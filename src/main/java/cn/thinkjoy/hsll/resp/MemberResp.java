@@ -1,16 +1,15 @@
-package cn.thinkjoy.hsll.bean;
-
-import java.io.Serializable;
+package cn.thinkjoy.hsll.resp;
 
 /**
- * Created by warden on 17/7/22.
+ * Created by warden on 17/7/31.
  */
-public class Member implements Serializable {
+public class MemberResp {
+
 
     private long id;
-    private String name;
+    private String userName;
     private String openId;
-    private int sex;
+    private String userSex;
     private String address;
     private String inviteCode;
 
@@ -23,12 +22,12 @@ public class Member implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getOpenId() {
@@ -39,12 +38,12 @@ public class Member implements Serializable {
         this.openId = openId;
     }
 
-    public int getSex() {
-        return sex;
+    public String getUserSex() {
+        return userSex;
     }
 
-    public void setSex(int sex) {
-        this.sex = sex;
+    public void setUserSex(String userSex) {
+        this.userSex = userSex;
     }
 
     public String getAddress() {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.thinkjoy.hsll.dao.MemberAddressDao">
+    <select id="getMemberByMemberId" resultType="cn.thinkjoy.hsll.bean.MemberAddress">
+        select id as id, member_id as memberId, phone as phone,address as address,person as person
+        FROM member_address
+        WHERE member_id = #{memberId}
+    </select>
+
+
+    <select id="getMemberById" resultType="cn.thinkjoy.hsll.bean.MemberAddress">
+        select id as id, member_id as memberId, phone as phone,address as address,person as person
+        FROM member_address
+        WHERE id = #{id}
+    </select>
+
+
+    <insert id="insertData">
+        INSERT INTO
+        member_address(member_id,phone,address,person)
+        VALUES (#{memberAddress.memberId},#{memberAddress.phone},#{memberAddress.address},#{memberAddress.person})
+    </insert>
+
+    <update id="updateData">
+        UPDATE member_address
+        <set>
+            phone = #{memberAddress.phone},
+            address = #{memberAddress.address},
+            person = #{memberAddress.person},
+        </set>
+        where id = #{memberAddress.id}
+    </update>
+</mapper>
+

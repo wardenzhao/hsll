@@ -19,8 +19,18 @@ public class WeiXinAuthService {
 
     private static final Logger logger = LoggerFactory.getLogger(WeiXinAuthService.class);
 
+    private static String accessTokenKey = "access_token_key";
+
     public static SnsapiUserinfo getUserinfoFromWeiChrt(String code){
-        return getUserInfo(getAccessToken(code));
+        RedisUtil redisUtil = new RedisUtil();
+        AccessToken accesstoken = null;
+        if(redisUtil.get(accessTokenKey) != null){
+            accesstoken =(AccessToken) redisUtil.get(accessTokenKey);
+        }else{
+            accesstoken = getAccessToken(code);
+            redisUtil.set(accessTokenKey,accesstoken,7000l);
+        }
+        return getUserInfo(accesstoken);
     }
 
 

@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>主页</title>
+    <title>不是会员</title>
 
 </head>
 
 <body>
-    这是主页面
+    不是会员主页面
 </body>
 </html>
