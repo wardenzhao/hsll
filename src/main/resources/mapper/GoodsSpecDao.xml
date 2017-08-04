@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.thinkjoy.hsll.dao.GoodsSpecDao">
+    <select id="getGoodsSpecByGoodsId" resultType="cn.thinkjoy.hsll.bean.GoodsSpec">
+        SELECT id, spec_name as specName,address,price
+        FROM
+        goods_spec
+        WHERE goods_id = ${goodsId}
+    </select>
+
+</mapper>
+

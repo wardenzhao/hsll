@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.thinkjoy.hsll.dao.MemberApplyDao">
+
+
+    <insert id="insertData">
+        INSERT INTO
+        member_apply(open_id,name,phone,sex,address,invite_member_id,status)
+        VALUES (#{memberApply.openId},#{memberApply.name},#{memberApply.phone},#{memberApply.sex},#{memberApply.address},#{memberApply.inviteMemberId},#{memberApply.status})
+    </insert>
+
+</mapper>
+

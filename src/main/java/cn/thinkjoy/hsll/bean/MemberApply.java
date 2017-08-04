@@ -5,15 +5,16 @@ import java.io.Serializable;
 /**
  * Created by warden on 17/7/22.
  */
-public class Member implements Serializable {
+public class MemberApply implements Serializable {
 
     private long id;
     private String name;
     private String openId;
-    private String phone;
     private int sex;
     private String address;
-    private String inviteCode;
+    private String phone;
+    private long inviteMemberId;
+    private long status;
 
 
     public long getId() {
@@ -40,14 +41,6 @@ public class Member implements Serializable {
         this.openId = openId;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public int getSex() {
         return sex;
     }
@@ -64,11 +57,27 @@ public class Member implements Serializable {
         this.address = address;
     }
 
-    public String getInviteCode() {
-        return inviteCode;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setInviteCode(String inviteCode) {
-        this.inviteCode = inviteCode;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public long getInviteMemberId() {
+        return inviteMemberId;
+    }
+
+    public void setInviteMemberId(long inviteMemberId) {
+        this.inviteMemberId = inviteMemberId;
+    }
+
+    public long getStatus() {
+        return status;
+    }
+
+    public void setStatus(long status) {
+        this.status = status;
     }
 }

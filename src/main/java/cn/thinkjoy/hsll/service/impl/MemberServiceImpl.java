@@ -19,4 +19,9 @@ public class MemberServiceImpl implements MemberService{
     public Member getMemberByOpenId(String openId) {
         return memberDao.getMemberByOpenId(openId);
     }
+
+    @Override
+    public Member getMemberByInviteCode(String inviteCode) {
+        return memberDao.getMemberByInviteCode(inviteCode);
+    }
 }

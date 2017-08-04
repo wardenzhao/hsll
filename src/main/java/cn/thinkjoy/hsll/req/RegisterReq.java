@@ -1,43 +1,24 @@
-package cn.thinkjoy.hsll.bean;
-
-import java.io.Serializable;
+package cn.thinkjoy.hsll.req;
 
 /**
- * Created by warden on 17/7/22.
+ * Created by warden on 17/7/31.
  */
-public class Member implements Serializable {
+public class RegisterReq extends BaseReq{
 
-    private long id;
-    private String name;
-    private String openId;
+
+    private String userName;
     private String phone;
     private int sex;
     private String address;
+    private String inviteName;
     private String inviteCode;
 
-
-    public long getId() {
-        return id;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOpenId() {
-        return openId;
-    }
-
-    public void setOpenId(String openId) {
-        this.openId = openId;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPhone() {
@@ -62,6 +43,14 @@ public class Member implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getInviteName() {
+        return inviteName;
+    }
+
+    public void setInviteName(String inviteName) {
+        this.inviteName = inviteName;
     }
 
     public String getInviteCode() {

@@ -9,4 +9,6 @@ public interface MemberService {
 
 
     Member getMemberByOpenId(String openId);
+
+    Member getMemberByInviteCode(String inviteCode);
 }

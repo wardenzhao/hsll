@@ -9,4 +9,6 @@ import org.apache.ibatis.annotations.Param;
 public interface MemberDao {
 
     Member getMemberByOpenId(@Param("openId")String openId);
+
+    Member getMemberByInviteCode(@Param("inviteCode")String inviteCode);
 }

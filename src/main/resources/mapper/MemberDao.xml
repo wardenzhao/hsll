@@ -3,10 +3,15 @@
 
 <mapper namespace="cn.thinkjoy.hsll.dao.MemberDao">
     <select id="getMemberByOpenId" resultType="cn.thinkjoy.hsll.bean.Member">
-        select id as id, name as name, open_id as openId, sex as sex,address as address,invite_code as inviteCode
+        select id as id, name as name, open_id as openId, phone as phone, sex as sex,address as address,invite_code as inviteCode
         FROM member
         WHERE open_id = #{openId}
     </select>
 
+    <select id="getMemberByInviteCode" resultType="cn.thinkjoy.hsll.bean.Member">
+        select id as id, name as name, open_id as openId, phone as phone, sex as sex,address as address,invite_code as inviteCode
+        FROM member
+        WHERE invite_code = #{inviteCode}
+    </select>
 </mapper>
 
