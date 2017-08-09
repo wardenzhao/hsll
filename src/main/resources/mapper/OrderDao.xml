@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.thinkjoy.hsll.dao.OrderDao">
+
+    <insert id="insertData">
+        INSERT INTO
+        hsll_order(order_no,goods_id,buy_member_id,goods_spec_id,goods_num,address_id,batch_id,goods_code,tax_info,buyer_message,status,created_time)
+        VALUES (#{order.orderNo},#{order.goodsId},#{order.buyMemberId},#{order.goodsSpecId},#{order.goodsNum},#{order.addressId},#{order.batchId},#{order.goodsCode},#{order.taxInfo},#{order.buyerMessage},#{order.status},#{order.createdTime})
+    </insert>
+
+    <select id="getByOrderNo" resultType="cn.thinkjoy.hsll.bean.Order">
+        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime
+        FROM hsll_order
+        WHERE order_no = #{orderNo}
+    </select>
+
+    <update id="updateData">
+        UPDATE hsll_order
+        SET batch_id = #{order.batchId},goods_code = #{order.goodsCode}
+        WHERE id = #{order.id}
+    </update>
+
+    <select id="getByGoodsCode" resultType="cn.thinkjoy.hsll.bean.Order">
+        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime
+        FROM hsll_order
+        WHERE goods_code LIKE #{goodsCode}
+        limit 1
+    </select>
+</mapper>
+

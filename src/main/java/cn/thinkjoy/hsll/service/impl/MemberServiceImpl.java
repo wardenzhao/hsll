@@ -24,4 +24,9 @@ public class MemberServiceImpl implements MemberService{
     public Member getMemberByInviteCode(String inviteCode) {
         return memberDao.getMemberByInviteCode(inviteCode);
     }
+
+    @Override
+    public Member getMemberById(long id) {
+        return memberDao.getMemberById(id);
+    }
 }

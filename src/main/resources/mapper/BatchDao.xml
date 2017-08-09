@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.thinkjoy.hsll.dao.BatchDao">
+
+    <select id="getNewBatch" resultType="cn.thinkjoy.hsll.bean.Batch">
+        SELECT id, batch_name AS batchName, batch_code AS batchCode, batch_no AS batchNo, goods_code AS goodsCode,status
+        FROM batch
+        WHERE status = 0
+        ORDER BY id ASC
+        limit #{count}
+
+    </select>
+
+    <update id="updateStatusById">
+        UPDATE batch SET status = 1 WHERE id = #{id}
+    </update>
+
+    <select id="getBatchByGoodsCode" resultType="cn.thinkjoy.hsll.bean.Batch">
+        SELECT id, batch_name AS batchName, batch_code AS batchCode, batch_no AS batchNo, goods_code AS goodsCode,status
+        FROM batch
+        WHERE status = 1 AND goods_code = #{goodsCode}
+        ORDER BY id ASC
+        limit 1
+    </select>
+
+</mapper>
+

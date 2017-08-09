@@ -13,5 +13,12 @@
         FROM member
         WHERE invite_code = #{inviteCode}
     </select>
+
+
+    <select id="getMemberById" resultType="cn.thinkjoy.hsll.bean.Member">
+        select id as id, name as name, open_id as openId, phone as phone, sex as sex,address as address,invite_code as inviteCode
+        FROM member
+        WHERE id = #{id}
+    </select>
 </mapper>
 

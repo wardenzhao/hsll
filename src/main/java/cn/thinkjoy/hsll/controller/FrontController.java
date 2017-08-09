@@ -5,10 +5,7 @@ package cn.thinkjoy.hsll.controller;
  */
 
 import cn.thinkjoy.hsll.bean.*;
-import cn.thinkjoy.hsll.req.BaseReq;
-import cn.thinkjoy.hsll.req.CheckInviteCodeReq;
-import cn.thinkjoy.hsll.req.EditAddressReq;
-import cn.thinkjoy.hsll.req.RegisterReq;
+import cn.thinkjoy.hsll.req.*;
 import cn.thinkjoy.hsll.resp.*;
 import cn.thinkjoy.hsll.service.*;
 import cn.thinkjoy.hsll.util.JsonUtil;
@@ -23,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 主页控制类
@@ -50,6 +47,13 @@ public class FrontController extends BaseController{
 
     @Autowired
     private GoodsSpecService goodsSpecService;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private BatchService batchService;
+
 
     @RequestMapping(value = "/check/isuser",method = RequestMethod.GET)
     public String index(HttpServletRequest request){
@@ -336,6 +340,160 @@ public class FrontController extends BaseController{
             resp.setMsg("success");
             resp.setOpedId(req.getOpenId());
         }catch (Exception e){
+            e.printStackTrace();
+            resp.setCode("-1");
+            resp.setMsg("系统错误");
+            resp.setOpedId(req.getOpenId());
+        }
+        return JsonUtil.tranObjectToJsonStr(resp);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "buy/goods")
+    public String buyGoods(HttpServletRequest request){
+        String json = this.getJsonString(request);
+        ObjectDataResp resp = new ObjectDataResp();
+        BuyGoods req = null;
+        try{
+            if(json != null){
+                req = JsonUtil.tranjsonStrToObject(json,BuyGoods.class);
+            }else{
+                resp.setCode("-1");
+                resp.setMsg("请求参数错误");
+                resp.setOpedId(req.getOpenId());
+            }
+
+            Member member = memberService.getMemberByOpenId(req.getOpenId());
+            if(member != null && member.getId()>0){
+                Order order = new Order();
+                order.setBuyMemberId(member.getId());
+                order.setGoodsId(req.getGoodId());
+                order.setGoodsNum(req.getGoodNum());
+                order.setAddressId(req.getAddressId());
+                order.setBuyerMessage(req.getBuyerMessage());
+                order.setOrderNo((new Date()).getTime() + "");
+                order.setGoodsSpecId(req.getGoodSpecId());
+                TaxInfo taxInfo = new TaxInfo();
+                taxInfo.setReceiptNo(req.getReceiptNo());
+                taxInfo.setReceiptTitle(req.getReceiptTitle());
+                taxInfo.setReceiptType(req.getReceiptType());
+                order.setTaxInfo(JsonUtil.tranObjectToJsonStr(taxInfo));
+                order.setStatus(1);
+                order.setCreatedTime(new Date());
+                order.setBatchId("");
+                order.setGoodsCode("");
+
+                orderService.insertData(order);
+
+                resp.setData(order.getOrderNo());
+                resp.setCode("1");
+                resp.setMsg("success");
+                resp.setOpedId(req.getOpenId());
+            }else{
+                resp.setCode("0");
+                resp.setMsg("未找到该会员信息");
+                resp.setOpedId(req.getOpenId());
+            }
+
+            resp.setCode("1");
+            resp.setMsg("success");
+            resp.setOpedId(req.getOpenId());
+        }catch (Exception e){
+            e.printStackTrace();
+            resp.setCode("-1");
+            resp.setMsg("系统错误");
+            resp.setOpedId(req.getOpenId());
+        }
+        return JsonUtil.tranObjectToJsonStr(resp);
+    }
+
+
+    @RequestMapping(value = "pay/success")
+    public String paySuccess(HttpServletRequest request){
+        String json = this.getJsonString(request);
+        ObjectDataResp resp = new ObjectDataResp();
+        String batchMessage = "";
+        String payTime = "";
+        try {
+            String orderNo = request.getParameter("orderNo");
+            orderNo = "1502276362910";
+            Order order = orderService.getByOrderNo(orderNo);
+            String batchId = "";
+            String goodsCode = "";
+            //获取最新的批次号码
+            List<Batch> batchList = batchService.getNewBatch(order.getGoodsNum());
+            for(int i=0;i<batchList.size();i++){
+                if(i==0){
+                    batchMessage += batchList.get(i).getBatchName() +"第"+batchList.get(i).getBatchCode();
+                }else{
+                    batchMessage += ","+batchList.get(i).getBatchCode();
+                }
+                if(i==(batchList.size()-1)){
+                    batchId += batchList.get(i).getId();
+                    goodsCode += batchList.get(i).getGoodsCode();
+                }else{
+                    batchId += batchList.get(i).getId()+",";
+                    goodsCode += batchList.get(i).getGoodsCode() + ",";
+                }
+                batchService.updateStatusById(batchList.get(i).getId());
+            }
+            batchMessage += "盒";
+            order.setBatchId(batchId);
+            order.setGoodsCode(goodsCode);
+            orderService.updateData(order);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            resp.setCode("-1");
+            resp.setMsg("系统错误");
+        }
+        return "pay_success.jsp?batchMessage="+batchMessage;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "take/good")
+    public String takeGood(HttpServletRequest request) {
+        String json = this.getJsonString(request);
+        ObjectDataResp resp = new ObjectDataResp();
+        TakeCodeReq req = null;
+        try {
+            if (json != null) {
+                req = JsonUtil.tranjsonStrToObject(json, TakeCodeReq.class);
+            } else {
+                resp.setCode("-1");
+                resp.setMsg("请求参数错误");
+                resp.setOpedId(req.getOpenId());
+            }
+            Batch batch = batchService.getBatchByGoodsCode(req.getTakeCode());
+            if(batch == null){
+                resp.setCode("0");
+                resp.setMsg("提货码有误，请重新输入");
+                resp.setOpedId(req.getOpenId());
+            }else{
+                TakeCodeResp takeCodeResp = new TakeCodeResp();
+                Order order = orderService.getByGoodsCode(req.getTakeCode());
+                Member member = memberService.getMemberById(order.getBuyMemberId());
+                Goods goods = goodsService.getGoodsById(order.getGoodsId());
+                takeCodeResp.setGoodBatch(batch.getBatchName()+batch.getBatchNo()+"盒");
+                takeCodeResp.setGoodId(goods.getId());
+                takeCodeResp.setGoodName(goods.getName());
+                takeCodeResp.setGoodImg(goods.getImage());
+                takeCodeResp.setReserveMember(member.getName());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calendar   =   new GregorianCalendar();
+                calendar.setTime(new Date());
+                calendar.add(calendar.DATE, 2);//把日期往后增加一天.整数往后推,负数往前移动
+                calendar.getTime();   //这个时间就是日期往后推一天的结果
+
+                takeCodeResp.setSendTime(dateFormat.format(calendar.getTime()));
+
+                resp.setCode("1");
+                resp.setMsg("请求参数错误");
+                resp.setOpedId(req.getOpenId());
+                resp.setData(takeCodeResp);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             resp.setCode("-1");
             resp.setMsg("系统错误");
