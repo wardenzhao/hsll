@@ -12,7 +12,7 @@ public interface BatchService {
 
     List<Batch> getNewBatch(int count);
 
-    void updateStatusById(long id);
+    void updateStatusById(int status, long id);
 
     Batch getBatchByGoodsCode(String takeCode);
 }

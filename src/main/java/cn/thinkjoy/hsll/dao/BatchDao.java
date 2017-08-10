@@ -12,7 +12,7 @@ public interface BatchDao {
 
     List<Batch> getNewBatch(@Param("count") int count);
 
-    void updateStatusById(@Param("id")long id);
+    void updateStatusById(@Param("status") int status,@Param("id")long id);
 
     Batch getBatchByGoodsCode(@Param("goodsCode")String goodsCode);
 }

@@ -8,6 +8,7 @@ import cn.thinkjoy.hsll.bean.*;
 import cn.thinkjoy.hsll.req.*;
 import cn.thinkjoy.hsll.resp.*;
 import cn.thinkjoy.hsll.service.*;
+import cn.thinkjoy.hsll.util.CodeUtil;
 import cn.thinkjoy.hsll.util.JsonUtil;
 import cn.thinkjoy.hsll.util.KeyUtil;
 import org.slf4j.Logger;
@@ -88,6 +89,7 @@ public class FrontController extends BaseController{
             resp.setCode("-1");
             resp.setMsg("请求参数错误");
             resp.setOpedId("");
+            return JsonUtil.tranObjectToJsonStr(resp);
         }
 
         Member member = memberService.getMemberByOpenId(req.getOpenId());
@@ -128,6 +130,7 @@ public class FrontController extends BaseController{
                 resp.setCode("-1");
                 resp.setMsg("请求参数错误");
                 resp.setOpedId("");
+                return JsonUtil.tranObjectToJsonStr(resp);
             }
 
             Member member = memberService.getMemberByOpenId(req.getOpenId());
@@ -180,6 +183,7 @@ public class FrontController extends BaseController{
                 resp.setCode("-1");
                 resp.setMsg("请求参数错误");
                 resp.setOpedId("");
+                return JsonUtil.tranObjectToJsonStr(resp);
             }
 
             Member member = memberService.getMemberByOpenId(req.getOpenId());
@@ -228,6 +232,7 @@ public class FrontController extends BaseController{
                 resp.setCode("-1");
                 resp.setMsg("请求参数错误");
                 resp.setOpedId("");
+                return JsonUtil.tranObjectToJsonStr(resp);
             }
 
             Member member = memberService.getMemberByInviteCode(req.getInviteCode());
@@ -263,6 +268,7 @@ public class FrontController extends BaseController{
                 resp.setCode("-1");
                 resp.setMsg("请求参数错误");
                 resp.setOpedId("");
+                return JsonUtil.tranObjectToJsonStr(resp);
             }
 
             Member member = memberService.getMemberByInviteCode(req.getInviteCode());
@@ -309,6 +315,7 @@ public class FrontController extends BaseController{
                 resp.setCode("-1");
                 resp.setMsg("请求参数错误");
                 resp.setOpedId(req.getOpenId());
+                return JsonUtil.tranObjectToJsonStr(resp);
             }
 
             List<Goods> list = goodsService.getGoodsList();
@@ -362,6 +369,7 @@ public class FrontController extends BaseController{
                 resp.setCode("-1");
                 resp.setMsg("请求参数错误");
                 resp.setOpedId(req.getOpenId());
+                return JsonUtil.tranObjectToJsonStr(resp);
             }
 
             Member member = memberService.getMemberByOpenId(req.getOpenId());
@@ -374,12 +382,19 @@ public class FrontController extends BaseController{
                 order.setBuyerMessage(req.getBuyerMessage());
                 order.setOrderNo((new Date()).getTime() + "");
                 order.setGoodsSpecId(req.getGoodSpecId());
+                order.setAddress(req.getAddress());
+                order.setPerson(req.getPerson());
+                order.setPhone(req.getPhone());
+
                 TaxInfo taxInfo = new TaxInfo();
                 taxInfo.setReceiptNo(req.getReceiptNo());
                 taxInfo.setReceiptTitle(req.getReceiptTitle());
                 taxInfo.setReceiptType(req.getReceiptType());
                 order.setTaxInfo(JsonUtil.tranObjectToJsonStr(taxInfo));
                 order.setStatus(1);
+                //购买订单
+                order.setType(0);
+
                 order.setCreatedTime(new Date());
                 order.setBatchId("");
                 order.setGoodsCode("");
@@ -394,6 +409,7 @@ public class FrontController extends BaseController{
                 resp.setCode("0");
                 resp.setMsg("未找到该会员信息");
                 resp.setOpedId(req.getOpenId());
+                return JsonUtil.tranObjectToJsonStr(resp);
             }
 
             resp.setCode("1");
@@ -436,7 +452,7 @@ public class FrontController extends BaseController{
                     batchId += batchList.get(i).getId()+",";
                     goodsCode += batchList.get(i).getGoodsCode() + ",";
                 }
-                batchService.updateStatusById(batchList.get(i).getId());
+                batchService.updateStatusById(1,batchList.get(i).getId());
             }
             batchMessage += "盒";
             order.setBatchId(batchId);
@@ -464,12 +480,14 @@ public class FrontController extends BaseController{
                 resp.setCode("-1");
                 resp.setMsg("请求参数错误");
                 resp.setOpedId(req.getOpenId());
+                return JsonUtil.tranObjectToJsonStr(resp);
             }
             Batch batch = batchService.getBatchByGoodsCode(req.getTakeCode());
             if(batch == null){
                 resp.setCode("0");
                 resp.setMsg("提货码有误，请重新输入");
                 resp.setOpedId(req.getOpenId());
+                return JsonUtil.tranObjectToJsonStr(resp);
             }else{
                 TakeCodeResp takeCodeResp = new TakeCodeResp();
                 Order order = orderService.getByGoodsCode(req.getTakeCode());
@@ -489,7 +507,7 @@ public class FrontController extends BaseController{
                 takeCodeResp.setSendTime(dateFormat.format(calendar.getTime()));
 
                 resp.setCode("1");
-                resp.setMsg("请求参数错误");
+                resp.setMsg("请求成功");
                 resp.setOpedId(req.getOpenId());
                 resp.setData(takeCodeResp);
             }
@@ -503,4 +521,104 @@ public class FrontController extends BaseController{
     }
 
 
+
+
+    @ResponseBody
+    @RequestMapping(value = "confirm/takeGood")
+    public String confirmTakeGood(HttpServletRequest request){
+        String json = this.getJsonString(request);
+        ConfirmTakeResp resp = new ConfirmTakeResp();
+        ConfirmTakeGood req = null;
+        try{
+            if(json != null){
+                req = JsonUtil.tranjsonStrToObject(json,ConfirmTakeGood.class);
+            }else{
+                resp.setCode("-1");
+                resp.setMsg("请求参数错误");
+                resp.setOpedId(req.getOpenId());
+                return JsonUtil.tranObjectToJsonStr(resp);
+            }
+
+            Batch batch = batchService.getBatchByGoodsCode(req.getTakeCode());
+            if(batch == null){
+                resp.setCode("0");
+                resp.setMsg("提货码有误，请重新输入");
+                resp.setOpedId(req.getOpenId());
+                return JsonUtil.tranObjectToJsonStr(resp);
+            }
+
+            Member member = memberService.getMemberByOpenId(req.getOpenId());
+            if(member != null && member.getId()>0){
+                Order order = new Order();
+                order.setBuyMemberId(member.getId());
+                order.setGoodsId(req.getGoodId());
+                order.setGoodsNum(1);
+                order.setGoodsCode(req.getTakeCode());
+                order.setOrderNo((new Date()).getTime() + "");
+                order.setAddress(req.getAddress());
+                order.setPerson(req.getPerson());
+                order.setPhone(req.getPhone());
+
+                order.setStatus(1);
+                //提货订单
+                order.setType(1);
+
+                order.setCreatedTime(new Date());
+                order.setBatchId(batch.getId()+"");
+
+                orderService.insertData(order);
+
+                //重置提货验证码
+                batchService.updateStatusById(2,batch.getId());
+
+                resp.setResult("提货成功");
+                resp.setCode("1");
+                resp.setMsg("success");
+                resp.setOpedId(req.getOpenId());
+            }else{
+                Order orderBuy = orderService.getByGoodsCode(req.getTakeCode());
+                Member memberBuy = memberService.getMemberById(orderBuy.getBuyMemberId());
+
+                Member memberNew = new Member();
+                memberNew.setOpenId(req.getOpenId());
+                memberNew.setName(req.getPerson());
+                memberNew.setInviteCode(CodeUtil.getRandomString(8));
+                memberService.insertData(memberNew);
+
+                Order order = new Order();
+                order.setBuyMemberId(memberService.getMemberByOpenId(req.getOpenId()).getId());
+                order.setGoodsId(req.getGoodId());
+                order.setGoodsNum(1);
+                order.setGoodsCode(req.getTakeCode());
+                order.setOrderNo((new Date()).getTime() + "");
+                order.setAddress(req.getAddress());
+                order.setPerson(req.getPerson());
+                order.setPhone(req.getPhone());
+
+                order.setStatus(1);
+                //提货订单
+                order.setType(1);
+
+                order.setCreatedTime(new Date());
+                order.setBatchId(batch.getId()+"");
+
+                orderService.insertData(order);
+
+                //重置提货验证码
+                batchService.updateStatusById(2, batch.getId());
+
+                resp.setResult(req.getReserveMember()+"已邀请您成为好柿连连会员，去柿园看看");
+                resp.setCode("1");
+                resp.setMsg("success");
+                resp.setOpedId(req.getOpenId());
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            resp.setCode("-1");
+            resp.setMsg("系统错误");
+            resp.setOpedId(req.getOpenId());
+        }
+        return JsonUtil.tranObjectToJsonStr(resp);
+    }
 }

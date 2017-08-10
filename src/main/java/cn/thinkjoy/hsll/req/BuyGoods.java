@@ -16,6 +16,9 @@ public class BuyGoods extends BaseReq{
     private String receiptTitle;
     private String receiptNo;
     private String buyerMessage;
+    private String address;
+    private String person;
+    private String phone;
 
 
     public long getGoodId() {
@@ -104,5 +107,29 @@ public class BuyGoods extends BaseReq{
 
     public void setBuyerMessage(String buyerMessage) {
         this.buyerMessage = buyerMessage;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPerson() {
+        return person;
+    }
+
+    public void setPerson(String person) {
+        this.person = person;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

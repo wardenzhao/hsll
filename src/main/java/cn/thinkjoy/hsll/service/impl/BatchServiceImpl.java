@@ -23,8 +23,8 @@ public class BatchServiceImpl implements BatchService{
     }
 
     @Override
-    public void updateStatusById(long id) {
-        batchDao.updateStatusById(id);
+    public void updateStatusById(int status, long id) {
+        batchDao.updateStatusById(status, id);
     }
 
     @Override

@@ -21,6 +21,10 @@ public class Order implements Serializable{
     private String buyerMessage;
     private int status;
     private Date createdTime;
+    private int type;
+    private String address;
+    private String person;
+    private String phone;
 
 
     public long getId() {
@@ -125,5 +129,37 @@ public class Order implements Serializable{
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPerson() {
+        return person;
+    }
+
+    public void setPerson(String person) {
+        this.person = person;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

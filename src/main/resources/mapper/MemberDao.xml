@@ -20,5 +20,10 @@
         FROM member
         WHERE id = #{id}
     </select>
+
+    <insert id="insertData">
+        INSERT INTO member(name,open_id,phone,sex,address,invite_code)
+        VALUES (#{member.name},#{member.openId},#{member.phone},#{member.sex},#{member.address},#{member.inviteCode})
+    </insert>
 </mapper>
 

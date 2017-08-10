@@ -5,12 +5,12 @@
 
     <insert id="insertData">
         INSERT INTO
-        hsll_order(order_no,goods_id,buy_member_id,goods_spec_id,goods_num,address_id,batch_id,goods_code,tax_info,buyer_message,status,created_time)
-        VALUES (#{order.orderNo},#{order.goodsId},#{order.buyMemberId},#{order.goodsSpecId},#{order.goodsNum},#{order.addressId},#{order.batchId},#{order.goodsCode},#{order.taxInfo},#{order.buyerMessage},#{order.status},#{order.createdTime})
+        hsll_order(order_no,goods_id,buy_member_id,goods_spec_id,goods_num,address_id,batch_id,goods_code,tax_info,buyer_message,status,created_time,type,address,person,phone)
+        VALUES (#{order.orderNo},#{order.goodsId},#{order.buyMemberId},#{order.goodsSpecId},#{order.goodsNum},#{order.addressId},#{order.batchId},#{order.goodsCode},#{order.taxInfo},#{order.buyerMessage},#{order.status},#{order.createdTime},#{order.type},#{order.address},#{order.person},#{order.phone})
     </insert>
 
     <select id="getByOrderNo" resultType="cn.thinkjoy.hsll.bean.Order">
-        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime
+        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone
         FROM hsll_order
         WHERE order_no = #{orderNo}
     </select>
@@ -22,7 +22,7 @@
     </update>
 
     <select id="getByGoodsCode" resultType="cn.thinkjoy.hsll.bean.Order">
-        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime
+        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone
         FROM hsll_order
         WHERE goods_code LIKE #{goodsCode}
         limit 1

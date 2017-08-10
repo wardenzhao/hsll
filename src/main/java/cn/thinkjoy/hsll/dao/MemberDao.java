@@ -13,4 +13,6 @@ public interface MemberDao {
     Member getMemberByInviteCode(@Param("inviteCode")String inviteCode);
 
     Member getMemberById(@Param("id")long id);
+
+    void insertData(@Param("member")Member member);
 }

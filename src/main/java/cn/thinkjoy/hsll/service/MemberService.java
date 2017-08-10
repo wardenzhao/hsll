@@ -13,4 +13,6 @@ public interface MemberService {
     Member getMemberByInviteCode(String inviteCode);
 
     Member getMemberById(long buyMemberId);
+
+    void insertData(Member memberNew);
 }
