@@ -55,13 +55,14 @@ public class FrontController extends BaseController{
     @Autowired
     private BatchService batchService;
 
+    private String baseUrl = "http://172.16.222.194:8080";
 
     @RequestMapping(value = "/check/isuser",method = RequestMethod.GET)
     public String index(HttpServletRequest request){
         BaseResp reObject = new BaseResp();
         SnsapiUserinfo snsapiUserinfo = (SnsapiUserinfo)request.getSession().getAttribute(KeyUtil.SESSION_KEY);
         if(snsapiUserinfo == null){
-            String INIT_URL = "http://172.16.222.194:8080/hsll/auth/init";
+            String INIT_URL = baseUrl + "/hsll/auth/init";
             return "redirect:/hsll/auth?redirect_uri"+INIT_URL;
         }
         Member member = memberService.getMemberByOpenId(snsapiUserinfo.getOpenid());
@@ -464,7 +465,7 @@ public class FrontController extends BaseController{
             resp.setCode("-1");
             resp.setMsg("系统错误");
         }
-        return "pay_success.jsp?batchMessage="+batchMessage;
+        return "pay_success.html?batchMessage="+batchMessage;
     }
 
     @ResponseBody

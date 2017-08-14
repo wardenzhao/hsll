@@ -32,6 +32,8 @@ public class IndexController extends BaseController{
     @Autowired
     private MemberService memberService;
 
+    private String baseUrl = "http://172.16.222.194:8080";
+
     @RequestMapping(value = "/auth",method = RequestMethod.GET)
     public String auth(HttpServletRequest request){
         String redirect_uri = request.getParameter("redirect_uri");
@@ -41,7 +43,7 @@ public class IndexController extends BaseController{
 
         logger.info("redirect to :" + redirect_uri);
 
-        String INIT_URL = "http://172.16.222.194:8080/hsll/auth/init";
+        String INIT_URL = baseUrl + "/hsll/auth/init";
         //微信认证URL
         String WEICHAT_AUTH_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
                 + WeiXinUtil.getAppid() + "&redirect_uri="
@@ -75,7 +77,7 @@ public class IndexController extends BaseController{
     public String index(HttpServletRequest request){
         SnsapiUserinfo snsapiUserinfo = (SnsapiUserinfo)request.getSession().getAttribute(KeyUtil.SESSION_KEY);
         if(snsapiUserinfo == null){
-            String INIT_URL = "http://172.16.222.194:8080/hsll/auth/auth";
+            String INIT_URL = baseUrl+"/hsll/auth/auth";
             return "redirect:/hsll/auth?redirect_uri="+INIT_URL;
         }
         logger.info(JsonUtil.tranObjectToJsonStr(snsapiUserinfo));
