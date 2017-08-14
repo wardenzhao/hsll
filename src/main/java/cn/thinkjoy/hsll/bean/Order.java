@@ -25,6 +25,7 @@ public class Order implements Serializable{
     private String address;
     private String person;
     private String phone;
+    private Date sendTime;
 
 
     public long getId() {
@@ -161,5 +162,13 @@ public class Order implements Serializable{
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
     }
 }

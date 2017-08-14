@@ -6,6 +6,8 @@ import cn.thinkjoy.hsll.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by warden on 17/7/22.
  */
@@ -33,5 +35,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getByGoodsCode(String goodsCode) {
         return orderDao.getByGoodsCode("%"+goodsCode+"%");
+    }
+
+    @Override
+    public List<Order> getListByMemberId(long id,int offset, int pageSize) {
+        return orderDao.getListByMemberId(id,offset,pageSize);
     }
 }

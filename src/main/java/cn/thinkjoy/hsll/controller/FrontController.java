@@ -621,4 +621,74 @@ public class FrontController extends BaseController{
         }
         return JsonUtil.tranObjectToJsonStr(resp);
     }
+
+
+    @ResponseBody
+    @RequestMapping(value = "myorder")
+    public String myorder(HttpServletRequest request) {
+        String json = this.getJsonString(request);
+        ListDataResp resp = new ListDataResp();
+        MyOrderReq req = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        int pageSize = 20;
+        try {
+            if (json != null) {
+                req = JsonUtil.tranjsonStrToObject(json, MyOrderReq.class);
+            } else {
+                resp.setCode("-1");
+                resp.setMsg("请求参数错误");
+                resp.setOpedId(req.getOpenId());
+                return JsonUtil.tranObjectToJsonStr(resp);
+            }
+
+            Member member = memberService.getMemberByOpenId(req.getOpenId());
+            if(member != null && member.getId()>0){
+                List<Order> orderList = orderService.getListByMemberId(member.getId(),(req.getPage()-1)*pageSize,pageSize);
+
+                List<MyOrderResp> respList = new ArrayList<>();
+                for(Order order :orderList){
+                    MyOrderResp myOrderResp = new MyOrderResp();
+                    myOrderResp.setOrderNo(order.getOrderNo());
+                    myOrderResp.setOrderTime(dateFormat.format(order.getCreatedTime()));
+                    myOrderResp.setAddress(order.getAddress());
+                    myOrderResp.setPerson(order.getPerson());
+                    myOrderResp.setPhone(order.getPhone());
+                    myOrderResp.setGoodNum(order.getGoodsNum());
+
+                    if(order.getStatus() == 1){
+                        myOrderResp.setOrderState("等待发货");
+                    }else if(order.getStatus() == 2){
+                        myOrderResp.setOrderState("已发货");
+                    }else if(order.getStatus() == 3){
+                        myOrderResp.setOrderState("已经确认收货");
+                    }
+
+                    Goods goods = goodsService.getGoodsById(order.getGoodsId());
+                    myOrderResp.setGoodIcon(goods.getImage());
+                    myOrderResp.setOrderPrice(order.getGoodsNum() * goods.getPrice() + "");
+                    if (order.getSendTime() != null){
+                        myOrderResp.setSendTime(dateFormat.format(order.getSendTime()));
+                    }
+
+                    respList.add(myOrderResp);
+                }
+
+                resp.setData(respList);
+                resp.setCode("1");
+                resp.setMsg("success");
+                resp.setOpedId(req.getOpenId());
+            }else{
+                resp.setCode("0");
+                resp.setMsg("未找到该会员信息");
+                resp.setOpedId(req.getOpenId());
+                return JsonUtil.tranObjectToJsonStr(resp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setCode("-1");
+            resp.setMsg("系统错误");
+            resp.setOpedId(req.getOpenId());
+        }
+        return JsonUtil.tranObjectToJsonStr(resp);
+    }
 }

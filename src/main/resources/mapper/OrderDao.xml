@@ -10,7 +10,7 @@
     </insert>
 
     <select id="getByOrderNo" resultType="cn.thinkjoy.hsll.bean.Order">
-        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone
+        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime
         FROM hsll_order
         WHERE order_no = #{orderNo}
     </select>
@@ -22,10 +22,17 @@
     </update>
 
     <select id="getByGoodsCode" resultType="cn.thinkjoy.hsll.bean.Order">
-        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone
+        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime
         FROM hsll_order
         WHERE goods_code LIKE #{goodsCode}
         limit 1
+    </select>
+
+    <select id="getListByMemberId" resultType="cn.thinkjoy.hsll.bean.Order">
+        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime
+        FROM hsll_order
+        WHERE buy_member_id LIKE #{memberId}
+        limit #{offset},#{pageSize}
     </select>
 </mapper>
 
