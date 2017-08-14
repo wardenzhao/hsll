@@ -83,10 +83,10 @@ public class IndexController extends BaseController{
         logger.info(JsonUtil.tranObjectToJsonStr(snsapiUserinfo));
         Member member = memberService.getMemberByOpenId(snsapiUserinfo.getOpenid());
         if(member != null && member.getId()>0){
-            return "index";
+            return "redirect:/hsll/goodsList?openId="+snsapiUserinfo.getOpenid();
         }else{
             //如果不是会员跳转到是不会会员提示页面
-            return "not_member";
+            return "redirect:/hsll/notMember?openId="+snsapiUserinfo.getOpenid();
         }
     }
 

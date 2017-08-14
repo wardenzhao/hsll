@@ -78,6 +78,16 @@ public class FrontController extends BaseController{
         return "goods_list";
     }
 
+    @RequestMapping(value = "/goodsList",method = RequestMethod.GET)
+    public String goodsList(HttpServletRequest request){
+        return "goods_list";
+    }
+
+    @RequestMapping(value = "/notMember",method = RequestMethod.GET)
+    public String notMember(HttpServletRequest request){
+        return "not_member";
+    }
+
     @ResponseBody
     @RequestMapping(value = "/getUserMessage")
     public String getUserMessage(HttpServletRequest request){
