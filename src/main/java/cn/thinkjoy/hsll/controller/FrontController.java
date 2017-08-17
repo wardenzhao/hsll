@@ -675,10 +675,13 @@ public class FrontController extends BaseController{
                     }
 
                     Goods goods = goodsService.getGoodsById(order.getGoodsId());
+                    myOrderResp.setGoodName(goods.getName());
                     myOrderResp.setGoodIcon(goods.getImage());
                     myOrderResp.setOrderPrice(order.getGoodsNum() * goods.getPrice() + "");
                     if (order.getSendTime() != null){
                         myOrderResp.setSendTime(dateFormat.format(order.getSendTime()));
+                    }else{
+                        myOrderResp.setSendTime("");
                     }
 
                     respList.add(myOrderResp);
