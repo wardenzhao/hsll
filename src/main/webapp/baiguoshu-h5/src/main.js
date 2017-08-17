@@ -5,9 +5,12 @@ import App from './App'
 import VueRouter from 'vue-router'
 import routes from './router'
 
+import UrlConfig from './assets/js/urlConfig.js'
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
+
+Vue.prototype.HttpUrl = UrlConfig
 
 const router = new VueRouter({
   routes
