@@ -88,6 +88,11 @@ public class FrontController extends BaseController{
         return "not_member";
     }
 
+    /**
+     * 获取用户信息
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/getUserMessage")
     public String getUserMessage(HttpServletRequest request){
@@ -128,6 +133,11 @@ public class FrontController extends BaseController{
         return JsonUtil.tranObjectToJsonStr(resp);
     }
 
+    /**
+     * 修改收货地址
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/edit/address")
     public String editAddress(HttpServletRequest request){
@@ -180,7 +190,11 @@ public class FrontController extends BaseController{
     }
 
 
-
+    /**
+     * 获取收货地址
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "get/address")
     public String getAddress(HttpServletRequest request){
@@ -229,7 +243,11 @@ public class FrontController extends BaseController{
         return JsonUtil.tranObjectToJsonStr(resp);
     }
 
-
+    /**
+     * 校验会员邀请码
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "check/inviteCode")
     public String checkInviteCode(HttpServletRequest request){
@@ -266,6 +284,11 @@ public class FrontController extends BaseController{
         return JsonUtil.tranObjectToJsonStr(resp);
     }
 
+    /**
+     * 用户注册
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "user/register")
     public String userRegister(HttpServletRequest request){
@@ -312,7 +335,11 @@ public class FrontController extends BaseController{
         return JsonUtil.tranObjectToJsonStr(resp);
     }
 
-
+    /**
+     * 获取商品列表
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "getGoods")
     public String getGoods(HttpServletRequest request){
@@ -340,15 +367,21 @@ public class FrontController extends BaseController{
                 goodResp.setAdvImg(good.getImage());
                 goodResp.setGoodSubTitle(good.getSubTitle());
                 goodResp.setGoodDes(good.getDescribe());
+                goodResp.setThumb(good.getThumb());
 
+                List<GoodsSpec> specList = goodsSpecService.getSpecLsBygoodId(good.getId());
+                if(specList != null && specList.size() > 0){
+                    List<GoodSpecResp> goodSpecRespList = new ArrayList<>();
+                    for(GoodsSpec spec:specList){
+                        GoodSpecResp goodSpecResp = new GoodSpecResp();
+                        goodSpecResp.setId(spec.getId());
+                        goodSpecResp.setName(spec.getSpecName());
+                        goodSpecResp.setPrice(spec.getPrice());
+                        goodResp.setGoodAddress(spec.getAddress());
+                        goodSpecRespList.add(goodSpecResp);
+                    }
 
-                GoodsSpec spec = goodsSpecService.getGoodsSpecByGoodsId(good.getId());
-                if(spec != null){
-                    GoodSpecResp goodSpecResp = new GoodSpecResp();
-                    goodSpecResp.setId(spec.getId());
-                    goodSpecResp.setName(spec.getSpecName());
-                    goodResp.setGoodAddress(spec.getAddress());
-                    goodResp.setGoodSpec(goodSpecResp);
+                    goodResp.setGoodSpec(goodSpecRespList);
                 }
 
                 respList.add(goodResp);
@@ -366,7 +399,11 @@ public class FrontController extends BaseController{
         return JsonUtil.tranObjectToJsonStr(resp);
     }
 
-
+    /**
+     * 购买商品
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "buy/goods")
     public String buyGoods(HttpServletRequest request){
@@ -478,6 +515,11 @@ public class FrontController extends BaseController{
         return "pay_success.html?batchMessage="+batchMessage;
     }
 
+    /**
+     * 校验提货码
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "take/good")
     public String takeGood(HttpServletRequest request) {
@@ -532,8 +574,11 @@ public class FrontController extends BaseController{
     }
 
 
-
-
+    /**
+     * 确认提货
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "confirm/takeGood")
     public String confirmTakeGood(HttpServletRequest request){
@@ -633,7 +678,11 @@ public class FrontController extends BaseController{
         return JsonUtil.tranObjectToJsonStr(resp);
     }
 
-
+    /**
+     * 我的订单
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "myorder")
     public String myorder(HttpServletRequest request) {

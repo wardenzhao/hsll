@@ -15,6 +15,7 @@ public class Goods implements Serializable{
     private String image;
     private Double price;
     private int status;
+    private String thumb;
 
 
     public long getId() {
@@ -79,5 +80,13 @@ public class Goods implements Serializable{
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(String thumb) {
+        this.thumb = thumb;
     }
 }

@@ -3,13 +3,13 @@
 
 <mapper namespace="cn.thinkjoy.hsll.dao.GoodsDao">
     <select id="getGoodsList" resultType="cn.thinkjoy.hsll.bean.Goods">
-        SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status
+        SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status,thumb
         FROM
         goods
     </select>
 
     <select id="getGoodsById" resultType="cn.thinkjoy.hsll.bean.Goods">
-        SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status
+        SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status,thumb
         FROM
         goods WHERE id = #{id}
     </select>
