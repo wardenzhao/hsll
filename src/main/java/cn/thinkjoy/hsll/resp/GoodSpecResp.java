@@ -8,6 +8,7 @@ public class GoodSpecResp {
 
     private long id;
     private String name;
+    private Double price;
 
 
     public long getId() {
@@ -24,5 +25,13 @@ public class GoodSpecResp {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }
