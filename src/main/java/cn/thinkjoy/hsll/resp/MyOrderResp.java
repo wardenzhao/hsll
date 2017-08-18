@@ -6,6 +6,7 @@ package cn.thinkjoy.hsll.resp;
 public class MyOrderResp {
 
     private String orderNo;
+    private String goodName;
     private String orderTime;
     private String goodIcon;
     private String goodSpec;
@@ -24,6 +25,14 @@ public class MyOrderResp {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getGoodName() {
+        return goodName;
+    }
+
+    public void setGoodName(String goodName) {
+        this.goodName = goodName;
     }
 
     public String getOrderTime() {
