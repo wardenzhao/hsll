@@ -26,4 +26,10 @@ public class GoodsSpecServiceImpl implements GoodsSpecService{
         }
         return null;
     }
+
+    @Override
+    public List<GoodsSpec> getSpecLsBygoodId(long id) {
+        List<GoodsSpec> list = goodsSpecDao.getGoodsSpecByGoodsId(id);
+        return list;
+    }
 }

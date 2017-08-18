@@ -13,5 +13,18 @@
         FROM
         goods WHERE id = #{id}
     </select>
+
+    <update id="updateGood">
+        UPDATE goods
+        <set>
+            title = #{memberAddress.phone},
+            sub_title = #{memberAddress.address},
+            image = #{memberAddress.person},
+            describe=,
+
+        </set>
+        where id = #{memberAddress.id}
+
+    </update>
 </mapper>
 
