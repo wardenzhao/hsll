@@ -14,7 +14,7 @@
           margin-bottom: 10px;
             .img {
                 width: 100%;
-                height: auto;
+                height: 200px;
             }
             .info {
                 padding: 10px 11px;
@@ -46,6 +46,9 @@
       border-radius: 5px;
     }
 }
+.wechat-btn {
+    margin: 30px 30px 60px;
+}
 
 </style>
 
@@ -53,32 +56,36 @@
 <div class="comfirm-goods">
     <div class="comfirm-goods-box">
         <div class="img-box">
-            <img class="img" src="../../assets/images/goods1.png" alt="">
+            <img class="img" :src="goodImg" alt="">
             <div class="info">
-                <p class="t">好柿连连限量流心吊柿一盒</p>
-                <p class="txt">此盒柿饼是好柿连连柿园2017年</p>
-                <p class="t">预订会员 汪洋先生</p>
+                <p class="t">{{goodName}}</p>
+                <p class="txt">{{goodBatch}}</p>
+                <p class="t">预订会员 {{reserveMember}}</p>
             </div>
         </div>
         <div class="user-info">
             <group>
               <cell :title="date"></cell>
-              <x-input title="联系人" name="person" v-model="phone" placeholder="请输入姓名" is-type="china-name"></x-input>
+              <x-input title="联系人" name="person" v-model="userName" placeholder="请输入姓名" is-type="china-name"></x-input>
               <x-input title="手机号码" name="mobile" v-model="phone" placeholder="请输入手机号" keyboard="number" is-type="china-mobile"></x-input>
-              <x-input title="选择地区" name="area"  placeholder="地区信息"></x-input>
-              <x-input title="详细地址" name="address" v-model="address" placeholder="街道门牌信息"></x-input>
+              <x-input title="收货地址" name="address" v-model="address" placeholder="街道门牌信息"></x-input>
             </group>
         </div>
-        <span class="btn">确认提交</span>
+        <div class="wechat-btn">
+            <x-button type="primary" @click.native="takeGood">确认提交</x-button>
+        </div>
     </div>
-
 </div>
 
 </template>
 
 <script>
 import {
-  XInput, Group,Cell,Toast
+    setStore, getStore
+}
+from '../../config/mUtils'
+import {
+  XInput, Group,Cell,Toast,XButton
 }
 from 'vux'
 export default {
@@ -86,39 +93,76 @@ export default {
     XInput,
       Group,
       Cell,
-      Toast
+      Toast,
+      XButton
   },
   data(){
     return{
-      person:'',
-      date:'预计发货时间：2017-12-10',
-      mobile:'',
-      area:'',
-      address:''
+      toastMsg:'',
+      toastShow:false,
+      takeCode:'',
+      goodName:'',
+      goodImg:'',
+      goodBatch:'',
+      reserveMember:'',
+      userName:'',
+      date:'',
+      phone:'',
+      address:'',
     }
   },
   created(){
     document.title="确认提货"
   },
+  mounted(){
+      let takeGoodInfo =  JSON.parse(getStore('takeGoodInfo'))
+      this.takeCode = takeGoodInfo.takeCode
+      this.goodName = takeGoodInfo.goodName
+      this.goodImg = takeGoodInfo.goodImg
+      this.reserveMember = takeGoodInfo.reserveMember
+      this.goodBatch = takeGoodInfo.goodBatch
+      this.date = '预计发货时间：'+takeGoodInfo.sendTime
+  },
   methods:{
     takeGood(){
+      let that = this;
+      let result = '王杨先生已邀请您成为好柿连连会员，快去柿园看看'
+      this.$vux.toast.show({
+          text: '提货成功',
+          type: 'text',
+          width: '80%',
+          time:'2000',
+          onHide(){
+            that.$router.push(
+              {
+                path: '/goods-sucess',
+                query: { result:  result}
+              })
+          }
+      })
+
       var datas = {
-          "openId":utils.LocalStorage.getStore('openId'),
+          // "openId":getStore('openId'),
+          "openId":'123456',
           "takeCode":this.takeCode,
           "address":this.address,
-          "person":this.person,
+          "person":this.userName,
           "phone":this.phone,
-          "goodId":this.goodId,
+          "goodId":'',
           "reserveMember":this.reserveMember
       }
-      this.$http.post(utils.UrlConfig.takeGood,datas)
+      console.log(datas)
+      this.$http.post(this.HttpUrl.UrlConfig.confirmTakeGood,datas)
                     .then(res => {
                       var res = res.data
                         if(res.code=='1'){// 成功
-                            this.items = res.list
+                          let result = res.result
                         }else{ // 异常
-                          this.toastShow = true
-                          this.toastTxt = res.msg
+                          this.$vux.toast.show({
+                              text: res.msg,
+                              type: 'text',
+                              width: '80%'
+                          })
                         }
 
                     }).catch(error => {

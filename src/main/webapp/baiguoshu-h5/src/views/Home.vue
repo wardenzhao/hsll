@@ -21,11 +21,12 @@ export default {
     }
   },
   mounted(){
-    this.isuser()
+
   },
   methods:{
     isuser(){
-      this.$http.post('/launcher'+this.HttpUrl.UrlConfig.isuser)
+      // this.$http.get('/'+this.HttpUrl.UrlConfig.isuser)
+      this.$http.get(this.HttpUrl.UrlConfig.isuser)
                     .then(res => {
                       var res = res.data
                         if(res.code=='1'){// 会员

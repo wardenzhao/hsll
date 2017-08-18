@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import VueRouter from 'vue-router'
 import routes from './router'
-
+import store from './store/'
 import UrlConfig from './assets/js/urlConfig.js'
 Vue.config.productionTip = false
 
@@ -23,12 +23,23 @@ import {
 from 'vux'
 Vue.use(AjaxPlugin)
 
+import {
+  ToastPlugin
+}
+from 'vux'
+Vue.use(ToastPlugin)
+
 // 添加Fastclick移除移动端点击延迟
-const FastClick = require('fastclick')
-FastClick.attach(document.body)
+import FastClick from 'fastclick'
+if ('addEventListener' in document) {
+  document.addEventListener('DOMContentLoaded', function() {
+    FastClick.attach(document.body);
+  }, false);
+}
 
 /* eslint-disable no-new */
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')

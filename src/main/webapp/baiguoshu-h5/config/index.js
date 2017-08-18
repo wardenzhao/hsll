@@ -28,16 +28,14 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/launcher': {
-        target: 'http://www.xxx.com', // 目标域名
-        changeOrigin: true,
+      '/api/': {
+        target: 'http://api.dsfderek.com:8282',
+        // target: 'http://127.0.0.1:8282',
+        changeOrigin: true, //set the option changeOrigin to true for name-based virtual hosted sites
         pathRewrite: {
-          '^/launcher': '/launcher' // 规则, 见下面说明
-        },
-        headers: {
-          'Cookie': 'SID=810q3nmoi5mfp8geb9bkm9jql0;' //这里可以设置cookies, 也可以不设置
+          '^/api': ''
         }
-      }
+      },
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

@@ -43,7 +43,7 @@
 <div class="goods-sucess">
   <img class="img" src="../../assets/images/sucess.png" alt="">
   <p class="sucess-txt">提货成功</p>
-  <p class="txt">汪洋先生已邀请您成为好柿连连会员，去柿园看看吧！</p>
+  <p class="txt">{{txtInfo}}</p>
   <span class="btn">了解好柿连连柿饼</span>
 </div>
 
@@ -54,20 +54,23 @@
 
 
 
-
+import {
+    getUrlKey
+}
+from '../../config/mUtils'
 
 export default {
 
     data() {
         return {
-
+          txtInfo:''
         }
     },
     created(){
         document.title="提货成功"
     },
     mounted() {
-
+      this.txtInfo = getUrlKey('result')
     },
     methods: {
 

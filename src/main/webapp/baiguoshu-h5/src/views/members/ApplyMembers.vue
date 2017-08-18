@@ -30,7 +30,7 @@
         <x-input title="推荐会员姓名" name="area" v-model="inviteName" placeholder="请填写推荐会员的真实姓名"></x-input>
       </group>
       <div class="wechat-btn">
-        <x-button type="primary" @click.native="submitBtn">保存</x-button>
+        <x-button type="primary" @click.native="register">提交</x-button>
       </div>
     </div>
     <toast v-model="toastShow" type="text">{{toastTxt}}</toast>
@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import utils from '../../assets/js/urlConfig.js'
 import {
   XInput, Group,
     XHeader,
@@ -69,30 +68,39 @@ export default {
         }
     },
     mounted(){
-
+      console.log(getUrlKey('takeCode'))
     },
     methods:{
       submitBtn(){
 
       },
       register(){
+        this.$router.push(
+          {
+            path: '/members'
+          })
+
+
+
         var datas = {
-          "openId":utils.LocalStorage.getStore('openId'),
+          "openId":'123456',
           "userName":this.userName,
           "phone":this.phone,
           "sex":this.sex,
           "address":this.address,
           "inviteName":this.inviteName
         }
-        this.$http.post(utils.UrlConfig.register,datas)
+        this.$http.post(this.HttpUrl.UrlConfig.register,datas)
                       .then(res => {
                         var res = res.data
                           if(res.code=='1'){
-                            this.toastShow = true
-                            this.toastTxt = "申请成功"
+
                           }else{ // 异常
-                            this.toastShow = true
-                            this.toastTxt = res.msg
+                            this.$vux.toast.show({
+                                text: res.msg,
+                                type: 'text',
+                                width: '80%'
+                            })
                           }
 
                       }).catch(error => {

@@ -73,28 +73,21 @@
   <div class="goods-pwd-content">
     <div class="txt">请输入会员邀请密码</div>
     <div class="input-list">
-        <input type="text" maxlength="1" name="" v-model="num1">
-        <input type="text" maxlength="1" name="" v-model="num2">
-        <input type="text" maxlength="1" name="" v-model="num3">
-        <input type="text" maxlength="1" name="" v-model="num4">
-        <input type="text" maxlength="1" name="" v-model="num5">
-        <input type="text" maxlength="1" name="" v-model="num6">
-        <input type="text" maxlength="1" name="" v-model="num7">
-        <input type="text" maxlength="1" name="" v-model="num8">
-        <input type="text" maxlength="1" name="" v-model="num9">
+        <input v-for="(n,index) in nums" maxlength="1" type="text" name="" v-model="n.num">
     </div>
   </div>
-    <span @click.native="" class="btn">确认提交</span>
-  <div class="btn-box">
-      <span>没有邀请码</span>
+  <div class="wechat-btn">
+      <x-button type="primary" @click.native="inviteCode">确认提交</x-button>
   </div>
+  <!-- <div class="btn-box">
+      <router-link to="/apply-members"><span>没有邀请码</span></router-link>
+  </div> -->
   <toast v-model="toastShow" type="text">{{toastTxt}}</toast>
 </div>
 
 </template>
 
 <script>
-import utils from '../../assets/js/urlConfig.js'
 
 import {
     Group,
@@ -114,43 +107,86 @@ export default {
         return {
           toastTxt: '',
           toastShow: false,
-          inviteCode:null,
-          num1:null,
-          num2:null,
-          num3:null,
-          num4:null,
-          num5:null,
-          num6:null,
-          num7:null,
-          num8:null,
-          num9:null
+          nums: [{
+              num: ''
+          }, {
+              num: ''
+          }, {
+              num: ''
+          }, {
+              num: ''
+          }, {
+              num: ''
+          }, {
+              num: ''
+          }, {
+              num: ''
+          }, {
+              num: ''
+          }, {
+              num: ''
+          }],
         }
     },
     created(){
       document.title="加入会员"
     },
     mounted(){
+
+
     },
     methods:{
       inviteCode(){
-        this.inviteCode = this.num1 + this.num2 + this.num3 + this.num4 + this.num5 + this.num6 + this.num7 + this.num8 + this.num9
-        let datas = {
-          "openId":utils.LocalStorage.getStore('openId'),
-          "inviteCode":this.inviteCode
+
+        this.$router.push(
+          {
+            path: '/apply-members'
+          })
+
+
+
+
+
+
+        let takeCode = '',
+            flag = true
+        this.nums.forEach((val, index) => {
+            if (!val.num) {
+                this.$vux.toast.text('请正确输入邀请码')
+                flag = false
+                return false
+            }
+            takeCode += val.num
+        })
+
+
+        if (flag) {
+          let datas = {
+            "openId":'123456',
+            "inviteCode":takeCode
+          }
+          console.log(datas)
+          this.$http.post(this.HttpUrl.UrlConfig.inviteCode,datas)
+                        .then(res => {
+                          var res = res.data
+                            if(res.code=='1'){// 会员
+                              this.$router.push(
+                                {
+                                  path: '/apply-members'
+                                })
+                            }else{ // 异常
+                              this.$vux.toast.show({
+                                  text: res.msg,
+                                  type: 'text',
+                                  width: '80%'
+                              })
+                            }
+                        }).catch(error => {
+                            console.log(error)
+                        })
         }
-        this.$http.post(utils.UrlConfig.inviteCode,datas)
-                      .then(res => {
-                        var res = res.data
-                          if(res.code=='1'){// 会员
-                            this.toastShow = true
-                            this.toastTxt = res.msg
-                          }else{ // 异常
-                            this.toastShow = true
-                            this.toastTxt = res.msg
-                          }
-                      }).catch(error => {
-                          console.log(error)
-                      })
+
+
       }
     }
 }

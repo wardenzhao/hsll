@@ -114,7 +114,7 @@
             </group>
         </div>
         <div class="wechat-btn">
-          <x-button type="primary" link="">微信支付</x-button>
+          <x-button type="primary" @click.native="buyGoods">微信支付</x-button>
         </div>
 
     </div>
@@ -143,7 +143,19 @@ export default {
             total: 180,
             num: 1,
             invoiceTypeList:['不要发票','个人','企业'],
-            invoiceTypeValue:['不要发票']
+            invoiceTypeValue:['不要发票'],
+            goodId:'',
+            goodNum:'',
+            goodSpecId:'',
+            goodSpeName:'',
+            goodPrice:'',
+            address:'',
+            person:'',
+            phone:'',
+            receiptType:'',
+            receiptTitle:'',
+            receiptNo:'',
+            buyerMessage:'',
         }
     },
     created() {
@@ -153,7 +165,38 @@ export default {
 
     },
     methods: {
+      buyGoods(){
+        let datas = {
+            'openId': '123456',
+            'goodId': this.goodId,
+            'goodNum': this.goodNum,
+            'goodSpecId': this.goodSpecId,
+            'goodSpeName': this.goodSpeName,
+            'goodPrice': this.goodPrice,
+            'address': this.address,
+            'person': this.person,
+            'phone': this.phone,
+            'receiptType': this.receiptType,
+            'receiptTitle': this.receiptTitle,
+            'receiptNo': this.receiptNo,
+            'buyerMessage': this.buyerMessage,
+        }
+        this.$http.post(this.HttpUrl.UrlConfig.buyGoods, datas)
+            .then(res => {
+                var res = res.data
+                if (res.code == "1") {
 
+                } else {
+                    this.$vux.toast.show({
+                        text: res.msg,
+                        type: 'text',
+                        width: '80%'
+                    })
+                }
+            }).catch(error => {
+                console.log(error)
+            })
+      }
     }
 }
 

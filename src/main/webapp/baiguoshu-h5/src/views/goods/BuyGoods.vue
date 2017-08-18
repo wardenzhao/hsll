@@ -204,17 +204,17 @@
 <div class="goods-main">
     <swiper :list="demo01_list" v-model="demo01_index" height="250px" @on-index-change="demo01_onIndexChange"></swiper>
     <div class="goods-info">
-        <h3 class="h3-title">标题</h3>
-        <p class="tips1">富平富平富平富平富平富平富平富平</p>
+        <h3 class="h3-title">{{goodTitle}}</h3>
+        <p class="tips1">{{goodSubTitle}}</p>
         <div class="price-box">
             <em class="yen">¥</em>
-            <span class="price">158</span>
+            <span class="price">{{goodPrice}}</span>
         </div>
         <div class="address-box">
-            <p><span>发货地：陕西富平</span></p>
+            <p><span>发货地:{{goodAddress}}</span></p>
         </div>
         <div class="tips2">
-            <p>今年好事连连预计，提示信息今年好事连连预计，提示信息今年好事连连预计，提示信息今年好事连连预计，提示信息</p>
+            <p>{{goodDes}}</p>
         </div>
         <div class="buy-btn" @click="handlerBuyBtn">立即购买</div>
     </div>
@@ -228,19 +228,25 @@
                 </span>
                 <div class="goods-box">
                     <span class="img">
-                  <img src="../../assets/images/1.png" alt="">
+                  <img :src="goodIcon" alt="">
                 </span>
                     <span class="img-t">好诗连连标题</span>
                 </div>
                 <div class="goods-standard">
                     <h4 class="h4-title">规格</h4>
                     <flexbox class="btn-list">
-                        <flexbox-item>
+
+                      <flexbox-item v-for="(item,index) in goodsDatas">
+                          <x-button class="active">{{item.nam}}</x-button>
+                      </flexbox-item>
+
+
+                        <!-- <flexbox-item>
                             <x-button class="active">礼盒装 4只 480克</x-button>
                         </flexbox-item>
                         <flexbox-item>
                             <x-button>礼盒装 4只 480克</x-button>
-                        </flexbox-item>
+                        </flexbox-item> -->
                     </flexbox>
                 </div>
                 <div class="goods-num">
@@ -303,19 +309,68 @@ export default {
     },
     data() {
         return {
+            goodTitle:'',
+            goodSubTitle:'',
+            goodPrice:'',
+            goodAddress:'',
+            goodDes:'',
+            goodIcon:'',
+            goodsDatas:[],
             show: false,
             dialogShow: false,
             myAddress: false,
-            demo01_list: baseList,
+            demo01_list: [],
             demo01_index: 0,
             total: 0
         }
     },
     mounted() {
         this.total = 1 * 158
-
+        this.getGoods()
     },
     methods: {
+        getGoods(){
+          var datas = {
+              "openId":'123456'
+          }
+          console.log(datas)
+          this.$http.post(this.HttpUrl.UrlConfig.getGoods,datas)
+                        .then(res => {
+                          var res = res.data
+                            if(res.code=='1'){// 成功
+                              this.goodTitle = res.data[0].goodTitle
+                              this.goodSubTitle = res.data[0].goodSubTitle
+                              this.goodPrice = res.data[0].goodPrice
+                              this.goodAddress = res.data[0].goodAddress
+                              this.goodDes = res.data[0].goodDes
+                              this.goodIcon = res.data[0].goodIcon
+                              this.goodsDatas = res.data[0].goodSpec
+
+                              let advImg = res.data[0].advImg.split(',')
+
+                              console.log(advImg)
+
+                              let advImgArr = []
+                              advImg.forEach((val)=>{
+                                advImgArr.push({
+                                  url: 'javascript:',
+                                  img: 'https://static.vux.li/demo/1.jpg',
+                                  title: ''
+                                })
+                              })
+                              this.demo01_list = advImgArr
+                            }else{ // 异常
+                              this.$vux.toast.show({
+                                  text: res.msg,
+                                  type: 'text',
+                                  width: '80%'
+                              })
+                            }
+
+                        }).catch(error => {
+                            console.log(error)
+                        })
+        },
         demo01_onIndexChange(index) {
                 this.demo01_index = index
             },

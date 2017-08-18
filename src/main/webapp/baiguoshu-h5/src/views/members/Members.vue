@@ -46,7 +46,7 @@
 <div class="members">
     <div class="img-box">
       <img class="img" src="../../assets/images/members.png" alt="">
-      <p class="name">汪汪汪</p>
+      <p class="name">{{userName}}</p>
     </div>
     <div class="">
       <group>
@@ -61,14 +61,13 @@
       </group>
     </div>
     <div class="btn-box">
-        <span>我的订单</span>
+        <router-link to='/my-order'><span>我的订单</span></router-link>
     </div>
 </div>
 
 </template>
 
 <script>
-import utils from '../../assets/js/urlConfig.js'
 import {
   Group,
   Cell,
@@ -91,13 +90,14 @@ export default {
         document.title="会员"
     },
     mounted(){
+      this.getUserMessage()
     },
     methods:{
         getUserMessage(){
           var datas = {
-              "openId":utils.LocalStorage.getStore('openId')
+              "openId":'123456'
           }
-          this.$http.post(utils.UrlConfig.getUserMessage,datas)
+          this.$http.post(this.HttpUrl.UrlConfig.getUserMessage,datas)
                         .then(res => {
                           var res = res.data
                             if(res.code=='1'){// 成功
