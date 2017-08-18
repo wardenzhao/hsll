@@ -1,5 +1,7 @@
 package cn.thinkjoy.hsll.resp;
 
+import java.util.List;
+
 /**
  * Created by warden on 17/7/31.
  */
@@ -15,7 +17,8 @@ public class GoodResp {
     private String goodAddress;
     private String goodIcon;
     private String goodSubTitle;
-    private GoodSpecResp goodSpec;
+    private List<GoodSpecResp> goodSpec;
+    private String thumb;
 
 
     public long getGoodId() {
@@ -90,11 +93,19 @@ public class GoodResp {
         this.goodSubTitle = goodSubTitle;
     }
 
-    public GoodSpecResp getGoodSpec() {
+    public List<GoodSpecResp> getGoodSpec() {
         return goodSpec;
     }
 
-    public void setGoodSpec(GoodSpecResp goodSpec) {
+    public void setGoodSpec(List<GoodSpecResp> goodSpec) {
         this.goodSpec = goodSpec;
+    }
+
+    public String getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(String thumb) {
+        this.thumb = thumb;
     }
 }

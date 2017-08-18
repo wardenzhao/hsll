@@ -3,15 +3,28 @@
 
 <mapper namespace="cn.thinkjoy.hsll.dao.GoodsDao">
     <select id="getGoodsList" resultType="cn.thinkjoy.hsll.bean.Goods">
-        SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status
+        SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status,thumb
         FROM
         goods
     </select>
 
     <select id="getGoodsById" resultType="cn.thinkjoy.hsll.bean.Goods">
-        SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status
+        SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status,thumb
         FROM
         goods WHERE id = #{id}
     </select>
+
+    <update id="updateGood">
+        UPDATE goods
+        <set>
+            title = #{memberAddress.phone},
+            sub_title = #{memberAddress.address},
+            image = #{memberAddress.person},
+            describe=,
+
+        </set>
+        where id = #{memberAddress.id}
+
+    </update>
 </mapper>
 
