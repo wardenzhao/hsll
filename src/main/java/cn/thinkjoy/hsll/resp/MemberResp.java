@@ -7,6 +7,7 @@ public class MemberResp {
 
 
     private long id;
+    private String phone;
     private String userName;
     private String openId;
     private String userSex;
@@ -20,6 +21,14 @@ public class MemberResp {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getUserName() {

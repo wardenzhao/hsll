@@ -112,10 +112,11 @@ public class FrontController extends BaseController{
         if(member != null && member.getId()>0){
             MemberResp memberResp = new MemberResp();
             memberResp.setId(member.getId());
-            memberResp.setOpenId(member.getOpenId());
-            memberResp.setUserName(member.getName());
-            memberResp.setAddress(member.getAddress());
-            memberResp.setInviteCode(member.getInviteCode());
+            memberResp.setPhone(member.getPhone()+"");
+            memberResp.setOpenId(member.getOpenId()+"");
+            memberResp.setUserName(member.getName()+"");
+            memberResp.setAddress(member.getAddress()+"");
+            memberResp.setInviteCode(member.getInviteCode()+"");
             if(member.getSex() == 0){
                 memberResp.setUserSex("女");
             }else{
