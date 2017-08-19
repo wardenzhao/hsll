@@ -74,6 +74,10 @@ import {
   Toast
 }
 from 'vux'
+import {
+    setStore, getStore ,getUrlKey
+}
+from '../../config/mUtils'
 export default {
   components: {
       Group, Cell,Toast
@@ -95,7 +99,7 @@ export default {
     methods:{
         getUserMessage(){
           var datas = {
-              "openId":'123456'
+              "openId":getStore('openId')
           }
           this.$http.post(this.HttpUrl.UrlConfig.getUserMessage,datas)
                         .then(res => {
@@ -109,7 +113,6 @@ export default {
                               this.toastShow = true
                               this.toastTxt = res.msg
                             }
-
                         }).catch(error => {
                             console.log(error)
                         })

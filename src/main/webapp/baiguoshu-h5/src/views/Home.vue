@@ -5,11 +5,12 @@
 </template>
 
 <script>
-import utils from '../assets/js/urlConfig.js'
 import {
     Toast
 }
 from 'vux'
+import {setStore,getStore} from '../config/mUtils.js'
+
 export default {
   components: {
         Toast
@@ -21,16 +22,16 @@ export default {
     }
   },
   mounted(){
-
+    setStore('openId','123456')
+    this.isuser()
   },
   methods:{
     isuser(){
-      // this.$http.get('/'+this.HttpUrl.UrlConfig.isuser)
       this.$http.get(this.HttpUrl.UrlConfig.isuser)
                     .then(res => {
                       var res = res.data
                         if(res.code=='1'){// 会员
-                          utils.LocalStorage.setStore('openId', res.openId)
+                          setStore('openId', res.openId)
                           this.$router.push('/buy-goods');
                         }else if(res.code=='0'){ // 非会员
                           this.$router.push('/no-members');

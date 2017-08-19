@@ -16,7 +16,7 @@ body{
       margin-bottom: 15px;
       .order-txt{
         position: relative;
-        line-height: 40px;
+        line-height: 20px;
         font-size: 14px;
         color: #666;
       }
@@ -73,7 +73,7 @@ body{
       <div class="img-box">
           <img class="img" :src="item.goodIcon" alt="">
           <div class="img-info">
-              <p class="txt">{{item.goodSpec}} x {{item.goodNum}}</p>
+              <p class="txt">{{item.goodName}} x {{item.goodNum}}</p>
               <p class="total">合计¥{{item.orderPrice}}</p>
           </div>
       </div>
@@ -85,7 +85,7 @@ body{
           <p>预计发货时间：{{item.sendTime}}</p>
       </div>
       <group>
-          <cell title="修改收货信息" is-link value=""></cell>
+          <cell title="addressInfo" :link="'/address-list?orderNo='+item.orderNo"></cell>
       </group>
   </div>
 
@@ -101,6 +101,10 @@ import {
     Toast
 }
 from 'vux'
+import {
+    setStore, getStore ,getUrlKey
+}
+from '../../config/mUtils'
 export default {
     components: {
         Group, Cell,Toast
@@ -110,50 +114,30 @@ export default {
             items: [],
             toastTxt: '',
             toastShow: false,
-            page:'1'
+            page:'1',
+            addressInfo:'修改收货信息',
+            orderNo:''
         }
     },
     created() {
         document.title = "我的订单"
     },
     mounted() {
+      let selAddress = JSON.parse(getStore('selAddress'))
+      console.log(selAddress[0])
+      if(selAddress[0]){
+        this.addressInfo = selAddress[0].item.address
+        this.orderNo = selAddress[0].orderNo
+      }
+
+
+
       this.myorder()
     },
     methods:{
       myorder(){
-
-//         let res = {
-//   "code": "1",
-//   "data": [
-//     {
-//       "goodIcon": "123",
-//       "goodNum": 2,
-//       "orderNo": "1502276362910",
-//       "orderPrice": "22.78",
-//       "orderState": "等待发货",
-//       "orderTime": "2017-08-09 18:59:22"
-//     },
-//     {
-//       "address": "678909876",
-//       "goodIcon": "123",
-//       "goodNum": 2,
-//       "orderNo": "1502361310033",
-//       "orderPrice": "22.78",
-//       "orderState": "等待发货",
-//       "orderTime": "2017-08-10 18:35:10",
-//       "person": "678909876",
-//       "phone": "678909876"
-//     }
-//   ],
-//   "msg": "success"
-// }
-//
-//
-//   this.items = res.data
-
-
         var datas = {
-            "openId":'123456',
+            "openId":getStore('openId'),
             "page":this.page
         }
         this.$http.post(this.HttpUrl.UrlConfig.myorder,datas)

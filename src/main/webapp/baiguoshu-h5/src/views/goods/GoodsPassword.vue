@@ -109,9 +109,13 @@ export default {
     methods: {
         takeGood() {
 
-                this.$router.push({
-                    path: '/comfirm-goods'
-                })
+          this.$router.push({
+              path: '/comfirm-goods',
+              query: { takeCode: '123456789' }
+          })
+
+
+
                 let takeCode = '',
                     flag = true
                 this.nums.forEach((val, index) => {
@@ -123,48 +127,15 @@ export default {
                     takeCode += val.num
                 })
                 console.log(takeCode)
-
-                let datas = {
-                    "openId": "12345678", //类型：String  必有字段  备注：无
-                    "code": "1", //类型：String  必有字段  备注：1成功0失败-1系统错误
-                    "msg": "success", //类型：String  必有字段  备注：返回信息
-                    "data": { //类型：Object  必有字段  备注：无
-                        "goodName": "好柿饼", //类型：String  必有字段  备注：商品名称
-                        "goodImg": "http://www.adasda.com/aaa.png", //类型：String  必有字段  备注：商品图片
-                        "goodBatch": "此盒柿饼是好柿连连第一批122盒", //类型：String  必有字段  备注：商品批次
-                        "reserveMember": "张三", //类型：String  必有字段  备注：预定会员
-                        "goodId": "1234", //类型：String  必有字段  备注：商品ID
-                        "takeCode": "12321", //类型：String  必有字段  备注：提货码
-                        "sendTime": "2017年7月12日 12:00" //类型：String  必有字段  备注：发货时间
-                    }
-                }
-                datas.data['takeCode'] = takeCode
-
-                setStore('takeGoodInfo',datas.data)
-
                 if (flag) {
-                    let datas = {
-                        'openId': '123456',
-                        'takeCode': takeCode
-                    }
-                    this.$http.post(this.HttpUrl.UrlConfig.takeGood, datas)
-                        .then(res => {
-                            var res = res.data
-                            if (res.code == "1") {
+                  this.$router.push({
+                      path: '/comfirm-goods',
+                      query:{
+                        takeCode:takeCode
+                      }
+                  })
 
-                                this.$router.push({
-                                    path: '/comfirm-goods'
-                                })
-                            } else {
-                                this.$vux.toast.show({
-                                    text: res.msg,
-                                    type: 'text',
-                                    width: '80%'
-                                })
-                            }
-                        }).catch(error => {
-                            console.log(error)
-                        })
+
                 }
 
 

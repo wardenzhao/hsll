@@ -37,7 +37,7 @@
 <template lang="html">
 
 <div class="address-list-box">
-      <div class="address-list" v-for="(item,index) in items" :key="index" @click="imgShowClick(index)">
+      <div class="address-list" v-for="(item,index) in items" :key="index" @click="imgShowClick(item,index)">
         <div class="address-icon"><img v-show="index==i" src="../../assets/images/address-icon.png" alt=""></div>
         <div class="address-info">
           <div>{{item.person}}({{item.phone}})</div>
@@ -61,6 +61,11 @@ import {
     Toast
 }
 from 'vux'
+import {
+    setStore, getStore ,getUrlKey
+}
+from '../../config/mUtils'
+import {mapMutations} from 'vuex'
 export default {
   components: {
         Toast
@@ -68,7 +73,8 @@ export default {
     data() {
         return {
           items:[],
-          i: -1
+          i: -1,
+          orderNo:''
         }
     },
     created(){
@@ -76,6 +82,7 @@ export default {
 
     },
     mounted(){
+        this.orderNo = getUrlKey('orderNo')
         this.addressList()
     },
     methods:{
@@ -99,33 +106,39 @@ export default {
                           console.log(error)
                       })
       },
-      imgShowClick(index){
+      ...mapMutations([
+        'SEL_ADDRESS'
+      ]),
+      imgShowClick(item,index){
+        console.log(this.orderNo)
         console.log(index)
         this.i = index
+        this.SEL_ADDRESS({
+          'item':item,
+          'index':index,
+          'orderNo':this.orderNo
+        });
 
 
-        // let datas = {
-        //   "openId":'123456',
-        //   "id":item.address,
-        //   "person":item.person,
-        //   "phone":item.phone,
-        //   "address":item.address
-        // }
-        // this.$http.post(this.HttpUrl.UrlConfig.selAddress,datas)
-        //               .then(res => {
-        //                 var res = res.data
-        //                   if(res.code=='1'){// 会员
-        //                     this.toastShow = true
-        //                     this.toastTxt = "选择成功"
-        //                   }else{ // 异常
-        //                     this.$vux.toast.show({
-        //                         text: res.msg,
-        //                         type: 'text'
-        //                     })
-        //                   }
-        //               }).catch(error => {
-        //                   console.log(error)
-        //               })
+        let datas = {
+          "openId":getStore('openId'),
+          "orderNo":this.orderNo,
+          "orderNoAddress":item.address
+        }
+        this.$http.post(this.HttpUrl.UrlConfig.orderNoAddress,datas)
+                      .then(res => {
+                        var res = res.data
+                          if(res.code=='1'){//
+
+                          }else{ // 异常
+                            this.$vux.toast.show({
+                                text: res.msg,
+                                type: 'text'
+                            })
+                          }
+                      }).catch(error => {
+                          console.log(error)
+                      })
       }
     }
 

@@ -72,7 +72,7 @@
             </group>
         </div>
         <div class="wechat-btn">
-            <x-button type="primary" @click.native="takeGood">确认提交</x-button>
+            <x-button type="primary" @click.native="confirmTakeGood">确认提交</x-button>
         </div>
     </div>
 </div>
@@ -81,7 +81,7 @@
 
 <script>
 import {
-    setStore, getStore
+    setStore, getStore ,getUrlKey
 }
 from '../../config/mUtils'
 import {
@@ -115,35 +115,45 @@ export default {
     document.title="确认提货"
   },
   mounted(){
-      let takeGoodInfo =  JSON.parse(getStore('takeGoodInfo'))
-      this.takeCode = takeGoodInfo.takeCode
-      this.goodName = takeGoodInfo.goodName
-      this.goodImg = takeGoodInfo.goodImg
-      this.reserveMember = takeGoodInfo.reserveMember
-      this.goodBatch = takeGoodInfo.goodBatch
-      this.date = '预计发货时间：'+takeGoodInfo.sendTime
+    this.takeGoodInfo()
   },
   methods:{
-    takeGood(){
-      let that = this;
-      let result = '王杨先生已邀请您成为好柿连连会员，快去柿园看看'
-      this.$vux.toast.show({
-          text: '提货成功',
-          type: 'text',
-          width: '80%',
-          time:'2000',
-          onHide(){
-            that.$router.push(
-              {
-                path: '/goods-sucess',
-                query: { result:  result}
-              })
-          }
-      })
+    takeGoodInfo(){
+      let datas = {
+          'openId': getStore('openId'),
+          'takeCode': getUrlKey('takeCode')
+      }
+      this.$http.post(this.HttpUrl.UrlConfig.takeGood, datas)
+          .then(res => {
+              var res = res.data
+              if (res.code == "1") {
+                this.takeCode = res.data.takeCode
+                this.goodName = res.data.goodName
+                this.goodImg = res.data.goodImg
+                this.reserveMember = res.data.reserveMember
+                this.goodBatch = res.data.goodBatch
+                this.date = '预计发货时间：'+res.data.sendTime
+              } else {
+                  this.$vux.toast.show({
+                      text: res.msg,
+                      type: 'text',
+                      width: '80%'
+                  })
+              }
+          }).catch(error => {
+              console.log(error)
+          })
+    },
+    confirmTakeGood(){
+      // let result = '王杨先生已邀请您成为好柿连连会员，快去柿园看看'
+      // this.$router.push(
+      //   {
+      //     path: '/goods-sucess',
+      //     query: { result:  result}
+      //   })
 
       var datas = {
-          // "openId":getStore('openId'),
-          "openId":'123456',
+          "openId":getStore('openId'),
           "takeCode":this.takeCode,
           "address":this.address,
           "person":this.userName,
@@ -151,12 +161,28 @@ export default {
           "goodId":'',
           "reserveMember":this.reserveMember
       }
-      console.log(datas)
       this.$http.post(this.HttpUrl.UrlConfig.confirmTakeGood,datas)
                     .then(res => {
                       var res = res.data
                         if(res.code=='1'){// 成功
                           let result = res.result
+                          let that = this;
+                          // let result = '王杨先生已邀请您成为好柿连连会员，快去柿园看看'
+                          this.$vux.toast.show({
+                              text: '提货成功',
+                              type: 'text',
+                              width: '80%',
+                              time:'2000',
+                              onHide(){
+                                that.$router.push(
+                                  {
+                                    path: '/goods-sucess',
+                                    query: { result:  result}
+                                  })
+                              }
+                          })
+
+
                         }else{ // 异常
                           this.$vux.toast.show({
                               text: res.msg,

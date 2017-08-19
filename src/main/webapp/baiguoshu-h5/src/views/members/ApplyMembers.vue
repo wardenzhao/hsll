@@ -33,7 +33,6 @@
         <x-button type="primary" @click.native="register">提交</x-button>
       </div>
     </div>
-    <toast v-model="toastShow" type="text">{{toastTxt}}</toast>
 </div>
 
 </template>
@@ -47,6 +46,10 @@ import {
     Toast
 }
 from 'vux'
+import {
+    setStore, getStore ,getUrlKey
+}
+from '../../config/mUtils'
 export default {
     components: {
         XHeader,
@@ -63,30 +66,56 @@ export default {
             address:'',
             inviteName:'',
             sexVal:[],
-            toastTxt: '',
-            toastShow: false,
         }
     },
     mounted(){
-      console.log(getUrlKey('takeCode'))
+
     },
     methods:{
       submitBtn(){
 
       },
       register(){
-        this.$router.push(
-          {
-            path: '/members'
+        if(!this.userName){
+          this.$vux.toast.show({
+              text: '请填写姓名',
+              type: 'text',
           })
-
-
-
+          return false
+        }
+        if(!this.phone){
+          this.$vux.toast.show({
+              text: '请填写手机号',
+              type: 'text',
+          })
+          return false
+        }
+        if(this.sexVal.length==0){
+          this.$vux.toast.show({
+              text: '请选择性别',
+              type: 'text',
+          })
+          return false
+        }
+        if(!this.address){
+          this.$vux.toast.show({
+              text: '请填写地址',
+              type: 'text',
+          })
+          return false
+        }
+        if(!this.inviteName){
+          this.$vux.toast.show({
+              text: '请填写推荐会员姓名',
+              type: 'text',
+          })
+          return false
+        }
         var datas = {
-          "openId":'123456',
+          "openId":getStore('openId'),
           "userName":this.userName,
           "phone":this.phone,
-          "sex":this.sex,
+          "sex":this.sexVal,
           "address":this.address,
           "inviteName":this.inviteName
         }
@@ -94,7 +123,10 @@ export default {
                       .then(res => {
                         var res = res.data
                           if(res.code=='1'){
-
+                            this.$router.push(
+                              {
+                                path: '/members'
+                              })
                           }else{ // 异常
                             this.$vux.toast.show({
                                 text: res.msg,
