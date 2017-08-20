@@ -15,8 +15,8 @@ Vue.prototype.HttpUrl = UrlConfig
 const router = new VueRouter({
   routes
 })
-
-// 发送 ajax 请求
+import $ from 'jquery'
+  // 发送 ajax 请求
 import {
   AjaxPlugin
 }
@@ -28,6 +28,7 @@ import {
 }
 from 'vux'
 Vue.use(ToastPlugin)
+
 
 // 添加Fastclick移除移动端点击延迟
 import FastClick from 'fastclick'

@@ -1,3 +1,4 @@
+var webpack = require("webpack")
 var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
@@ -48,7 +49,14 @@ const webpackConfig = {
         name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
       }
     }]
-  }
+  },
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin('common.js'),
+    new webpack.ProvidePlugin({
+      jQuery: "jquery",
+      $: "jquery"
+    })
+  ]
 }
 
 const vuxLoader = require('vux-loader')

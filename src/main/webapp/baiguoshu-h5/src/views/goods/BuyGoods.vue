@@ -236,7 +236,7 @@
                     <h4 class="h4-title">规格</h4>
                     <flexbox class="btn-list">
 
-                      <flexbox-item v-for="(item,index) in goodsDatas">
+                      <flexbox-item v-for="(item,index) in goodsDatas" :key="index">
                           <x-button class="active">{{item.nam}}</x-button>
                       </flexbox-item>
 

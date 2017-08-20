@@ -22,6 +22,7 @@ export default {
     }
   },
   mounted(){
+    console.log(333)
     setStore('openId','123456')
     this.isuser()
   },
