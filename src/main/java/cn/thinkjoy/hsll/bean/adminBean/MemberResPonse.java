@@ -1,6 +1,6 @@
 package cn.thinkjoy.hsll.bean.adminBean;
 
-import cn.thinkjoy.hsll.bean.MemberApply;
+import cn.thinkjoy.hsll.bean.Member;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
 public class MemberResPonse {
     private int pageNo;
     private int listCount;
-    private List<MemberApply> memberList;
+    private List<Member> memberList;
 
     public int getPageNo() {
         return pageNo;
@@ -28,11 +28,11 @@ public class MemberResPonse {
         this.listCount = listCount;
     }
 
-    public List<MemberApply> getMemberList() {
+    public List<Member> getMemberList() {
         return memberList;
     }
 
-    public void setMemberList(List<MemberApply> memberList) {
+    public void setMemberList(List<Member> memberList) {
         this.memberList = memberList;
     }
 }
