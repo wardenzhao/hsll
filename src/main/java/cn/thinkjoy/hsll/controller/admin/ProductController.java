@@ -14,9 +14,7 @@ import com.alibaba.dubbo.common.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -86,7 +84,7 @@ public class ProductController {
      */
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     @ResponseBody
-    public ResultResponse update(HttpServletRequest request,HttpServletResponse response,ProductRequest productRequest){
+    public ResultResponse update(HttpServletRequest request,HttpServletResponse response,@RequestBody ProductRequest productRequest){
         ResultResponse result=new ResultResponse();
         try{
             String specsJson=productRequest.getSpecs();
@@ -119,7 +117,7 @@ public class ProductController {
      */
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @ResponseBody
-    public ResultResponse add(HttpServletRequest request,HttpServletResponse response,ProductRequest productRequest){
+    public ResultResponse add(HttpServletRequest request,HttpServletResponse response,@RequestBody ProductRequest productRequest){
         ResultResponse result=new ResultResponse();
         try{
             String specsJson=productRequest.getSpecs();
@@ -173,7 +171,7 @@ public class ProductController {
      */
     @RequestMapping(value = "/upOrDown",method = RequestMethod.POST)
     @ResponseBody
-    public ResultResponse upOrDownGood(HttpServletRequest request,HttpServletResponse response,ProductRequest productRequest){
+    public ResultResponse upOrDownGood(HttpServletRequest request,HttpServletResponse response,@RequestBody ProductRequest productRequest){
         ResultResponse result=new ResultResponse();
         try{
 

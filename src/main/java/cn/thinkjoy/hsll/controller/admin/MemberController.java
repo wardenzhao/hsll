@@ -12,6 +12,7 @@ import cn.thinkjoy.hsll.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -67,7 +68,7 @@ public class MemberController {
      */
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @ResponseBody
-    public ResultResponse add(HttpServletRequest request,HttpServletResponse response,Member member){
+    public ResultResponse add(HttpServletRequest request,HttpServletResponse response,@RequestBody Member member){
         ResultResponse result=new ResultResponse();
         try{
             memberService.add(member);
@@ -96,7 +97,7 @@ public class MemberController {
 
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     @ResponseBody
-    public ResultResponse update(HttpServletRequest request,HttpServletResponse response,Member member){
+    public ResultResponse update(HttpServletRequest request,HttpServletResponse response,@RequestBody Member member){
         ResultResponse result=new ResultResponse();
         try{
             memberService.update(member);

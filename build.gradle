@@ -119,5 +119,6 @@ dependencies {
     compile 'org.apache.poi:poi:3.14'
     compile 'org.apache.poi:poi-ooxml:3.14'
     compile 'mysql:mysql-connector-java:5.1.6'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.3'
 }
 
