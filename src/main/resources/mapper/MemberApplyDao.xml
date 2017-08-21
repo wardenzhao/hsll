@@ -16,7 +16,7 @@
         FROM member_apply limit #{startPage},#{pageSize}
     </select>
 
-    <select id="getMemberApplys" resultType="java.lang.Integer">
+    <select id="getMemberApplysCount" resultType="java.lang.Integer">
         select count(1)
         FROM member_apply
     </select>
