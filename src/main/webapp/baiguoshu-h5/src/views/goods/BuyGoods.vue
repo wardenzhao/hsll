@@ -196,6 +196,11 @@
     transform: translateY(500px);
     opacity: 0;
 }
+.vux-flexbox-item{
+  button.weui-btn, input.weui-btn{
+        width: 91%;
+  }
+}
 
 </style>
 
@@ -230,34 +235,25 @@
                     <span class="img">
                   <img :src="goodIcon" alt="">
                 </span>
-                    <span class="img-t">好诗连连标题</span>
+                    <span class="img-t">{{goodTitle}}</span>
                 </div>
                 <div class="goods-standard">
                     <h4 class="h4-title">规格</h4>
                     <flexbox class="btn-list">
-
                       <flexbox-item v-for="(item,index) in goodsDatas" :key="index">
-                          <x-button class="active">{{item.nam}}</x-button>
+                          <x-button @click.native="selGood(item)" :class="{'active':item.active}">{{item.name}}</x-button>
                       </flexbox-item>
-
-
-                        <!-- <flexbox-item>
-                            <x-button class="active">礼盒装 4只 480克</x-button>
-                        </flexbox-item>
-                        <flexbox-item>
-                            <x-button>礼盒装 4只 480克</x-button>
-                        </flexbox-item> -->
                     </flexbox>
                 </div>
                 <div class="goods-num">
                     <group>
-                        <x-number title="数量" :value="1" :min="1" @on-change="change"></x-number>
+                        <x-number title="数量" v-model="numValue" :min="1" @on-change="change"></x-number>
                     </group>
                 </div>
                 <div class="goods-total">
                     <h4 class="h4-title">共计:¥{{total}}</h4>
                 </div>
-                <div class="buy-btn">下一步</div>
+                <div class="buy-btn" @click.active='subCart'>下一步</div>
             </div>
         </div>
     </transition>
@@ -266,7 +262,11 @@
 </template>
 
 <script>
-
+import Vue from 'vue'
+import {
+    setStore, getStore ,getUrlKey
+}
+from '../../config/mUtils'
 import {
     Swiper,
     XDialog,
@@ -279,7 +279,7 @@ import {
 }
 from 'vux'
 
-
+import {mapMutations} from 'vuex'
 
 const baseList = [{
     url: 'javascript:',
@@ -316,24 +316,28 @@ export default {
             goodDes:'',
             goodIcon:'',
             goodsDatas:[],
-            show: false,
+            show: true,
             dialogShow: false,
             myAddress: false,
             demo01_list: [],
             demo01_index: 0,
-            total: 0
+            total: 0,
+            numValue:1,
+            price:0,
         }
     },
     mounted() {
-        this.total = 1 * 158
         this.getGoods()
     },
     methods: {
+      ...mapMutations([
+        'ADD_CART'
+      ]),
         getGoods(){
           var datas = {
-              "openId":'123456'
+              "openId":getStore('openId')
           }
-          console.log(datas)
+          // console.log(datas)
           this.$http.post(this.HttpUrl.UrlConfig.getGoods,datas)
                         .then(res => {
                           var res = res.data
@@ -345,6 +349,19 @@ export default {
                               this.goodDes = res.data[0].goodDes
                               this.goodIcon = res.data[0].goodIcon
                               this.goodsDatas = res.data[0].goodSpec
+
+
+                              this.$nextTick(()=>{
+                                Vue.set(this.goodsDatas[0],'active',true)
+                                this.price = this.goodsDatas[0].price
+                                this.total = parseInt(this.numValue) * this.price
+                              })
+
+
+
+
+
+
 
                               let advImg = res.data[0].advImg.split(',')
 
@@ -381,7 +398,7 @@ export default {
             },
             change(val) {
                 console.log('change', val)
-                this.total = parseInt(val) * 158
+                this.total = parseInt(val) * this.price
             },
             handlerBuyBtn() {
                 this.show = true
@@ -389,6 +406,22 @@ export default {
             handlerCloseBtn(){
               console.log(11)
               this.show = false
+            },
+            selGood(item){
+                let that = this
+                console.log(item)
+                this.$nextTick(()=>{
+                  this.goodsDatas.forEach((item)=>{
+                    Vue.set(item,'active',false)
+                  })
+                  Vue.set(item,'active',true)
+                  this.price = item.price
+                  this.total = parseInt(this.numValue) * this.price
+                })
+                this.numValue = 1
+            },
+            subCart(){
+              console.log(this.price)
             }
     }
 }

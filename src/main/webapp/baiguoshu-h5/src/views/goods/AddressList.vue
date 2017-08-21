@@ -88,7 +88,7 @@ export default {
     methods:{
       addressList(){
         let datas = {
-          "openId":'123456'
+          "openId":getStore('openId')
         }
         this.$http.post(this.HttpUrl.UrlConfig.address,datas)
                       .then(res => {

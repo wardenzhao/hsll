@@ -1,5 +1,6 @@
 import {
-  SEL_ADDRESS
+  SEL_ADDRESS,
+  ADD_CART
 }
 from './mutations_types.js'
 import {
@@ -24,5 +25,18 @@ export default {
     state.selAddress = selAddressTemp
       //存入localStorage
     setStore('selAddress', state.selAddress);
+  },
+  // 添加商品
+  [ADD_CART](state, {
+    'item': item
+  }) {
+    let addCartListTemp = []
+    addCartListTemp.push({
+      'item': item
+    })
+
+    state.cartList = addCartListTemp
+      //存入localStorage
+    setStore('addCartList', state.cartList);
   },
 }

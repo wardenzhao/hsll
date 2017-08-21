@@ -123,7 +123,10 @@
 </template>
 
 <script>
-
+import {
+    setStore, getStore ,getUrlKey
+}
+from '../../config/mUtils'
 import {
     Cell, Group,XInput,
     XButton,
@@ -167,7 +170,7 @@ export default {
     methods: {
       buyGoods(){
         let datas = {
-            'openId': '123456',
+            'openId':getStore('openId') ,
             'goodId': this.goodId,
             'goodNum': this.goodNum,
             'goodSpecId': this.goodSpecId,
