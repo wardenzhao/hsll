@@ -326,6 +326,11 @@ export default {
             price:0,
         }
     },
+    created(){
+      if(getUrlKey('openId')){
+        setStore('openId',getUrlKey('openId'))
+      }
+    },
     mounted() {
         this.getGoods()
     },

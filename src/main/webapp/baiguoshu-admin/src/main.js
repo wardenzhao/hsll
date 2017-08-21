@@ -15,7 +15,7 @@ Vue.config.productionTip = false
 
 Vue.prototype.$http = axios;
 
-Vue.prototype.htmlUrl = UrlConfig.UrlConfig
+Vue.prototype.HttpUrl = UrlConfig
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)

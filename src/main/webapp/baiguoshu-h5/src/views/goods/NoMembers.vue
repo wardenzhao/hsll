@@ -14,10 +14,19 @@
 </template>
 
 <script>
+import {
+    setStore, getStore ,getUrlKey
+}
+from '../../config/mUtils'
 import { XButton } from 'vux'
 export default {
   components:{
     XButton
+  },
+  created(){
+    if(getUrlKey('openId')){
+      setStore('openId',getUrlKey('openId'))
+    }
   },
 }
 </script>

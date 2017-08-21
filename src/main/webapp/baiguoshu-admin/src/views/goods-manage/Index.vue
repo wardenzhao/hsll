@@ -22,15 +22,15 @@
             <el-table-column prop="title" label="主标"></el-table-column>
             <el-table-column prop="subTitle" label="副标"></el-table-column>
             <el-table-column prop="" label="说明文字"></el-table-column>
-            <el-table-column prop="image" label="图片"></el-table-column>
+            <el-table-column prop="images" label="图片"></el-table-column>
             <el-table-column label="规格">
               <template scope="scope">
-                <span>{{scope.row.specs[0].specname}}</span>
+                <div v-for="(item,index) in scope.row.specs">{{item.specName}}</div>
               </template>
             </el-table-column>
             <el-table-column label="价格">
               <template scope="scope">
-                <span>{{scope.row.specs[0].specPrice}}</span>
+                <div v-for="(item,index) in scope.row.specs">{{item.specPrice}}</div>
               </template>
             </el-table-column>
             <el-table-column prop="" label="发货地"></el-table-column>
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import qs from 'qs'
 import AddUpdate from './AddUpdate'
 import DelDialog from '../../components/DelDialog'
 export default {
@@ -84,52 +85,36 @@ export default {
             },
             // 拉取列表
             list() {
-                    this.tableData = [{
-                            "productId": 123,
-                            "productName": "柿饼子",
-                            "title": "柿饼",
-                            "subTitle": "柿饼又大又甜，美太太",
-                            "image": "http://imag1.jpg,http://img2.jpg",
-                            "specs": [{
-                                "specId": 123,
-                                "specname": "规格1",
-                                "specPrice": "158元",
-                                "specStatus": "0"
-                            }]
-                        }]
-                        // this.$http.post(this.htmlUrl.goodList)
-                        //     .then(res => {
-                        //         // console.log(res)
-                        //         res = res.data
-                        //         if (res.rtnCode === "0000000") {
-                        //             // console.log(res)
-                        //             this.tableData = res.products
-                        //
-                        //
-                        //
-                        //
-                        //         } else {
-                        //             this.$message.error(res.msg);
-                        //         }
-                        //
-                        //     }).catch(error => {
-                        //         console.log(error)
-                        //     })
+                        this.$http.get(this.HttpUrl.UrlConfig.goodList)
+                            .then(res => {
+                                console.log(res)
+                                res = res.data
+                                this.tableData = res
+                            }).catch(error => {
+                                console.log(error)
+                            })
                 },
 
                 // 新增
                 addHandler() {
-                    this.$refs.refDialog.childMethod('add')
+                    this.$refs.refDialog.childMethod('add','')
                 },
                 // 修改
                 updateHandler() {
-                  this.$refs.refDialog.childMethod('update')
+                  if (this.multipleSelection.length != 1) {
+                      this.$message({
+                          message: '请选择一项后在修改',
+                          type: 'warning'
+                      });
+                      return;
+                  }
+                  this.$refs.refDialog.childMethod('update',this.multipleSelection[0].productId)
                 },
                 // 删除
                 deleteHandler() {
-                  if (this.multipleSelection.length == 0) {
+                  if (this.multipleSelection.length != 1) {
                       this.$message({
-                          message: '请选择后在删除',
+                          message: '请选择一项后在删除',
                           type: 'warning'
                       });
                       return;
@@ -150,7 +135,7 @@ export default {
                   let datas = {
                     'id':this.multipleSelection[0].productId
                   }
-                  this.$http.post(this.htmlUrl.goodDel,datas)
+                  this.$http.post(this.HttpUrl.UrlConfig.goodDel,datas)
                       .then(res => {
                           res = res.data
                           if (res.ret === "0") {

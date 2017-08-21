@@ -92,6 +92,9 @@ export default {
     },
     created(){
         document.title="会员"
+        if(getUrlKey('openId')){
+          setStore('openId',getUrlKey('openId'))
+        }
     },
     mounted(){
       this.getUserMessage()

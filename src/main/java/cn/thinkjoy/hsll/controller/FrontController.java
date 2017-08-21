@@ -55,7 +55,8 @@ public class FrontController extends BaseController{
     @Autowired
     private BatchService batchService;
 
-    private String baseUrl = "http://172.16.222.194:8080";
+//    private String baseUrl = "http://172.16.222.194:8080";
+    private String baseUrl = "http://172.16.222.157:8282";
 
     @RequestMapping(value = "/check/isuser",method = RequestMethod.GET)
     public String index(HttpServletRequest request){
