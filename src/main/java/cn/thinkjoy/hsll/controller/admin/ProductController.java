@@ -84,7 +84,7 @@ public class ProductController {
      * @param productRequest
      * @return
      */
-    @RequestMapping(value = "/update",method = RequestMethod.GET)
+    @RequestMapping(value = "/update",method = RequestMethod.POST)
     @ResponseBody
     public ResultResponse update(HttpServletRequest request,HttpServletResponse response,ProductRequest productRequest){
         ResultResponse result=new ResultResponse();
@@ -117,7 +117,7 @@ public class ProductController {
      * @param productRequest
      * @return
      */
-    @RequestMapping(value = "/add",method = RequestMethod.GET)
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
     @ResponseBody
     public ResultResponse add(HttpServletRequest request,HttpServletResponse response,ProductRequest productRequest){
         ResultResponse result=new ResultResponse();
@@ -129,11 +129,8 @@ public class ProductController {
                 JSONObject map=(JSONObject) jsonMap.get(i);
                 ProductSpec productSpec= new ProductSpec();
                 productSpec.setGoodId(goodId);
-                productSpec.setSpecId((Long) map.get("specId"));
                 productSpec.setSpecName(map.getString("specName"));
                 productSpec.setSpecPrice(map.getString("specPrice"));
-                productSpec.setSpecStatus(map.getString("specStatus"));
-                productSpec.setAddress(map.getString("address"));
                 goodsSpecService.add(productSpec);
             }
         }catch (Exception e){
@@ -151,7 +148,7 @@ public class ProductController {
      * @param goodId
      * @return
      */
-    @RequestMapping(value = "/del",method = RequestMethod.GET)
+    @RequestMapping(value = "/del",method = RequestMethod.POST)
     @ResponseBody
     public ResultResponse del(HttpServletRequest request,HttpServletResponse response,long goodId){
         ResultResponse result=new ResultResponse();
@@ -174,7 +171,7 @@ public class ProductController {
      * @param productRequest
      * @return
      */
-    @RequestMapping(value = "/upOrDown",method = RequestMethod.GET)
+    @RequestMapping(value = "/upOrDown",method = RequestMethod.POST)
     @ResponseBody
     public ResultResponse upOrDownGood(HttpServletRequest request,HttpServletResponse response,ProductRequest productRequest){
         ResultResponse result=new ResultResponse();
