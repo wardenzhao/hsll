@@ -85,3 +85,8 @@
 ##idea##
 /.idea/
 *.iml
+
+/src/main/webapp/baiguoshu-h5/node_modules
+src/main/webapp/baiguoshu-h5/node_modules
+/src/main/webapp/baiguoshu-admin/node_modules
+src/main/webapp/baiguoshu-admin/node_modules
