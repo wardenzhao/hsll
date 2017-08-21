@@ -8,7 +8,7 @@
     <div class="btn-box">
       <router-link to="/goods-password"><x-button class="btn" plain>兑换您的柿饼</x-button></router-link>
     </div>
-    <p class="into-members"><router-link to="/apply-members">成为会员</router-link></p>
+    <router-link to="/join-members"><p class="into-members">成为会员</p></router-link>
   </div>
 </div>
 </template>

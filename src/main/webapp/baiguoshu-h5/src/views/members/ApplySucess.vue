@@ -1,6 +1,6 @@
 <style lang="less">
 .goods-sucess {
-  padding: 80px 11px;
+  padding: 200px 11px;
   .img{
     width: 60px;
     height: auto;
@@ -42,9 +42,8 @@
 
 <div class="goods-sucess">
   <img class="img" src="../../assets/images/sucess.png" alt="">
-  <p class="sucess-txt">提货成功</p>
-  <p class="txt">{{txtInfo}}</p>
-  <router-link to='/solar-terms'><span class="btn">了解好柿连连柿饼</span></router-link>
+  <!-- <p class="sucess-txt">提货成功</p> -->
+  <p class="txt">提交成功，请耐心等待审核</p>
 </div>
 
 </template>
@@ -67,7 +66,7 @@ export default {
         }
     },
     created(){
-        document.title="提货成功"
+        document.title="申请成功"
     },
     mounted() {
       this.txtInfo = getUrlKey('result')

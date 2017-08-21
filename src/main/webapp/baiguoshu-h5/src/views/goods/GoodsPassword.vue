@@ -23,7 +23,7 @@
         }
         .input-list {
             margin: 0 auto;
-            width: 279px;
+            width: 252px;
             clear: both;
             input {
                 float: left;
@@ -94,8 +94,6 @@ export default {
                 num: ''
             }, {
                 num: ''
-            }, {
-                num: ''
             }],
             reserveMember: ''
         }
@@ -109,13 +107,6 @@ export default {
     methods: {
         takeGood() {
 
-          this.$router.push({
-              path: '/comfirm-goods',
-              query: { takeCode: '123456789' }
-          })
-
-
-
                 let takeCode = '',
                     flag = true
                 this.nums.forEach((val, index) => {
@@ -126,16 +117,32 @@ export default {
                     }
                     takeCode += val.num
                 })
-                console.log(takeCode)
                 if (flag) {
-                  this.$router.push({
-                      path: '/comfirm-goods',
-                      query:{
-                        takeCode:takeCode
-                      }
-                  })
 
-
+                  let datas = {
+                      'openId': getStore('openId'),
+                      'takeCode':takeCode
+                  }
+                  this.$http.post(this.HttpUrl.UrlConfig.takeGood, datas)
+                      .then(res => {
+                          var res = res.data
+                          if (res.code == "1") {
+                            this.$router.push({
+                                path: '/comfirm-goods',
+                                query:{
+                                  takeCode:takeCode
+                                }
+                            })
+                          } else {
+                              this.$vux.toast.show({
+                                  text: res.msg,
+                                  type: 'text',
+                                  width: '80%'
+                              })
+                          }
+                      }).catch(error => {
+                          console.log(error)
+                      })
                 }
 
 

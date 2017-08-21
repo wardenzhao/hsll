@@ -23,9 +23,9 @@
     <div class="">
       <p class="txt">请填写您的申请信息，我们将进行人工审核。</p>
       <group>
-        <x-input title="姓名" v-model="userName" name="username" placeholder="请填写真实姓名" is-type="china-name"></x-input>
+        <x-input title="姓名" v-model="userName" name="username" placeholder="请填写真实姓名"></x-input>
         <x-input title="电话" name="mobile" v-model="phone" placeholder="11位手机号" keyboard="number" is-type="china-mobile"></x-input>
-        <popup-picker title="性别" :data="[['男','女']]" v-model="sexVal"  placeholder="请选择"></popup-picker>
+        <popup-picker title="性别" show-name :data="[sexDatas]" v-model="sexVal"  placeholder="请选择"></popup-picker>
         <x-input title="我的地址" name="area" v-model="address" placeholder="填写可用于收货的地址"></x-input>
         <x-input title="推荐会员姓名" name="area" v-model="inviteName" placeholder="请填写推荐会员的真实姓名"></x-input>
       </group>
@@ -66,6 +66,18 @@ export default {
             address:'',
             inviteName:'',
             sexVal:[],
+            sexDatas:[
+              {
+                name:'男',
+                value:1,
+                parent: 0
+              },
+              {
+                name:'女',
+                value:0,
+                parent: 0
+              }
+            ]
         }
     },
     mounted(){
@@ -76,7 +88,7 @@ export default {
 
       },
       register(){
-        if(!this.userName){
+        if(this.userName==''){
           this.$vux.toast.show({
               text: '请填写姓名',
               type: 'text',
@@ -86,6 +98,13 @@ export default {
         if(!this.phone){
           this.$vux.toast.show({
               text: '请填写手机号',
+              type: 'text',
+          })
+          return false
+        }
+        if (/^1[3|4|5|6|7|8|9][0-9]{1}[0-9]{8}$/.test(this.phone) == false) {
+          this.$vux.toast.show({
+              text: '手机号格式不正确',
               type: 'text',
           })
           return false
@@ -104,18 +123,18 @@ export default {
           })
           return false
         }
-        if(!this.inviteName){
-          this.$vux.toast.show({
-              text: '请填写推荐会员姓名',
-              type: 'text',
-          })
-          return false
-        }
+        // if(!this.inviteName){
+        //   this.$vux.toast.show({
+        //       text: '请填写推荐会员姓名',
+        //       type: 'text',
+        //   })
+        //   return false
+        // }
         var datas = {
           "openId":getStore('openId'),
           "userName":this.userName,
           "phone":this.phone,
-          "sex":this.sexVal,
+          "sex":this.sexVal[0],
           "address":this.address,
           "inviteName":this.inviteName
         }
@@ -125,7 +144,7 @@ export default {
                           if(res.code=='1'){
                             this.$router.push(
                               {
-                                path: '/members'
+                                path: '/apply-sucess'
                               })
                           }else{ // 异常
                             this.$vux.toast.show({

@@ -61,33 +61,46 @@ body{
       }
     }
 }
+.no-order{
+  padding: 100px;
+  text-align: center;
+  font-size: 18px;
+}
 
 </style>
 
 <template lang="html">
 
 <div class="my-order">
-  <div class="myorder-box" v-for="(item,index) in items" :key="index">
-      <div class="order-txt">订单编号:{{item.orderNo}}</div>
-      <div class="order-txt order-txt2">下单时间:{{item.orderTime}}</div>
-      <div class="img-box">
-          <img class="img" :src="item.goodIcon" alt="">
-          <div class="img-info">
-              <p class="txt">{{item.goodName}} x {{item.goodNum}}</p>
-              <p class="total">合计¥{{item.orderPrice}}</p>
-          </div>
-      </div>
-      <div class="user-info">
-          <p>收货地址：{{item.address}}</p>
-          <p>收货人:{{item.person}}</p>
-          <p>电话号码：{{item.phone}}</p>
-          <p>订单状态：{{item.orderState}}</p>
-          <p>预计发货时间：{{item.sendTime}}</p>
-      </div>
-      <group>
-          <cell title="addressInfo" :link="'/address-list?orderNo='+item.orderNo"></cell>
-      </group>
+  <!-- {{items.length}} -->
+  <div class=""  v-if="items.length!=0">
+    <div class="myorder-box" v-for="(item,index) in items" :key="index">
+        <div class="order-txt">订单编号:{{item.orderNo}}</div>
+        <div class="order-txt order-txt2">下单时间:{{item.orderTime}}</div>
+        <div class="img-box">
+            <img class="img" :src="item.goodIcon" alt="">
+            <div class="img-info">
+                <p class="txt">{{item.goodName}} x {{item.goodNum}}</p>
+                <p class="total">合计¥{{item.orderPrice}}</p>
+            </div>
+        </div>
+        <div class="user-info">
+            <p>收货地址：{{item.address}}</p>
+            <p>收货人:{{item.person}}</p>
+            <p>电话号码：{{item.phone}}</p>
+            <p>订单状态：{{item.orderState}}</p>
+            <p>预计发货时间：{{item.sendTime}}</p>
+        </div>
+        <group>
+            <cell title="addressInfo" :link="'/address-list?orderNo='+item.orderNo"></cell>
+        </group>
+    </div>
   </div>
+  <div class="" v-else>
+    <p class="no-order">暂无订单</p>
+  </div>
+
+
 
 </div>
 
@@ -123,12 +136,12 @@ export default {
         document.title = "我的订单"
     },
     mounted() {
-      let selAddress = JSON.parse(getStore('selAddress'))
-      console.log(selAddress[0])
-      if(selAddress[0]){
-        this.addressInfo = selAddress[0].item.address
-        this.orderNo = selAddress[0].orderNo
-      }
+      // let selAddress = JSON.parse(getStore('selAddress'))
+      // console.log(selAddress[0])
+      // if(selAddress[0]){
+      //   this.addressInfo = selAddress[0].item.address
+      //   this.orderNo = selAddress[0].orderNo
+      // }
 
 
 

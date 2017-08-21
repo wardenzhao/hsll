@@ -10,7 +10,7 @@
   }
   .goods-pwd-content{
     width: 308px;
-    height:130px;
+    height:230px;
     border:1px solid #ccc;
     margin: 40px auto 0;
     border-radius: 10px;
@@ -23,7 +23,7 @@
     }
     .input-list{
       margin: 20px auto 0;
-      width: 279px;
+      width: 252px;
       clear: both;
       input{
         float: left;
@@ -52,7 +52,7 @@
   }
   .btn-box{
     text-align: center;
-    padding: 40px 0;
+    padding: 0 ;
     span{
       font-size: 16px;
       color:rgb(0,147, 211);
@@ -63,7 +63,12 @@
 .wechat-btn{
   margin: 30px 30px 60px;
 }
-
+.userInfo{
+  width: 80%;
+  margin: 0 auto;
+  clear: both;
+  overflow: hidden;
+}
 </style>
 
 <template lang="html">
@@ -75,20 +80,29 @@
     <div class="input-list">
         <input v-for="(n,index) in nums" maxlength="1" type="text" name="" v-model="n.num">
     </div>
+    <div class="userInfo">
+      <group>
+        <x-input title="姓名" v-model="userName"></x-input>
+        <x-input title="手机" v-model="userPhone"></x-input>
+      </group>
+    </div>
   </div>
   <div class="wechat-btn">
       <x-button type="primary" @click.native="inviteCode">确认提交</x-button>
   </div>
-  <!-- <div class="btn-box">
+  <div class="btn-box">
       <router-link to="/apply-members"><span>没有邀请码</span></router-link>
-  </div> -->
+  </div>
   <toast v-model="toastShow" type="text">{{toastTxt}}</toast>
 </div>
 
 </template>
 
 <script>
-
+import {
+    setStore, getStore
+}
+from '../../config/mUtils'
 import {
     Group,
     XInput,
@@ -105,11 +119,11 @@ export default {
     },
     data() {
         return {
+          userName:'',
+          userPhone:'',
           toastTxt: '',
           toastShow: false,
           nums: [{
-              num: ''
-          }, {
               num: ''
           }, {
               num: ''
@@ -137,17 +151,6 @@ export default {
     },
     methods:{
       inviteCode(){
-
-        this.$router.push(
-          {
-            path: '/apply-members'
-          })
-
-
-
-
-
-
         let takeCode = '',
             flag = true
         this.nums.forEach((val, index) => {
@@ -161,9 +164,37 @@ export default {
 
 
         if (flag) {
+
+          if(this.userName==''){
+            this.$vux.toast.show({
+                text: '请填写姓名',
+                type: 'text',
+            })
+            return false
+          }
+          if(!this.userPhone){
+            this.$vux.toast.show({
+                text: '请填写手机号',
+                type: 'text',
+            })
+            return false
+          }
+          if (/^1[3|4|5|6|7|8|9][0-9]{1}[0-9]{8}$/.test(this.userPhone) == false) {
+            this.$vux.toast.show({
+                text: '手机号格式不正确',
+                type: 'text',
+                width: '80%'
+            })
+            return false
+          }
+
+
+
           let datas = {
-            "openId":'123456',
-            "inviteCode":takeCode
+            "openId":getStore('openId'),
+            "inviteCode":takeCode,
+            "name":this.userName,
+            "phone":this.userPhone
           }
           console.log(datas)
           this.$http.post(this.HttpUrl.UrlConfig.inviteCode,datas)
@@ -172,7 +203,10 @@ export default {
                             if(res.code=='1'){// 会员
                               this.$router.push(
                                 {
-                                  path: '/apply-members'
+                                  path: '/join-members-sucess',
+                                  query:{
+                                    result:res.result
+                                  }
                                 })
                             }else{ // 异常
                               this.$vux.toast.show({

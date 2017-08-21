@@ -22,6 +22,7 @@
                     font-size: 16px;
                 }
                 .txt {
+                    width: 100%;
                     padding: 6px 0 0;
                     font-size: 14px;
                     color: rgb(223, 75, 36);
@@ -109,6 +110,7 @@ export default {
       date:'',
       phone:'',
       address:'',
+      goodId:''
     }
   },
   created(){
@@ -133,6 +135,7 @@ export default {
                 this.reserveMember = res.data.reserveMember
                 this.goodBatch = res.data.goodBatch
                 this.date = '预计发货时间：'+res.data.sendTime
+                this.goodId = res.data.goodId
               } else {
                   this.$vux.toast.show({
                       text: res.msg,
@@ -154,11 +157,11 @@ export default {
 
       var datas = {
           "openId":getStore('openId'),
-          "takeCode":this.takeCode,
+          "takeCode":getUrlKey('takeCode'),
           "address":this.address,
           "person":this.userName,
           "phone":this.phone,
-          "goodId":'',
+          "goodId":this.goodId,
           "reserveMember":this.reserveMember
       }
       this.$http.post(this.HttpUrl.UrlConfig.confirmTakeGood,datas)

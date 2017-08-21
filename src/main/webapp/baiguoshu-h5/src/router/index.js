@@ -9,10 +9,12 @@ import GoodsPassword from '@/views/goods/GoodsPassword'
 import ComfirmGoods from '@/views/goods/ComfirmGoods'
 import GoodsSucess from '@/views/goods/GoodsSucess'
 import JoinMembers from '@/views/goods/JoinMembers'
+import JoinMembersSucess from '@/views/goods/JoinMembersSucess'
 import SolarTerms from '@/views/solarterms/SolarTerms'
 import Members from '@/views/members/Members'
 import MyOrder from '@/views/members/MyOrder'
 import ApplyMembers from '@/views/members/ApplyMembers'
+import ApplySucess from '@/views/members/ApplySucess'
 
 
 const routes = [
@@ -95,11 +97,23 @@ const routes = [
     name: '加入会员',
     component: JoinMembers
   },
+  // 加入会员
+  {
+    path: '/join-members-sucess',
+    name: '邀请码提交成功',
+    component: JoinMembersSucess
+  },
   // 申请会员
   {
     path: '/apply-members',
     name: '申请会员',
     component: ApplyMembers
+  },
+  // 申请会员成功
+  {
+    path: '/apply-sucess',
+    name: '申请会员成功',
+    component: ApplySucess
   },
   // 我的订单
   {

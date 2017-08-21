@@ -281,19 +281,19 @@ from 'vux'
 
 import {mapMutations} from 'vuex'
 
-const baseList = [{
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/1.jpg',
-    title: '送你一朵fua'
-}, {
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/2.jpg',
-    title: '送你一辆车'
-}, {
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/3.jpg',
-    title: '送你一次旅行'
-}]
+// const baseList = [{
+//     url: 'javascript:',
+//     img: 'https://static.vux.li/demo/1.jpg',
+//     title: '送你一朵fua'
+// }, {
+//     url: 'javascript:',
+//     img: 'https://static.vux.li/demo/2.jpg',
+//     title: '送你一辆车'
+// }, {
+//     url: 'javascript:',
+//     img: 'https://static.vux.li/demo/3.jpg',
+//     title: '送你一次旅行'
+// }]
 export default {
     directives: {
         TransferDom
@@ -316,7 +316,7 @@ export default {
             goodDes:'',
             goodIcon:'',
             goodsDatas:[],
-            show: true,
+            show: false,
             dialogShow: false,
             myAddress: false,
             demo01_list: [],
@@ -347,6 +347,8 @@ export default {
                         .then(res => {
                           var res = res.data
                             if(res.code=='1'){// 成功
+
+                              // this.demo01_list = advImgStr
                               this.goodTitle = res.data[0].goodTitle
                               this.goodSubTitle = res.data[0].goodSubTitle
                               this.goodPrice = res.data[0].goodPrice
@@ -368,15 +370,17 @@ export default {
 
 
 
-                              let advImg = res.data[0].advImg.split(',')
-
-                              console.log(advImg)
+                              // let advImg = res.data[0].advImg.split(',')
+                              let advImgStr = res.data[0].advImg.split(',')
+                              // console.log(advImgStr)
+                              // console.log(advImg)
 
                               let advImgArr = []
-                              advImg.forEach((val)=>{
+                              advImgStr.forEach((val)=>{
+                                // console.log(val)
                                 advImgArr.push({
                                   url: 'javascript:',
-                                  img: 'https://static.vux.li/demo/1.jpg',
+                                  img: val,
                                   title: ''
                                 })
                               })
