@@ -17,14 +17,28 @@
     <update id="updateGood">
         UPDATE goods
         <set>
-            title = #{memberAddress.phone},
-            sub_title = #{memberAddress.address},
-            image = #{memberAddress.person},
-            describe=,
-
+            title = #{productRequest.title},
+            sub_title = #{productRequest.subTitle},
+            image = #{productRequest.images},
+            describe=#{productRequest.describe},
+            name=#{productRequest.productName}
         </set>
-        where id = #{memberAddress.id}
+        where id = #{productRequest.id}
 
     </update>
+
+    <insert id="addGood">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+       insert into goods(name,title,subTitle,describe,image,price,status)
+       VALUES (#{productReques.name},#{productReques.title},#{productReques.subTitle},#{productReques.describe},#{productReques.describe},${productReques.image},#{productReques.price},#{productReques.status})
+
+    </insert>
+
+    <delete id="delGood">
+
+        DELETE from goods where id=#{goodId}
+    </delete>
 </mapper>
 

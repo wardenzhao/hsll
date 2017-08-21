@@ -6,6 +6,8 @@ import cn.thinkjoy.hsll.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by warden on 17/7/22.
  */
@@ -33,5 +35,30 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void insertData(Member member) {
         memberDao.insertData(member);
+    }
+
+    @Override
+    public List<Member> getMemberList(int pageNo, int pageSize) {
+        return memberDao.getMemberList(pageNo,pageSize);
+    }
+
+    @Override
+    public int getMemberCount() {
+        return memberDao.getMemberCount();
+    }
+
+    @Override
+    public void add(Member member) {
+        memberDao.add(member);
+    }
+
+    @Override
+    public void update(Member member) {
+        memberDao.update(member);
+    }
+
+    @Override
+    public void delete(long id) {
+        memberDao.delete(id);
     }
 }

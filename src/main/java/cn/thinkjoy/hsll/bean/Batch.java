@@ -15,6 +15,15 @@ public class Batch implements Serializable {
     private Date createdTime;
     private String goodsCode;
     private int status;
+    private long goodSpecId;
+
+    public long getGoodSpecId() {
+        return goodSpecId;
+    }
+
+    public void setGoodSpecId(long goodSpecId) {
+        this.goodSpecId = goodSpecId;
+    }
 
     public long getId() {
         return id;

@@ -15,7 +15,15 @@ public class MemberApply implements Serializable {
     private String phone;
     private long inviteMemberId;
     private long status;
+    private String inviteMemberName;
 
+    public String getInviteMemberName() {
+        return inviteMemberName;
+    }
+
+    public void setInviteMemberName(String inviteMemberName) {
+        this.inviteMemberName = inviteMemberName;
+    }
 
     public long getId() {
         return id;

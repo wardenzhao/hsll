@@ -10,5 +10,30 @@
         VALUES (#{memberApply.openId},#{memberApply.name},#{memberApply.phone},#{memberApply.sex},#{memberApply.address},#{memberApply.inviteMemberId},#{memberApply.status})
     </insert>
 
+
+    <select id="getMemberApplys" resultType="cn.thinkjoy.hsll.bean.MemberApply">
+        select id as id, name as name, open_id as openId, phone as phone, sex as sex,address as address, invite_member_id as inviteMemberId,status as status
+        FROM member_apply limit #{startPage},#{pageSize}
+    </select>
+
+    <select id="getMemberApplys" resultType="java.lang.Integer">
+        select count(1)
+        FROM member_apply
+    </select>
+
+
+    <select id="getMemberApplyDetail" resultType="cn.thinkjoy.hsll.bean.MemberApply">
+        select id as id, name as name, open_id as openId, phone as phone, sex as sex,address as address, invite_member_id as inviteMemberId,status as status
+        FROM member_apply where id=#{id}
+    </select>
+
+    <update id="updateApplyStatus">
+        UPDATE member_apply
+        <set>
+            status = #{status}
+        </set>
+        where id = #{id}
+    </update>
+
 </mapper>
 

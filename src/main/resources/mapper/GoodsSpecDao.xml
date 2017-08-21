@@ -9,5 +9,36 @@
         WHERE goods_id = ${goodsId}
     </select>
 
+
+
+    <update id="update">
+        UPDATE goodsSpec
+        <set>
+            <if test="productSpec.specName!=null">
+            specName = #{productSpec.specName},
+            </if>
+            <if test="productSpec.specPrice!=null">
+                price = #{productSpec.specPrice},
+            </if>
+            status=#{productSpec.status}
+        </set>
+        where id = #{productRequest.id}
+    </update>
+
+    <insert id="add">
+        insert into goodsSpec(goodsId,specName,address,price,status)
+        VALUES (#{productSpec.goodId},#{productSpec.specName},#{productSpec.address},#{productSpec.specPrice},#{productSpec.status})
+
+    </insert>
+
+    <select id="getSpecById" resultType="cn.thinkjoy.hsll.bean.GoodsSpec">
+        SELECT id, spec_name as specName,address,price
+        FROM
+        goods_spec
+        WHERE id = ${id}
+    </select>
+
+
+
 </mapper>
 

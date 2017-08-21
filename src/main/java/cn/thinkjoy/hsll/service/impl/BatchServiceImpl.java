@@ -1,6 +1,7 @@
 package cn.thinkjoy.hsll.service.impl;
 
 import cn.thinkjoy.hsll.bean.Batch;
+import cn.thinkjoy.hsll.bean.adminBean.BatchInfo;
 import cn.thinkjoy.hsll.dao.BatchDao;
 import cn.thinkjoy.hsll.service.BatchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,35 @@ public class BatchServiceImpl implements BatchService{
     @Override
     public Batch getBatchByGoodsCode(String goodsCode) {
         return batchDao.getBatchByGoodsCode(goodsCode);
+    }
+
+    @Override
+    public List<BatchInfo> getBatchList(int i, int pageSize) {
+        return batchDao.getBatchList(i,pageSize);
+    }
+
+    @Override
+    public int getBatchCount() {
+        return batchDao.getBatchCount();
+    }
+
+    @Override
+    public void add(Batch batch) {
+        batchDao.add(batch);
+    }
+
+    @Override
+    public int getUseNumByBatchCode(String batchCode) {
+        return batchDao.getUseNumByBatchCode(batchCode);
+    }
+
+    @Override
+    public List<BatchInfo> getGoodCodeList(String batchCode, int i, int pageSize) {
+        return batchDao.getGoodCodeList(batchCode, i, pageSize);
+    }
+
+    @Override
+    public int getUnUseNumByBatchCode(String batchCode) {
+        return batchDao.getUnUseNumByBatchCode(batchCode);
     }
 }

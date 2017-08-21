@@ -1,6 +1,7 @@
 package cn.thinkjoy.hsll.service.impl;
 
 import cn.thinkjoy.hsll.bean.GoodsSpec;
+import cn.thinkjoy.hsll.bean.adminBean.ProductSpec;
 import cn.thinkjoy.hsll.dao.GoodsSpecDao;
 import cn.thinkjoy.hsll.service.GoodsSpecService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,20 @@ public class GoodsSpecServiceImpl implements GoodsSpecService{
     public List<GoodsSpec> getSpecLsBygoodId(long id) {
         List<GoodsSpec> list = goodsSpecDao.getGoodsSpecByGoodsId(id);
         return list;
+    }
+
+    @Override
+    public void update(ProductSpec productSpec) {
+        goodsSpecDao.update(productSpec);
+    }
+
+    @Override
+    public void add(ProductSpec productSpec) {
+        goodsSpecDao.add(productSpec);
+    }
+
+    @Override
+    public GoodsSpec getSpecById(Long aLong) {
+        return goodsSpecDao.getSpecById(aLong);
     }
 }
