@@ -2,7 +2,7 @@ package cn.thinkjoy.hsll.controller.admin;
 
 import cn.thinkjoy.hsll.bean.Member;
 import cn.thinkjoy.hsll.bean.MemberApply;
-import cn.thinkjoy.hsll.bean.adminBean.MemberResPonse;
+import cn.thinkjoy.hsll.bean.adminBean.MemberApplyResponse;
 import cn.thinkjoy.hsll.bean.adminBean.ResultResponse;
 import cn.thinkjoy.hsll.service.MemberApplyService;
 import cn.thinkjoy.hsll.service.MemberService;
@@ -39,8 +39,8 @@ public class ApplyMemberController {
      */
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     @ResponseBody
-    public MemberResPonse list(HttpServletRequest request,HttpServletResponse response,int pageNo,int pageSize){
-        MemberResPonse memberResPonse=new MemberResPonse();
+    public MemberApplyResponse list(HttpServletRequest request,HttpServletResponse response,int pageNo,int pageSize){
+        MemberApplyResponse memberResPonse=new MemberApplyResponse();
             List<MemberApply> memberApplies=memberApplyService.getMemberApplys(pageNo*pageSize,pageNo);
             int count=memberApplyService.getMemberApplysCount();
             for(int i=0;i<memberApplies.size();i++){
@@ -49,7 +49,7 @@ public class ApplyMemberController {
                 apply.setInviteMemberName(member.getName());
             }
         memberResPonse.setPageNo(pageNo);
-        memberResPonse.setMemberList(memberApplies);
+        memberResPonse.setApplyList(memberApplies);
         memberResPonse.setListCount(count);
         return memberResPonse;
     }
