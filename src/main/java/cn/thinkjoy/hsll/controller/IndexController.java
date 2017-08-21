@@ -75,6 +75,7 @@ public class IndexController extends BaseController{
 
     @RequestMapping(value = "/index",method = RequestMethod.GET)
     public String index(HttpServletRequest request){
+        String type = request.getParameter("type");
         SnsapiUserinfo snsapiUserinfo = (SnsapiUserinfo)request.getSession().getAttribute(KeyUtil.SESSION_KEY);
         if(snsapiUserinfo == null){
             String INIT_URL = baseUrl+"/hsll/auth/auth";
@@ -83,6 +84,11 @@ public class IndexController extends BaseController{
         logger.info(JsonUtil.tranObjectToJsonStr(snsapiUserinfo));
         Member member = memberService.getMemberByOpenId(snsapiUserinfo.getOpenid());
         if(member != null && member.getId()>0){
+            if(type != null && type.equals("1")){
+                return "redirect:/hsll/goodsList?openId="+snsapiUserinfo.getOpenid();
+            }else if(type != null && type.equals("2")){
+                return "redirect:/hsll/userInfo?openId="+snsapiUserinfo.getOpenid();
+            }
             return "redirect:/hsll/goodsList?openId="+snsapiUserinfo.getOpenid();
         }else{
             //如果不是会员跳转到是不会会员提示页面
