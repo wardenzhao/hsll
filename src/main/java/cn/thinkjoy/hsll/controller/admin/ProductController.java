@@ -8,6 +8,9 @@ import cn.thinkjoy.hsll.bean.adminBean.ProductSpec;
 import cn.thinkjoy.hsll.bean.adminBean.ResultResponse;
 import cn.thinkjoy.hsll.service.GoodsService;
 import cn.thinkjoy.hsll.service.GoodsSpecService;
+import com.alibaba.dubbo.common.json.JSON;
+import com.alibaba.dubbo.common.json.JSONArray;
+import com.alibaba.dubbo.common.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -86,19 +89,106 @@ public class ProductController {
     public ResultResponse update(HttpServletRequest request,HttpServletResponse response,ProductRequest productRequest){
         ResultResponse result=new ResultResponse();
         try{
+            String specsJson=productRequest.getSpecs();
+            JSONArray jsonMap=(JSONArray)JSON.parse(specsJson);
+            for(int i=0;i<jsonMap.length();i++){
+              JSONObject map=(JSONObject) jsonMap.get(i);
+               ProductSpec productSpec= new ProductSpec();
+                productSpec.setSpecId((Long)map.get("specId"));
+                productSpec.setSpecName(map.getString("specName"));
+                productSpec.setSpecPrice(map.getString("specPrice"));
+                productSpec.setSpecStatus(map.getString("specStatus"));
+                goodsSpecService.update(productSpec);
+            }
             goodsService.updateGood(productRequest);
+
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
         result.setRet(0);
         result.setMsg("success");
         return result;
     }
 
+    /**
+     * 添加商品
+     * @param request
+     * @param response
+     * @param productRequest
+     * @return
+     */
+    @RequestMapping(value = "/add",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultResponse add(HttpServletRequest request,HttpServletResponse response,ProductRequest productRequest){
+        ResultResponse result=new ResultResponse();
+        try{
+            String specsJson=productRequest.getSpecs();
+            JSONArray jsonMap=(JSONArray)JSON.parse(specsJson);
+           long goodId= goodsService.addGood(productRequest);
+            for(int i=0;i<jsonMap.length();i++){
+                JSONObject map=(JSONObject) jsonMap.get(i);
+                ProductSpec productSpec= new ProductSpec();
+                productSpec.setGoodId(goodId);
+                productSpec.setSpecId((Long) map.get("specId"));
+                productSpec.setSpecName(map.getString("specName"));
+                productSpec.setSpecPrice(map.getString("specPrice"));
+                productSpec.setSpecStatus(map.getString("specStatus"));
+                productSpec.setAddress(map.getString("address"));
+                goodsSpecService.add(productSpec);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        result.setRet(0);
+        result.setMsg("success");
+        return result;
+    }
 
+    /**
+     * 删除商品
+     * @param request
+     * @param response
+     * @param goodId
+     * @return
+     */
+    @RequestMapping(value = "/del",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultResponse del(HttpServletRequest request,HttpServletResponse response,long goodId){
+        ResultResponse result=new ResultResponse();
+        try{
 
+            goodsService.delGood(goodId);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        result.setRet(0);
+        result.setMsg("success");
+        return result;
+    }
+
+    /**
+     * 商品上下架
+     * @param request
+     * @param response
+     * @param productRequest
+     * @return
+     */
+    @RequestMapping(value = "/upOrDown",method = RequestMethod.GET)
+    @ResponseBody
+    public ResultResponse upOrDownGood(HttpServletRequest request,HttpServletResponse response,ProductRequest productRequest){
+        ResultResponse result=new ResultResponse();
+        try{
+
+            goodsService.updateGood(productRequest);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        result.setRet(0);
+        result.setMsg("success");
+        return result;
+    }
 
 
 }

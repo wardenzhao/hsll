@@ -1,6 +1,7 @@
 package cn.thinkjoy.hsll.service.impl;
 
 import cn.thinkjoy.hsll.bean.Goods;
+import cn.thinkjoy.hsll.bean.adminBean.ProductRequest;
 import cn.thinkjoy.hsll.dao.GoodsDao;
 import cn.thinkjoy.hsll.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,21 @@ public class GoodsServiceImpl implements GoodsService{
     @Override
     public Goods getGoodsById(long id) {
         return goodsDao.getGoodsById(id);
+    }
+
+    @Override
+    public void updateGood(ProductRequest productRequest) {
+        goodsDao.updateGoode(productRequest);
+    }
+
+    @Override
+    public long addGood(ProductRequest productRequest) {
+
+        return goodsDao.addGood(productRequest);
+    }
+
+    @Override
+    public void delGood(long goodId) {
+        goodsDao.delGood(goodId);
     }
 }

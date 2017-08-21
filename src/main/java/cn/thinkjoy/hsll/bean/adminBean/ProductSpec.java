@@ -5,9 +5,28 @@ package cn.thinkjoy.hsll.bean.adminBean;
  * 商品规格
  */
 public class ProductSpec {
+    private long goodId;
     private long specId;
     private String specName;
     private String specPrice;
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public long getGoodId() {
+        return goodId;
+    }
+
+    public void setGoodId(long goodId) {
+        this.goodId = goodId;
+    }
+
     private String specStatus;
 
     public long getSpecId() {

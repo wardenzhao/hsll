@@ -24,5 +24,47 @@
         limit 1
     </select>
 
+    <select id="getBatchList" resultType="cn.thinkjoy.hsll.bean.adminBean.BatchInfo">
+        SELECT batch_name AS name, batch_code AS batchCode, good_spec_id as goodSpecId,count(1) as number,date_format(created_time,'%Y-%c-%d %h:%i:%s') as createTime
+        FROM batch
+        group by good_spec_id,batch_code,batch_name,created_time
+        limit #{startPage},#{pageSize}
+    </select>
+
+
+    <select id="getBatchCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM ( SELECT batch_name AS name, batch_code AS batchCode, batch_no as goodSpecId,count(1) as number,date_format(created_time,'%Y-%c-%d %h:%i:%s') as createTime
+        FROM batch
+        group by good_spec_id,batch_code,batch_name,created_time) as a
+
+    </select>
+
+
+    <insert id="add">
+        insert into batch(batch_name,batch_code,batch_no,created_time,goods_code,good_spec_id)
+        VALUES (#{batch.batchName},#{batch.batchCode},#{batch.batchNo},#{batch.createdTime},#{batch.goodsCode},${batch.goodSpecId})
+
+    </insert>
+
+    <select id=" getUseNumByBatchCode" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM batch where batch_code=#{batchCode} and status=1
+
+    </select>
+
+
+    <select id="getGoodCodeList" resultType="cn.thinkjoy.hsll.bean.adminBean.BatchInfo">
+        SELECT  goods_code as goodsCode,batch_name AS name, batch_code AS batchCode, good_spec_id as goodSpecId,count(1) as number,date_format(created_time,'%Y-%c-%d %h:%i:%s') as createTime
+        FROM batch
+          where batch_code=#{batchCode} and status=0
+    </select>
+
+
+    <select id=" getUnUseNumByBatchCode" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM batch where batch_code=#{batchCode} and status=0
+
+    </select>
 </mapper>
 

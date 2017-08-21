@@ -25,5 +25,36 @@
         INSERT INTO member(name,open_id,phone,sex,address,invite_code)
         VALUES (#{member.name},#{member.openId},#{member.phone},#{member.sex},#{member.address},#{member.inviteCode})
     </insert>
+
+    <select id="getMemberList" resultType="cn.thinkjoy.hsll.bean.Member">
+        select id as id, name as name, open_id as openId, phone as phone, sex as sex,address as address,invite_code as inviteCode
+        FROM member limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="getMemberCount" resultType="java.lang.Integer">
+        select count(1)
+        FROM member
+    </select>
+
+    <insert id="add">
+        insert into members(name,phone)
+        VALUES (#{member.name},#{member.phone})
+
+    </insert>
+
+    <update id="updateGood">
+        UPDATE members
+        <set>
+            name = #{member.name},
+            phone = #{member.phone}
+        </set>
+        where id = #{member.id}
+
+    </update>
+
+    <delete id="delete">
+        delete from members where id=#{id}
+    </delete>
+
 </mapper>
 

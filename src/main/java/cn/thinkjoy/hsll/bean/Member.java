@@ -16,6 +16,7 @@ public class Member implements Serializable {
     private String inviteCode;
 
 
+
     public long getId() {
         return id;
     }
