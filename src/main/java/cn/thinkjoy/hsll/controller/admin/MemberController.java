@@ -137,7 +137,7 @@ public class MemberController {
         List<BuyInfoResponse> buyInfoResponses=new ArrayList<>();
         try{
            List<Order> orders=orderService.getListByMemberId(id,1,1000);
-            SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-DD hh24:mi:ss");
+            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Order order=null;
             for(int i=0;i<orders.size();i++){
                 BuyInfoResponse buyInfoResponse=new BuyInfoResponse();

@@ -229,6 +229,7 @@ public class FrontController extends BaseController{
                 List<MemberAddressResp> respList = new ArrayList<MemberAddressResp>();
                 for(MemberAddress info:addressList){
                     MemberAddressResp memberAddressResp = new MemberAddressResp();
+                    memberAddressResp.setId(info.getId());
                     memberAddressResp.setPhone(info.getPhone());
                     memberAddressResp.setAddress(info.getAddress());
                     memberAddressResp.setPerson(info.getPerson());
