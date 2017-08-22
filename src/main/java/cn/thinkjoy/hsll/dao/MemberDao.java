@@ -28,4 +28,6 @@ public interface MemberDao {
     void update(@Param("member")Member member);
 
     void delete(@Param("id")long id);
+
+    Member getMemberByInviteName(@Param("name")String name);
 }

@@ -61,4 +61,9 @@ public class MemberServiceImpl implements MemberService{
     public void delete(long id) {
         memberDao.delete(id);
     }
+
+    @Override
+    public Member getMemberByInviteName(String inviteName) {
+        return memberDao.getMemberByInviteName(inviteName);
+    }
 }
