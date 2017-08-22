@@ -78,21 +78,21 @@ public class IndexController extends BaseController{
         String type = request.getParameter("type");
         SnsapiUserinfo snsapiUserinfo = (SnsapiUserinfo)request.getSession().getAttribute(KeyUtil.SESSION_KEY);
         if(snsapiUserinfo == null){
-            String INIT_URL = baseUrl+"/hsll/auth/auth";
+            String INIT_URL = baseUrl+"/hsll/auth";
             return "redirect:/hsll/auth?redirect_uri="+INIT_URL;
         }
         logger.info(JsonUtil.tranObjectToJsonStr(snsapiUserinfo));
         Member member = memberService.getMemberByOpenId(snsapiUserinfo.getOpenid());
         if(member != null && member.getId()>0){
             if(type != null && type.equals("1")){
-                return "redirect:/hsll/goodsList?openId="+snsapiUserinfo.getOpenid();
+                return "redirect:"+baseUrl + "/baiguoshu-h5/dist/index.html#/buy-goods?openId="+snsapiUserinfo.getOpenid();
             }else if(type != null && type.equals("2")){
-                return "redirect:/hsll/userInfo?openId="+snsapiUserinfo.getOpenid();
+                return "redirect:"+baseUrl + "/baiguoshu-h5/dist/index.html#/members?openId="+snsapiUserinfo.getOpenid();
             }
-            return "redirect:/hsll/goodsList?openId="+snsapiUserinfo.getOpenid();
+            return "redirect:"+baseUrl + "/baiguoshu-h5/dist/index.html#/buy-goods?openId="+snsapiUserinfo.getOpenid();
         }else{
             //如果不是会员跳转到是不会会员提示页面
-            return "redirect:/hsll/notMember?openId="+snsapiUserinfo.getOpenid();
+            return "redirect:"+baseUrl + "/baiguoshu-h5/dist/index.html#/no-members?openId="+snsapiUserinfo.getOpenid();
         }
     }
 

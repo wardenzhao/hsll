@@ -17,7 +17,7 @@
 
     <update id="updateData">
         UPDATE hsll_order
-        SET batch_id = #{order.batchId},goods_code = #{order.goodsCode}
+        SET batch_id = #{order.batchId},goods_code = #{order.goodsCode}, person = #{order.person}, address = #{order.address}, phone = #{order.phone}
         WHERE id = #{order.id}
     </update>
 

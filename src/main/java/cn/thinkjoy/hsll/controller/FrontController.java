@@ -55,8 +55,11 @@ public class FrontController extends BaseController{
     @Autowired
     private BatchService batchService;
 
-//    private String baseUrl = "http://172.16.222.194:8080";
-    private String baseUrl = "http://172.16.222.157:8282";
+    @Autowired
+    private JieqiService jieqiService;
+
+    private String baseUrl = "http://172.16.222.194:8080";
+//    private String baseUrl = "http://172.16.222.157:8282";
 
     @RequestMapping(value = "/check/isuser",method = RequestMethod.GET)
     public String index(HttpServletRequest request){
@@ -81,18 +84,18 @@ public class FrontController extends BaseController{
 
     @RequestMapping(value = "/goodsList",method = RequestMethod.GET)
     public String goodsList(HttpServletRequest request){
-        return "/baiguoshu-h5/dist/index.html#/buy-goods";
+        return "redirect:"+baseUrl + "/baiguoshu-h5/dist/index.html#/buy-goods?1231231";
     }
 
     @RequestMapping(value = "/userInfo",method = RequestMethod.GET)
     public String userInfo(HttpServletRequest request){
-        return "/baiguoshu-h5/dist/index.html#/members";
+        return "redirect:"+baseUrl + "/baiguoshu-h5/dist/index.html#/members";
     }
 
 
     @RequestMapping(value = "/notMember",method = RequestMethod.GET)
     public String notMember(HttpServletRequest request){
-        return "/baiguoshu-h5/dist/index.html#/no-members";
+        return "redirect:"+baseUrl + "/baiguoshu-h5/dist/index.html#/no-members";
     }
 
     /**
@@ -260,7 +263,7 @@ public class FrontController extends BaseController{
     @RequestMapping(value = "check/inviteCode")
     public String checkInviteCode(HttpServletRequest request){
         String json = this.getJsonString(request);
-        BaseResp resp = new BaseResp();
+        CheckInviteCodeResp resp = new CheckInviteCodeResp();
         CheckInviteCodeReq req = null;
         try{
             if(json != null){
@@ -274,6 +277,18 @@ public class FrontController extends BaseController{
 
             Member member = memberService.getMemberByInviteCode(req.getInviteCode());
             if(member != null && member.getId()>0){
+                Member inviteMember = new Member();
+                inviteMember.setOpenId(req.getOpenId());
+                inviteMember.setName(req.getName());
+                inviteMember.setSex(0);
+                inviteMember.setPhone(req.getPhone()+"");
+                inviteMember.setAddress("");
+                inviteMember.setInviteCode(CodeUtil.getRandomString(8));
+
+                memberService.insertData(inviteMember);
+
+
+                resp.setResult("恭喜你通过" + member.getName() + "的邀请成为会员");
                 resp.setCode("1");
                 resp.setMsg("success");
                 resp.setOpedId(req.getOpenId());
@@ -312,14 +327,33 @@ public class FrontController extends BaseController{
                 resp.setOpedId("");
                 return JsonUtil.tranObjectToJsonStr(resp);
             }
+            if(req.getInviteName() != null && !"".equals(req.getInviteName())){
+                Member member = memberService.getMemberByInviteName(req.getInviteName());
+                if(member != null && member.getId()>0){
+                    MemberApply memberApply = new MemberApply();
+                    memberApply.setPhone(req.getPhone());
+                    memberApply.setName(req.getUserName());
+                    memberApply.setAddress(req.getAddress());
+                    memberApply.setInviteMemberId(member.getId());
+                    memberApply.setSex(req.getSex());
+                    memberApply.setOpenId(req.getOpenId());
+                    memberApply.setStatus(0);
+                    memberApplyService.insertData(memberApply);
 
-            Member member = memberService.getMemberByInviteCode(req.getInviteCode());
-            if(member != null && member.getId()>0){
+                    resp.setCode("1");
+                    resp.setMsg("success");
+                    resp.setOpedId(req.getOpenId());
+                }else{
+                    resp.setCode("0");
+                    resp.setMsg("您输入的推荐会员姓名不正确，请重新输入");
+                    resp.setOpedId(req.getOpenId());
+                }
+            }else{
                 MemberApply memberApply = new MemberApply();
                 memberApply.setPhone(req.getPhone());
                 memberApply.setName(req.getUserName());
                 memberApply.setAddress(req.getAddress());
-                memberApply.setInviteMemberId(member.getId());
+                memberApply.setInviteMemberId(0);
                 memberApply.setSex(req.getSex());
                 memberApply.setOpenId(req.getOpenId());
                 memberApply.setStatus(0);
@@ -328,11 +362,8 @@ public class FrontController extends BaseController{
                 resp.setCode("1");
                 resp.setMsg("success");
                 resp.setOpedId(req.getOpenId());
-            }else{
-                resp.setCode("0");
-                resp.setMsg("您输入的会员邀请码不正确，请重新输入");
-                resp.setOpedId(req.getOpenId());
             }
+
         }catch (Exception e){
             e.printStackTrace();
             resp.setCode("-1");
@@ -552,25 +583,33 @@ public class FrontController extends BaseController{
             }else{
                 TakeCodeResp takeCodeResp = new TakeCodeResp();
                 Order order = orderService.getByGoodsCode(req.getTakeCode());
-                Member member = memberService.getMemberById(order.getBuyMemberId());
-                Goods goods = goodsService.getGoodsById(order.getGoodsId());
-                takeCodeResp.setGoodBatch(batch.getBatchName()+batch.getBatchNo()+"盒");
-                takeCodeResp.setGoodId(goods.getId());
-                takeCodeResp.setGoodName(goods.getName());
-                takeCodeResp.setGoodImg(goods.getImage());
-                takeCodeResp.setReserveMember(member.getName());
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Calendar calendar   =   new GregorianCalendar();
-                calendar.setTime(new Date());
-                calendar.add(calendar.DATE, 2);//把日期往后增加一天.整数往后推,负数往前移动
-                calendar.getTime();   //这个时间就是日期往后推一天的结果
+                if(order == null ){
+                    resp.setCode("0");
+                    resp.setMsg("提货码有误，请重新输入");
+                    resp.setOpedId(req.getOpenId());
+                }else{
+                    Member member = memberService.getMemberById(order.getBuyMemberId());
+                    Goods goods = goodsService.getGoodsById(order.getGoodsId());
+                    String batchString = "此盒柿饼是好柿连连柿园"+batch.getBatchName()+"第"+batch.getBatchNo()+"盒流星吊柿";
+                    takeCodeResp.setGoodBatch(batchString);
+                    takeCodeResp.setGoodId(goods.getId());
+                    takeCodeResp.setGoodName(goods.getName());
+                    takeCodeResp.setGoodImg(goods.getImage().split(",")[0]);
+                    takeCodeResp.setReserveMember(member.getName());
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Calendar calendar   =   new GregorianCalendar();
+                    calendar.setTime(new Date());
+                    calendar.add(calendar.DATE, 2);//把日期往后增加一天.整数往后推,负数往前移动
+                    calendar.getTime();   //这个时间就是日期往后推一天的结果
 
-                takeCodeResp.setSendTime(dateFormat.format(calendar.getTime()));
+                    takeCodeResp.setSendTime(dateFormat.format(calendar.getTime()));
 
-                resp.setCode("1");
-                resp.setMsg("请求成功");
-                resp.setOpedId(req.getOpenId());
-                resp.setData(takeCodeResp);
+                    resp.setCode("1");
+                    resp.setMsg("请求成功");
+                    resp.setOpedId(req.getOpenId());
+                    resp.setData(takeCodeResp);
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -633,9 +672,9 @@ public class FrontController extends BaseController{
                 orderService.insertData(order);
 
                 //重置提货验证码
-                batchService.updateStatusById(2,batch.getId());
+                batchService.updateStatusById(2, batch.getId());
 
-                resp.setResult("提货成功");
+                resp.setResult(req.getReserveMember() + "已邀请您成为好柿连连会员，去柿园看看");
                 resp.setCode("1");
                 resp.setMsg("success");
                 resp.setOpedId(req.getOpenId());
@@ -733,12 +772,19 @@ public class FrontController extends BaseController{
 
                     Goods goods = goodsService.getGoodsById(order.getGoodsId());
                     myOrderResp.setGoodName(goods.getName());
-                    myOrderResp.setGoodIcon(goods.getImage());
+                    myOrderResp.setGoodIcon(goods.getThumb());
                     myOrderResp.setOrderPrice(order.getGoodsNum() * goods.getPrice() + "");
                     if (order.getSendTime() != null){
                         myOrderResp.setSendTime(dateFormat.format(order.getSendTime()));
                     }else{
-                        myOrderResp.setSendTime("");
+
+                        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+                        Calendar calendar   =   new GregorianCalendar();
+                        calendar.setTime(new Date());
+                        calendar.add(calendar.DATE, 2);//把日期往后增加一天.整数往后推,负数往前移动
+                        calendar.getTime();   //这个时间就是日期往后推一天的结果
+
+                        myOrderResp.setSendTime(dateFormat1.format(calendar.getTime()));
                     }
 
                     respList.add(myOrderResp);
@@ -762,4 +808,69 @@ public class FrontController extends BaseController{
         }
         return JsonUtil.tranObjectToJsonStr(resp);
     }
+
+    /**
+     * 修改收货地址
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "changeOrderAddress")
+    public String changeOrderAddress(HttpServletRequest request) {
+        String json = this.getJsonString(request);
+        BaseResp resp = new BaseResp();
+        ChangeOrderAddressReq req = null;
+
+        try {
+            if (json != null) {
+                req = JsonUtil.tranjsonStrToObject(json, ChangeOrderAddressReq.class);
+            } else {
+                resp.setCode("-1");
+                resp.setMsg("请求参数错误");
+                resp.setOpedId(req.getOpenId());
+                return JsonUtil.tranObjectToJsonStr(resp);
+            }
+
+            Order order = orderService.getByOrderNo(req.getOrderNo());
+            order.setAddress(req.getAddress());
+            order.setPhone(req.getPhone());
+            order.setPerson(req.getPerson());
+
+            orderService.updateData(order);
+
+            resp.setCode("1");
+            resp.setMsg("success");
+            resp.setOpedId(req.getOpenId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setCode("-1");
+            resp.setMsg("系统错误");
+            resp.setOpedId(req.getOpenId());
+        }
+        return JsonUtil.tranObjectToJsonStr(resp);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "getJq")
+    public String getJq(HttpServletRequest request) {
+        String json = this.getJsonString(request);
+        ListDataResp resp = new ListDataResp();
+
+        try {
+            List<Jieqi> dataList = jieqiService.getJieqi();
+
+            resp.setData(dataList);
+            resp.setCode("1");
+            resp.setMsg("success");
+            resp.setOpedId("");
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setCode("-1");
+            resp.setMsg("系统错误");
+            resp.setOpedId("");
+        }
+        return JsonUtil.tranObjectToJsonStr(resp);
+    }
+
 }

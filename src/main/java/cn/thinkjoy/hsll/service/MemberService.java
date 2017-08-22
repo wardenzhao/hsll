@@ -27,4 +27,6 @@ public interface MemberService {
     void update(Member member);
 
     void delete(long id);
+
+    Member getMemberByInviteName(String inviteName);
 }
