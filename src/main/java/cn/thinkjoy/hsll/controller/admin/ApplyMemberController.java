@@ -45,8 +45,12 @@ public class ApplyMemberController {
             int count=memberApplyService.getMemberApplysCount();
             for(int i=0;i<memberApplies.size();i++){
                 MemberApply apply=new MemberApply();
-                 Member member=  memberService.getMemberById(apply.getInviteMemberId());
-                apply.setInviteMemberName(member.getName());
+                if(apply.getInviteMemberId()==0){
+                    apply.setInviteMemberName("");
+                }else{
+                    Member member=  memberService.getMemberById(apply.getInviteMemberId());
+                    apply.setInviteMemberName(member.getName());
+                }
             }
         memberResPonse.setPageNo(pageNo);
         memberResPonse.setApplyList(memberApplies);
@@ -65,8 +69,13 @@ public class ApplyMemberController {
     @ResponseBody
     public MemberApply applyDetail(HttpServletRequest request,HttpServletResponse response,long id){
        MemberApply memberApply= memberApplyService.getMemberApplyDetail(id);
-        Member member=  memberService.getMemberById(memberApply.getInviteMemberId());
-        memberApply.setInviteMemberName(member.getName());
+        if(memberApply.getInviteMemberId()==0){
+            memberApply.setInviteMemberName("");
+        }else{
+            Member member=  memberService.getMemberById(memberApply.getInviteMemberId());
+            memberApply.setInviteMemberName(member.getName());
+        }
+
         return memberApply;
     }
 
