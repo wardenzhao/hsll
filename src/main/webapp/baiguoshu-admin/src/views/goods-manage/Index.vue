@@ -22,7 +22,13 @@
             <el-table-column prop="title" label="主标"></el-table-column>
             <el-table-column prop="subTitle" label="副标"></el-table-column>
             <el-table-column prop="" label="说明文字"></el-table-column>
-            <el-table-column prop="images" label="图片"></el-table-column>
+            <el-table-column label="图片">
+              <template scope="scope">
+                <span v-for="(item,index) in scope.row.images.split(',')"><img :src="item" alt=""></span>
+              </template>
+                <!-- <span>{{scope.row.specs[0].specStatus}}</span> -->
+
+            </el-table-column>
             <el-table-column label="规格">
               <template scope="scope">
                 <div v-for="(item,index) in scope.row.specs">{{item.specName}}</div>
