@@ -11,7 +11,16 @@ public class ProductResponse {
     private String title;
     private String subTitle;
     private String images;
+    private String describe;
     private List<ProductSpec> specs;
+
+    public String getDescribe() {
+        return describe;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
 
     public long getProductId() {
         return productId;

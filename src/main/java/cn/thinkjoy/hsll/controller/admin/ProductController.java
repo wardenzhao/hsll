@@ -55,6 +55,7 @@ public class ProductController {
                 productResponse.setTitle(good.getTitle());
                 productResponse.setImages(good.getImage());
                 productResponse.setSubTitle(good.getSubTitle());
+                productResponse.setDescribe(good.getDescribe());
                 List<GoodsSpec> goodsSpecList= goodsSpecService.getSpecLsBygoodId(good.getId());
                 List<ProductSpec> productSpecs=new ArrayList<>();
                 if(goodsSpecList!=null&&goodsSpecList.size()>0){
@@ -62,8 +63,9 @@ public class ProductController {
                         ProductSpec productSpec=new ProductSpec();
                         productSpec.setSpecId(goodsSpec.getId());
                         productSpec.setSpecName(goodsSpec.getSpecName());
-                        productSpec.setSpecPrice(goodsSpec.getPrice()+"");
-                        productSpec.setSpecStatus(goodsSpec.getStatus()+"");
+                        productSpec.setSpecPrice(goodsSpec.getPrice() + "");
+                        productSpec.setSpecStatus(goodsSpec.getStatus() + "");
+                        productSpec.setAddress(goodsSpec.getAddress());
                         productSpecs.add(productSpec);
                     }
                 }
@@ -97,10 +99,17 @@ public class ProductController {
                 productSpec.setSpecName(goodsSpec.getSpecName());
                 productSpec.setSpecPrice(goodsSpec.getPrice()+"");
                 productSpec.setSpecStatus(goodsSpec.getStatus()+"");
+                productSpec.setAddress(goodsSpec.getAddress());
                 productSpecs.add(productSpec);
             }
         }
         productResponse.setSpecs(productSpecs);
+        productResponse.setProductId(goods.getId());
+        productResponse.setProductName(goods.getName());
+        productResponse.setTitle(goods.getTitle());
+        productResponse.setImages(goods.getImage());
+        productResponse.setSubTitle(goods.getSubTitle());
+        productResponse.setDescribe(goods.getDescribe());
         return productResponse;
     }
     /**
@@ -158,6 +167,8 @@ public class ProductController {
                 productSpec.setGoodId(productRequest.getId());
                 productSpec.setSpecName(map.getString("specName"));
                 productSpec.setSpecPrice(map.getString("specPrice"));
+                productSpec.setAddress(productRequest.getAddress());
+
                 goodsSpecService.add(productSpec);
             }
         }catch (Exception e){
