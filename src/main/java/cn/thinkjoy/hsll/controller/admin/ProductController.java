@@ -150,11 +150,12 @@ public class ProductController {
         try{
             String specsJson=productRequest.getSpecs();
             JSONArray jsonMap=(JSONArray)JSON.parse(specsJson);
-           long goodId= goodsService.addGood(productRequest);
+            goodsService.addGood(productRequest);
+
             for(int i=0;i<jsonMap.length();i++){
                 JSONObject map=(JSONObject) jsonMap.get(i);
                 ProductSpec productSpec= new ProductSpec();
-                productSpec.setGoodId(goodId);
+                productSpec.setGoodId(productRequest.getId());
                 productSpec.setSpecName(map.getString("specName"));
                 productSpec.setSpecPrice(map.getString("specPrice"));
                 goodsSpecService.add(productSpec);

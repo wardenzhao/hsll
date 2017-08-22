@@ -27,12 +27,9 @@
 
     </update>
 
-    <insert id="addGood">
-        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
-            SELECT LAST_INSERT_ID() AS id
-        </selectKey>
+    <insert id="addGood" useGeneratedKeys="true" keyProperty="id" parameterType="cn.thinkjoy.hsll.bean.adminBean.ProductRequest">
        insert into goods(name,title,sub_title,`describe`,image,price,status,content)
-       VALUES (#{productRequest.productName},#{productRequest.title},#{productRequest.subTitle},#{productRequest.describe},#{productRequest.images},#{productRequest.price},#{productRequest.status},#{productRequest.content})
+       VALUES (#{productName},#{title},#{subTitle},#{describe},#{images},#{price},#{status},#{content})
 
     </insert>
 

@@ -18,7 +18,7 @@ public interface GoodsDao {
 
     void updateGoode(@Param("productRequest")ProductRequest productRequest);
 
-    long addGood(@Param("productRequest")ProductRequest productRequest);
+    long addGood(ProductRequest productRequest);
 
     void delGood(@Param("goodId")long goodId);
 }
