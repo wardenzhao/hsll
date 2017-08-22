@@ -5,7 +5,7 @@ body{
 .news-address{
   position: relative;
   left:0;
-  top:0;
+  top:70px;
   bottom: 0;
   right: 0;
   width: 100%;
@@ -21,8 +21,10 @@ body{
 
 <div class="news-address">
     <div class="">
-      <group>
-        <x-input title="联系人" v-model="username" name="username" placeholder="请输入姓名" is-type="china-name"></x-input>
+      <group title="地址信息">
+        <x-input title="联系人" v-model="username" name="username" placeholder="请输入姓名"
+
+        ></x-input>
         <x-input title="手机号码"  v-model="phone" name="phone" placeholder="请输入手机号" keyboard="number" is-type="china-mobile"></x-input>
         <!-- <x-input title="选择地区" name="area" placeholder="地区信息"></x-input> -->
         <x-input title="收货地址" v-model="address" name="area" placeholder="街道门牌信息"></x-input>
@@ -36,7 +38,10 @@ body{
 </template>
 
 <script>
-
+import {
+    setStore, getStore ,getUrlKey
+}
+from '../../config/mUtils'
 import {
   XInput, Group,
     XHeader,
@@ -58,8 +63,48 @@ export default {
     },
     methods:{
       selAddress(){
+
+        if(this.username==''){
+          this.$vux.toast.show({
+              text: '请填写姓名',
+              type: 'text',
+          })
+          return false
+        }
+        if(!this.phone){
+          this.$vux.toast.show({
+              text: '请填写手机号',
+              type: 'text',
+          })
+          return false
+        }
+        if (/^1[3|4|5|6|7|8|9][0-9]{1}[0-9]{8}$/.test(this.phone) == false) {
+          this.$vux.toast.show({
+              text: '手机号格式不正确',
+              type: 'text',
+              width: '80%'
+          })
+          return false
+        }
+
+        if(!this.address){
+          this.$vux.toast.show({
+              text: '请填写收货地址',
+              type: 'text',
+          })
+          return false
+        }
+
+
+
+
+
+
+
+
+
         let datas = {
-          "openId":'123456',
+          "openId":getStore('openId'),
           "id":'0',
           "person":this.username,
           "phone":this.phone,
@@ -68,13 +113,25 @@ export default {
         }
         this.$http.post(this.HttpUrl.UrlConfig.selAddress,datas)
                       .then(res => {
+                        let that = this;
                         var res = res.data
                           if(res.code=='1'){// 会员
                             this.$vux.toast.show({
+                                position:'top',
                                 text: '保存成功',
                                 type: 'text',
-                                width: '80%'
+                                width: '80%',
+                                time:'2000',
+                                onHide(){
+                                  that.$router.push({
+                                    path:'/address-list',
+                                    query:{
+                                      orderNo:getUrlKey('orderNo')
+                                    }
+                                  })
+                                }
                             })
+
                           }else{ // 异常
                             this.$vux.toast.show({
                                 text: res.msg,

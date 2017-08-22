@@ -12,7 +12,7 @@
       text-align: center;
       img{
         position: relative;
-        top: 15px;
+        top: 18px;
         width: 20px;
         height:100%;
       }
@@ -26,10 +26,11 @@
       text-align: center;
       img{
         position: relative;
-        top: 4px;
+        top: 2px;
         width: 20px;
         height:100%;
       }
+
 }}
 }
 </style>
@@ -44,7 +45,7 @@
           <div>{{item.address}}</div>
         </div>
       </div>
-      <router-link to="/news-address">
+      <router-link :to="'/news-address?orderNo='+orderNo">
         <div class="add-address">
           <div class="address-icon"><img src="../../assets/images/add.png" alt=""></div>
           <div class="address-info">
@@ -74,7 +75,8 @@ export default {
         return {
           items:[],
           i: -1,
-          orderNo:''
+          orderNo:'',
+          page:''
         }
     },
     created(){
@@ -82,8 +84,15 @@ export default {
 
     },
     mounted(){
-        this.orderNo = getUrlKey('orderNo')
+        if(getUrlKey('orderNo')){
+          this.orderNo = getUrlKey('orderNo')
+          setStore('orderNo',  this.orderNo)
+        }
+        if(getUrlKey('page')){
+          this.page = getUrlKey('page')
+        }
         this.addressList()
+
     },
     methods:{
       addressList(){
@@ -110,15 +119,11 @@ export default {
         'SEL_ADDRESS'
       ]),
       imgShowClick(item,index){
-        console.log(this.orderNo)
-        console.log(index)
-        this.i = index
-        this.SEL_ADDRESS({
-          'item':item,
-          'index':index,
-          'orderNo':this.orderNo
-        });
+          this.i = index
 
+          if(this.page=='comfirmOrder'){
+            setStore('comfirmOrderAddress',item)
+          }
 
         let datas = {
           "openId":getStore('openId'),

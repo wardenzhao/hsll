@@ -1,9 +1,38 @@
 <style lang="css">
-.input2{
-  width: 100px;
+
+.input2 {
+    width: 100px;
 }
-.specList{
-  padding: 0 0 10px;
+
+.specList {
+    padding: 0 0 10px;
+}
+
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+    border-color: #20a0ff;
+}
+
+.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    display: block;
 }
 
 </style>
@@ -26,12 +55,19 @@
                 <el-form-item label="说明文字" prop="intro">
                     <el-input class="input" type="textarea" v-model="ruleForm.intro" placeholder="请输入说明文字"></el-input>
                 </el-form-item>
-                <el-form-item label="展示图片" prop="">
-
+                <el-form-item label="展示图片" prop="imageUrl">
+                    <el-upload class="upload-demo" :action="uploadify" :on-success="handleAvatarSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList2" list-type="picture">
+                        <el-button size="small" type="primary">点击上传</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                    </el-upload>
+                    <el-input type="hidden" style="display:none;" v-model="ruleForm.imageUrl"></el-input>
                 </el-form-item>
-                <el-form-item label="规格及价格设置" prop="">
+                <el-form-item label="规格及价格设置" prop="specDatas">
                     <div v-if="ruleForm.specDatas.length!=0" class="specList" v-for="(specItem,specIndex) in ruleForm.specDatas" :key="specIndex">
-                      规格{{specIndex+1}}：<el-input class="input2" type="text" v-model="specItem.specName"  placeholder="规格名称"></el-input>&nbsp;&nbsp;&nbsp;&nbsp;单价：<el-input class="input2" type="text" v-model="specItem.specPrice"  placeholder="规格价格"></el-input>&nbsp;&nbsp;&nbsp;&nbsp;<el-button type='text' @click="handleDelSpecBtn(specIndex)">删除</el-button>
+                        规格{{specIndex+1}}：
+                        <el-input class="input2" type="text" v-model="specItem.specName" placeholder="规格名称"></el-input>&nbsp;&nbsp;&nbsp;&nbsp;单价：
+                        <el-input class="input2" type="text" v-model="specItem.specPrice" placeholder="规格价格"></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <el-button type='text' @click="handleDelSpecBtn(specIndex)">删除</el-button>
                     </div>
                     <el-button type='text' @click="handleSpecBtn">新增</el-button>
                 </el-form-item>
@@ -57,16 +93,22 @@
 </template>
 
 <script>
-import { VueEditor } from 'vue2-editor'
+
+import {
+    VueEditor
+}
+from 'vue2-editor'
 export default {
     props: ['dialogType'],
-    components:{
+    components: {
         VueEditor
     },
     data() {
         return {
-            goodId:'',
-            isUpdate:false,
+            fileList2: [],
+            uploadify: '',
+            goodId: '',
+            isUpdate: false,
             dialogVisible: false,
             dialogTitle: '',
             ruleForm: {
@@ -76,9 +118,9 @@ export default {
                 intro: '',
                 specifications: '',
                 address: '',
-                specDatas:[],
-                imgUrl:'',
-                content:''
+                specDatas: [],
+                imageUrl: '',
+                content: ''
             },
             rules: {
                 name: [{
@@ -123,114 +165,158 @@ export default {
                     max: 20,
                     min: 1
                 }],
-                content:[{
-                  required: true,
-                  message: '请输入介绍',
-                  trigger: 'blur change',
-                }]
-            }
+                content: [{
+                    required: true,
+                    message: '请输入介绍',
+                    trigger: 'blur change',
+                }],
+                imageUrl: [{
+                    required: true,
+                    message: '请上传图片',
+                    trigger: 'blur change'
+                }],
+                specDatas: [{
+                    type: 'array',
+                    required: true,
+                    message: '请设置规格及价格',
+                    trigger: 'blur change'
+                }],
+            },
+
         }
     },
     created() {
+        this.uploadify = this.HttpUrl.UrlConfig.upload
     },
     mounted() {
 
     },
-    methods:{
-      childMethod(type,goodId){
-        this.goodId = goodId
-        this.dialogVisible = true
-        if(type == 'add'){
-          this.isUpdate = false
-          this.dialogTitle = '新增商品'
-        }else if(type == 'update'){
-          this.detail()
-          this.isUpdate = true
-          this.dialogTitle = '修改商品'
-        }
-      },
-      // 提交
-      submitForm(formName) {
-          this.$refs[formName].validate((valid) => {
-              if (valid) {
-
-                  this.handleSubmitServer();
-              } else {
-                  return false;
-              }
-          });
-      },
-      // 提交服务
-      handleSubmitServer() {
-        let datas = {
-          'productName':this.ruleForm.name,
-          'title':this.ruleForm.mainTxt,
-          'subtitle':this.ruleForm.viceTxt,
-          'describe':this.ruleForm.intro,
-          'images':this.ruleForm.imgUrl,
-          'specs':this.ruleForm.specDatas,
-          'specsTips':this.ruleForm.specifications,
-          'address':this.ruleForm.address,
-        }
-        console.log(datas)
-        let url = '',
-          message =''
-        if(this.isUpdate == true){
-          url = this.HttpUrl.UrlConfig.goodUpdate
-          message = '修改成功'
-        }else{
-          url = this.HttpUrl.UrlConfig.goodAdd
-          message = '新增成功'
-        }
-        this.$http.post(url,datas)
-            .then(res => {
-                res = res.data
-                if (res.ret === 0) {
-                  this.$emit("listenToSuccess",res)
-                  this.$message({
-                      message: message,
-                      type: 'success'
-                  });
-                  this.dialogVisible = false
-                } else {
-                    this.$message.error(res.msg);
+    methods: {
+        childMethod(type, goodId) {
+                this.goodId = goodId
+                this.dialogVisible = true
+                if (type == 'add') {
+                    this.isUpdate = false
+                    this.dialogTitle = '新增商品'
+                } else if (type == 'update') {
+                    this.detail()
+                    this.isUpdate = true
+                    this.dialogTitle = '修改商品'
                 }
-            }).catch(error => {
-                console.log(error)
-            })
-      },
-      resetForm(formName) {
-          this.$refs[formName].resetFields();
-      },
-      handleSpecBtn(){
-        this.ruleForm.specDatas.push({
-          'specName':'',
-          'specPrice':''
-        })
-      },
-      handleDelSpecBtn(specIndex){
-        this.ruleForm.specDatas.splice(specIndex,1)
-      },
-      // 商品详情
-      detail(){
-        let datas = {
-          'id' : this.goodId
-        }
-        this.$http.get(this.HttpUrl.UrlConfig.detail,datas)
-            .then(res => {
-                res = res.data
-                if (res.ret === 0) {
-                  this.ruleForm.name = res.productName
-                  this.ruleForm.mainTxt = res.title
-                  this.ruleForm.viceTxt = res.subTitle
+            },
+            // 提交
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
 
-                } else {
-                    this.$message.error(res.msg);
+                        this.handleSubmitServer();
+                    } else {
+                        return false;
+                    }
+                });
+            },
+            // 提交服务
+            handleSubmitServer() {
+                var imgUrl = []
+                this.fileList2.forEach((val) => {
+                    imgUrl.push(val.response)
+                })
+                console.log(imgUrl.join(','))
+                let datas = {
+                    'productName': this.ruleForm.name,
+                    'title': this.ruleForm.mainTxt,
+                    'subtitle': this.ruleForm.viceTxt,
+                    'describe': this.ruleForm.intro,
+                    'images': this.ruleForm.imageUrl,
+                    'specs': this.ruleForm.specDatas,
+                    'specsTips': this.ruleForm.specifications,
+                    'address': this.ruleForm.address,
+                    'content': this.ruleForm.content
                 }
-            }).catch(error => {
-                console.log(error)
-            })
-      }
+                console.log(datas)
+                let url = '',
+                    message = ''
+                if (this.isUpdate == true) {
+                    url = this.HttpUrl.UrlConfig.goodUpdate
+                    message = '修改成功'
+                } else {
+                    url = this.HttpUrl.UrlConfig.goodAdd
+                    message = '新增成功'
+                }
+                this.$http.post(url, datas)
+                    .then(res => {
+                        res = res.data
+                        if (res.ret === 0) {
+                            this.$emit("listenToSuccess", res)
+                            this.$message({
+                                message: message,
+                                type: 'success'
+                            });
+                            this.dialogVisible = false
+                        } else {
+                            this.$message.error(res.msg);
+                        }
+                    }).catch(error => {
+                        console.log(error)
+                    })
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            handleSpecBtn() {
+                this.ruleForm.specDatas.push({
+                    'specName': '',
+                    'specPrice': ''
+                })
+            },
+            handleDelSpecBtn(specIndex) {
+                this.ruleForm.specDatas.splice(specIndex, 1)
+            },
+            // 商品详情
+            detail() {
+                let datas = {
+                    'id': this.goodId
+                  }
+                this.$http.get(this.HttpUrl.UrlConfig.detail, datas)
+                    .then(res => {
+                        res = res.data
+                        if (res.ret === 0) {
+                            this.ruleForm.name = res.productName
+                            this.ruleForm.mainTxt = res.title
+                            this.ruleForm.viceTxt = res.subTitle
+
+                        } else {
+                            this.$message.error(res.msg);
+                        }
+                    }).catch(error => {
+                        console.log(error)
+                    })
+            },
+            handleAvatarSuccess(res, file, fileList) {
+                // this.ruleForm.imageUrl = res;
+                this.ruleForm.required = false;
+                // this.fileList2 = fileList
+
+                let imgStr = []
+                fileList.forEach((val)=>{
+                  imgStr.push(val.response)
+                })
+
+                // console.log(imgStr.join(','))
+
+            },
+            handleRemove(file, fileList) {
+                // this.fileList2 = fileList
+                let imgStr = []
+                fileList.forEach((val)=>{
+                  imgStr.push(val.response)
+                })
+
+                // console.log(imgStr.join(','))
+            },
+            handlePreview(file) {
+                console.log(file);
+            }
     }
 }
 

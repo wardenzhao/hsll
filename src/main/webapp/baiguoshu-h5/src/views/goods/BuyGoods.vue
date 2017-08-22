@@ -233,9 +233,9 @@
                 </span>
                 <div class="goods-box">
                     <span class="img">
-                  <img :src="goodIcon" alt="">
+                  <img :src="thumb" alt="">
                 </span>
-                    <span class="img-t">{{goodTitle}}</span>
+                    <span class="img-t">{{goodName}}</span>
                 </div>
                 <div class="goods-standard">
                     <h4 class="h4-title">规格</h4>
@@ -324,6 +324,11 @@ export default {
             total: 0,
             numValue:1,
             price:0,
+            thumb:'',
+            goodName:'',
+            goodId:'',
+            goodNum:null,
+            goodSpecId:null
         }
     },
     created(){
@@ -349,6 +354,7 @@ export default {
                             if(res.code=='1'){// 成功
 
                               // this.demo01_list = advImgStr
+                              this.goodName = res.data[0].goodName
                               this.goodTitle = res.data[0].goodTitle
                               this.goodSubTitle = res.data[0].goodSubTitle
                               this.goodPrice = res.data[0].goodPrice
@@ -356,11 +362,15 @@ export default {
                               this.goodDes = res.data[0].goodDes
                               this.goodIcon = res.data[0].goodIcon
                               this.goodsDatas = res.data[0].goodSpec
+                              this.thumb = res.data[0].thumb
+                              this.goodId = res.data[0].goodId
 
 
                               this.$nextTick(()=>{
                                 Vue.set(this.goodsDatas[0],'active',true)
                                 this.price = this.goodsDatas[0].price
+                                this.goodSpecId = this.goodsDatas[0].id
+                                this.goodSpeName = this.goodsDatas[0].name
                                 this.total = parseInt(this.numValue) * this.price
                               })
 
@@ -406,6 +416,7 @@ export default {
 
             },
             change(val) {
+                this.goodNum = parseInt(val)
                 console.log('change', val)
                 this.total = parseInt(val) * this.price
             },
@@ -418,7 +429,10 @@ export default {
             },
             selGood(item){
                 let that = this
-                console.log(item)
+                this.goodSpecId = item.id
+                this.goodSpeName = item.name
+                this.price = item.price
+                console.log(item.id)
                 this.$nextTick(()=>{
                   this.goodsDatas.forEach((item)=>{
                     Vue.set(item,'active',false)
@@ -430,6 +444,39 @@ export default {
                 this.numValue = 1
             },
             subCart(){
+
+              let datas = {
+                'openId':getStore('openId'),
+                'goodId':this.goodId,
+                'goodNum':this.goodNum,
+                'goodSpecId':this.goodSpecId,
+                'goodSpeName':this.goodSpeName,
+                'price':this.price,
+                'thumb':this.thumb,
+                'goodName':this.goodName,
+                'goodPrice':this.total,
+                // 'address':this.address,
+                // 'person':this.person,
+                // 'phone':this.phone,
+                // 'receiptType':this.receiptType,
+                // 'receiptTitle':this.receiptTitle,
+                // 'receiptNo':this.receiptNo,
+                // 'buyerMessage':this.buyerMessage
+              }
+              setStore('buyInfo',datas)
+
+              this.$router.push({
+                path:'/confirm-order'
+              })
+
+
+
+
+
+
+
+
+
               console.log(this.price)
             }
     }

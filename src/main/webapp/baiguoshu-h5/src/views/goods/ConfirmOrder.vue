@@ -6,14 +6,14 @@
 .goods-price {
     padding: 10px 0;
     background: #fff;
-    margin-bottom: 19px;
+    margin-bottom: 11px;
 }
 
 
 
 
 .goods-info {
-    padding: 25px 22px;
+    padding: 16px 15px;
     .t{
       font-size: 16px;
       font-weight: normal;
@@ -59,7 +59,7 @@
     }
 }
 .goods-page{
-  background: #ccc;
+  background: #f0eff5;
   width: 100%
 }
 .goods-main {
@@ -68,7 +68,12 @@
 .wechat-btn{
   margin: 30px 30px 60px;
 }
-
+.statement{
+  display: flex;
+  .t1{
+    width: 95px;
+  }
+}
 </style>
 
 <template lang="html">
@@ -79,38 +84,38 @@
             <h2 class="t">店铺名称：好柿连连</h2>
             <div class="img-box">
                 <div class="img">
-                    <img src="../../assets/images/1.png" alt="">
+                    <img :src="buyInfo.thumb" alt="">
                 </div>
                 <div class="img-info">
-                    <p class="txt">好柿连连柿饼2017限量礼盒装</p>
+                    <p class="txt" v-text="buyInfo.goodName"></p>
                     <div class="price">
-                      <span>¥{{total}}</span>
-                      <span>X {{num}}</span>
+                      <span>¥{{buyInfo.price}}</span>
+                      <span>X {{buyInfo.goodNum}}</span>
                     </div>
 
                 </div>
             </div>
-            <div class="txt2">
-                特别申明：您本次购买的您本次购买的您本次购买的您本次购买的您本次购买的您本次购买的
+            <div class="txt2 statement">
+                <span class="t1">特别申明：</span>
+                <span>您本次购买的您本次购买的您本次购买的您本次购买的您本次购买的您本次购买的</span>
             </div>
         </div>
         <div class="address-msg">
             <group>
-              <cell :title="2222" is-link link="/address-list">
-                <img slot="icon" width="20" style="display:block;margin-right:5px;" src="../../assets/images/map.png">
+              <cell :title="addressInfo" is-link link="/address-list?page=comfirmOrder">
+                <img slot="icon" width="20" style="display:block;margin-right:15px;" src="../../assets/images/map.png">
               </cell>
-                <popup-picker title="发票类型" :data="[invoiceTypeList]" v-model="invoiceTypeValue"  placeholder="请选择"></popup-picker>
-                <x-input title="发票内容" placeholder="明细"></x-input>
-                <x-input title="发票抬头" placeholder="明细"></x-input>
-                <x-input title="纳税人识别号" placeholder="免费单位请填0"></x-input>
-                <x-input title="卖家留言" placeholder="140字以内" :max="140"></x-input>
+                <popup-picker title="发票类型：" :data="[invoiceTypeList]" v-model="invoiceTypeValue" @on-change="invoiceTypeValueClick" placeholder="请选择"></popup-picker>
+                <x-input v-if="invoiceTypeValue!='不要发票'" :title="invoiceTitle" v-model="receiptTitle" placeholder="明细"></x-input>
+                <x-input v-if="invoiceTypeValue=='企业'" title="纳税人识别号："v-model="receiptNo"  placeholder="免费单位请填0"></x-input>
+                <x-input title="卖家留言：" placeholder="140字以内" v-model="buyerMessage" :max="140"></x-input>
             </group>
         </div>
         <div class="goods-price">
             <group>
-                <cell title="产品：" value=""></cell>
-                <cell title="运费" value=""></cell>
-                <cell title="合计" value=""></cell>
+                <cell title="产品：" v-model="goodPrice"></cell>
+                <cell title="运费：" v-model="freight"></cell>
+                <cell title="合计：" v-model="totalPrice"></cell>
             </group>
         </div>
         <div class="wechat-btn">
@@ -159,15 +164,47 @@ export default {
             receiptTitle:'',
             receiptNo:'',
             buyerMessage:'',
+            buyInfo:'',
+            goodPrice:0,
+            freight:0,
+            totalPrice:0,
+            addressInfo:'请选择收货地址',
+            comfirmOrderAddress:'',
+            invoiceTitle:''
         }
     },
     created() {
         document.title = "确认订单"
     },
     mounted() {
-
+      if(getStore('buyInfo')){
+        this.buyInfo = JSON.parse(getStore('buyInfo'))
+        this.goodId = this.buyInfo.goodId
+        this.goodSpecId = this.buyInfo.goodSpecId
+        this.goodSpeName = this.buyInfo.goodSpeName
+        this.goodNum = this.buyInfo.goodNum
+        this.goodPrice = '¥' + this.buyInfo.goodPrice.toFixed(2)
+        this.freight = '¥0.00'
+        this.totalPrice = '¥' + this.buyInfo.goodPrice.toFixed(2)
+      }
+      if(getStore('comfirmOrderAddress')){
+        this.comfirmOrderAddress = JSON.parse(getStore('comfirmOrderAddress'))
+        this.addressInfo = this.comfirmOrderAddress.address
+        this.person = this.comfirmOrderAddress.person
+        this.phone = this.comfirmOrderAddress.phone
+      }
     },
     methods: {
+      invoiceTypeValueClick(val){
+        this.receiptTitle = ''
+        this.invoiceTypeValue = val.join('')
+        if(val.join('')=='个人'){
+          this.invoiceTitle = '发票内容：'
+        }
+        if(val.join('')=='企业'){
+          this.invoiceTitle = '发票抬头：'
+        }
+      },
       buyGoods(){
         let datas = {
             'openId':getStore('openId') ,
@@ -176,14 +213,15 @@ export default {
             'goodSpecId': this.goodSpecId,
             'goodSpeName': this.goodSpeName,
             'goodPrice': this.goodPrice,
-            'address': this.address,
+            'address': this.addressInfo,
             'person': this.person,
             'phone': this.phone,
-            'receiptType': this.receiptType,
+            'receiptType': this.invoiceTypeValue.join(''),
             'receiptTitle': this.receiptTitle,
             'receiptNo': this.receiptNo,
             'buyerMessage': this.buyerMessage,
         }
+        console.log(datas)
         this.$http.post(this.HttpUrl.UrlConfig.buyGoods, datas)
             .then(res => {
                 var res = res.data

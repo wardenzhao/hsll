@@ -10,6 +10,8 @@ body{
     bottom: 0;
     right: 0;
     padding: 10 11px;
+    background: #efefef;
+    height:100%;
     .myorder-box{
       background: #fff;
       padding: 10px;
@@ -73,7 +75,7 @@ body{
 
 <div class="my-order">
   <!-- {{items.length}} -->
-  <div class=""  v-if="items.length!=0">
+  <div class=""  v-show="orderList">
     <div class="myorder-box" v-for="(item,index) in items" :key="index">
         <div class="order-txt">订单编号:{{item.orderNo}}</div>
         <div class="order-txt order-txt2">下单时间:{{item.orderTime}}</div>
@@ -91,13 +93,13 @@ body{
             <p>订单状态：{{item.orderState}}</p>
             <p>预计发货时间：{{item.sendTime}}</p>
         </div>
-        <group>
-            <cell title="addressInfo" :link="'/address-list?orderNo='+item.orderNo"></cell>
+        <group v-if="item.orderState=='等待发货'">
+            <cell title="修改收货信息" :link="'/address-list?orderNo='+item.orderNo"></cell>
         </group>
     </div>
   </div>
-  <div class="" v-else>
-    <p class="no-order">暂无订单</p>
+  <div class="" v-show="!orderList">
+    <p class="no-order" v-text='noOrderTxt'></p>
   </div>
 
 
@@ -124,6 +126,8 @@ export default {
     },
     data() {
         return {
+            noOrderTxt:'暂无订单',
+            orderList:false,
             items: [],
             toastTxt: '',
             toastShow: false,
@@ -158,6 +162,7 @@ export default {
                         var res = res.data
                           if(res.code=='1'){// 成功
                               this.items = res.data
+                              this.orderList = true
                           }else{ // 异常
                             this.toastShow = true
                             this.toastTxt = res.msg

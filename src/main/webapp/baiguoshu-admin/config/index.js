@@ -29,7 +29,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api/': {
-        target: 'http://api.dsfderek.com:8282',
+        target: 'http://localhost:8282',
         // target: 'http://127.0.0.1:8282',
         changeOrigin: true, //set the option changeOrigin to true for name-based virtual hosted sites
         pathRewrite: {

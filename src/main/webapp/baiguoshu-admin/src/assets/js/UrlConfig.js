@@ -28,6 +28,8 @@ const UrlConfig = {
   memberDel: BASE_URL + '/admin/member/del',
   // 删除
   applyList: BASE_URL + '/admin/apply/list',
+  // 上传
+  upload: BASE_URL + '/file/upload',
 }
 
 export default {
