@@ -20,4 +20,10 @@ public interface OrderDao {
     Order getByGoodsCode(@Param("goodsCode")String goodsCode);
 
     List<Order> getListByMemberId(@Param("memberId")long memberId,@Param("offset") int offset, @Param("pageSize") int pageSize);
+
+    List<Order> getListByStatus(@Param("startPage")int i, @Param("pageSize")int pageSize, @Param("status")int status);
+
+    int getListCountByStatus(@Param("status")int status);
+
+    void sendByOrderNo(@Param("orderNo")String orderNo,@Param("status")int status);
 }

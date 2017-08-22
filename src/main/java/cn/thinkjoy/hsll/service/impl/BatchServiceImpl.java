@@ -62,4 +62,9 @@ public class BatchServiceImpl implements BatchService{
     public int getUnUseNumByBatchCode(String batchCode) {
         return batchDao.getUnUseNumByBatchCode(batchCode);
     }
+
+    @Override
+    public Batch getBatchById(Long aLong) {
+        return batchDao.getBatchById(aLong);
+    }
 }

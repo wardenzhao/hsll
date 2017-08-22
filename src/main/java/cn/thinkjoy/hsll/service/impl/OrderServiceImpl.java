@@ -41,4 +41,19 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getListByMemberId(long id,int offset, int pageSize) {
         return orderDao.getListByMemberId(id,offset,pageSize);
     }
+
+    @Override
+    public List<Order> getListByStatus(int i, int pageSize, int status) {
+        return orderDao.getListByStatus(i, pageSize, status);
+    }
+
+    @Override
+    public int getListCountByStatus(int status) {
+        return orderDao.getListCountByStatus(status);
+    }
+
+    @Override
+    public void sendByOrderNo(String orderNo,int status) {
+        orderDao.sendByOrderNo(orderNo,status);
+    }
 }
