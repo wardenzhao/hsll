@@ -41,7 +41,7 @@ public class ApplyMemberController {
     @ResponseBody
     public MemberApplyResponse list(HttpServletRequest request,HttpServletResponse response,int pageNo,int pageSize){
         MemberApplyResponse memberResPonse=new MemberApplyResponse();
-            List<MemberApply> memberApplies=memberApplyService.getMemberApplys(pageNo*pageSize,pageNo);
+            List<MemberApply> memberApplies=memberApplyService.getMemberApplys(pageNo*pageSize,pageSize);
             int count=memberApplyService.getMemberApplysCount();
             for(int i=0;i<memberApplies.size();i++){
                 MemberApply apply=new MemberApply();
