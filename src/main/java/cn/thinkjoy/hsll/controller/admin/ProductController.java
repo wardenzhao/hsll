@@ -75,6 +75,34 @@ public class ProductController {
     }
 
 
+
+
+    /**
+     * 商品列别
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/detail",method = RequestMethod.POST)
+    @ResponseBody
+    public ProductResponse detail(HttpServletRequest request,HttpServletResponse response,long id){
+        ProductResponse productResponse=new ProductResponse();
+        Goods goods= goodsService.getGoodsById(id);
+        List<GoodsSpec> goodsSpecList= goodsSpecService.getSpecLsBygoodId(goods.getId());
+        List<ProductSpec> productSpecs=new ArrayList<>();
+        if(goodsSpecList!=null&&goodsSpecList.size()>0){
+            for (GoodsSpec goodsSpec:goodsSpecList){
+                ProductSpec productSpec=new ProductSpec();
+                productSpec.setSpecId(goodsSpec.getId());
+                productSpec.setSpecName(goodsSpec.getSpecName());
+                productSpec.setSpecPrice(goodsSpec.getPrice()+"");
+                productSpec.setSpecStatus(goodsSpec.getStatus()+"");
+                productSpecs.add(productSpec);
+            }
+        }
+        productResponse.setSpecs(productSpecs);
+        return productResponse;
+    }
     /**
      * 更新商品
      * @param request
@@ -151,9 +179,7 @@ public class ProductController {
     public ResultResponse del(HttpServletRequest request,HttpServletResponse response,long goodId){
         ResultResponse result=new ResultResponse();
         try{
-
             goodsService.delGood(goodId);
-
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -174,9 +200,7 @@ public class ProductController {
     public ResultResponse upOrDownGood(HttpServletRequest request,HttpServletResponse response,@RequestBody ProductRequest productRequest){
         ResultResponse result=new ResultResponse();
         try{
-
             goodsService.updateGood(productRequest);
-
         }catch (Exception e){
             e.printStackTrace();
         }

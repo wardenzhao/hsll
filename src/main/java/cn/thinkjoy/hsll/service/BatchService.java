@@ -28,4 +28,6 @@ public interface BatchService {
     List<BatchInfo> getGoodCodeList(String batchCode, int i, int pageSize);
 
     int getUnUseNumByBatchCode(String batchCode);
+
+    Batch getBatchById(Long aLong);
 }

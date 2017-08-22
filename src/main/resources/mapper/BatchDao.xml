@@ -66,5 +66,12 @@
         FROM batch where batch_code=#{batchCode} and status=0
 
     </select>
+
+
+    <select id="getBatchById" resultType="cn.thinkjoy.hsll.bean.Batch">
+        SELECT id, batch_name AS batchName, batch_code AS batchCode, batch_no AS batchNo, goods_code AS goodsCode,status
+        FROM batch
+        WHERE id=#{id}
+    </select>
 </mapper>
 

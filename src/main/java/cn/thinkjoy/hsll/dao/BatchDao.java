@@ -28,4 +28,6 @@ public interface BatchDao {
     List<BatchInfo> getGoodCodeList(@Param("batchCode")String batchCode, @Param("pageNo")int i, @Param("pageSize")int pageSize);
 
     int getUnUseNumByBatchCode(@Param("batchCode")String batchCode);
+
+    Batch getBatchById(@Param("id")Long aLong);
 }

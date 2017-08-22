@@ -34,5 +34,27 @@
         WHERE buy_member_id LIKE #{memberId}
         limit #{offset},#{pageSize}
     </select>
+
+    <select id="getListByStatus" resultType="cn.thinkjoy.hsll.bean.Order">
+        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime
+        FROM hsll_order
+        WHERE status=#{status}
+        limit #{startPage},#{pageSize}
+    </select>
+
+
+    <select id="getListCountByStatus" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM hsll_order
+        WHERE status=#{status}
+    </select>
+
+    <update id="sendByOrderNo">
+        UPDATE hsll_order
+        SET status=${status}
+        WHERE order_no = #{orderNo}
+    </update>
+
+
 </mapper>
 

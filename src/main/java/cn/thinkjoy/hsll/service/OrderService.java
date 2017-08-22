@@ -18,4 +18,10 @@ public interface OrderService {
     Order getByGoodsCode(String goodsCode);
 
     List<Order> getListByMemberId(long id,int offset, int pageSize);
+
+    List<Order> getListByStatus(int i, int pageSize, int status);
+
+    int getListCountByStatus(int status);
+
+    void sendByOrderNo(String orderNo,int status);
 }
