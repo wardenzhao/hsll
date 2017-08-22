@@ -2,7 +2,7 @@ package cn.thinkjoy.hsll.bean.adminBean;
 
 /**
  * Created by wpliu on 17/8/14.
- * ÉÌÆ·¹æ¸ñ
+ * ï¿½ï¿½Æ·ï¿½ï¿½ï¿½
  */
 public class ProductSpec {
     private long goodId;
@@ -10,6 +10,15 @@ public class ProductSpec {
     private String specName;
     private String specPrice;
     private String address;
+    private int status=0;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public String getAddress() {
         return address;

@@ -14,6 +14,24 @@ public class ProductRequest {
     private String specsTips;
     private String address;
     private String content;
+    private String price;
+    private String status;
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getContent() {
         return content;

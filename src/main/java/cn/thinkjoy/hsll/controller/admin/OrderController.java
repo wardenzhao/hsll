@@ -53,7 +53,7 @@ public class OrderController {
     @ResponseBody
     public OrderResponse list(HttpServletRequest request,HttpServletResponse response,int pageNo,int pageSize,int status){
         OrderResponse orderResponse=new OrderResponse();
-        SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-DD hh24:mi:ss");
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<Order>  orders=orderService.getListByStatus(pageNo*pageSize,pageSize,status);
         List<OrderInfo> orderInfos=new ArrayList<>();
         for(int i=0;i<orders.size();i++){
@@ -93,7 +93,7 @@ public class OrderController {
     @ResponseBody
     public OrderInfo list(HttpServletRequest request,HttpServletResponse response,String orderNo){
         OrderResponse orderResponse=new OrderResponse();
-        SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-DD hh24:mi:ss");
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Order order=orderService.getByOrderNo(orderNo);
             OrderInfo orderInfo=new OrderInfo();
             orderInfo.setAddress(order.getAddress());

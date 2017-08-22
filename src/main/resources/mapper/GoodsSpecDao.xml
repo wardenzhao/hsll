@@ -12,10 +12,10 @@
 
 
     <update id="update">
-        UPDATE goodsSpec
+        UPDATE goods_spec
         <set>
             <if test="productSpec.specName!=null">
-            specName = #{productSpec.specName},
+            spec_name = #{productSpec.specName},
             </if>
             <if test="productSpec.specPrice!=null">
                 price = #{productSpec.specPrice},
@@ -26,7 +26,7 @@
     </update>
 
     <insert id="add">
-        insert into goodsSpec(goodsId,specName,address,price,status)
+        insert into goods_spec(goods_id,spec_name,address,price,status)
         VALUES (#{productSpec.goodId},#{productSpec.specName},#{productSpec.address},#{productSpec.specPrice},#{productSpec.status})
 
     </insert>
