@@ -73,6 +73,7 @@ export default {
         },
         mounted() {
             this.list()
+
         },
         updated() {
 
@@ -133,9 +134,9 @@ export default {
                 },
                 listenToDel(data){
                   let datas = {
-                    'id':this.multipleSelection[0].productId
+                    'goodId':this.multipleSelection[0].productId
                   }
-                  this.$http.post(this.HttpUrl.UrlConfig.goodDel,datas)
+                  this.$http.post(this.HttpUrl.UrlConfig.goodDel,qs.stringify(datas))
                       .then(res => {
                           res = res.data
                           if (res.ret === "0") {

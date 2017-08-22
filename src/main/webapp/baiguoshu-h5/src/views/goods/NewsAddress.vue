@@ -59,11 +59,23 @@ export default {
           username:'',
           phone:'',
           address:'',
+          id:'0',
+          msg:'保存成功'
         }
     },
+    mounted(){
+      if(getStore('updateAddress')){
+        let updateAddress = JSON.parse(getStore('updateAddress'))
+        this.username = updateAddress.person
+        this.phone = updateAddress.phone
+        this.address = updateAddress.address
+        this.id = updateAddress.id
+        this.msg = '修改成功'
+      }
+    },
     methods:{
-      selAddress(){
 
+      selAddress(){
         if(this.username==''){
           this.$vux.toast.show({
               text: '请填写姓名',
@@ -96,16 +108,9 @@ export default {
         }
 
 
-
-
-
-
-
-
-
         let datas = {
           "openId":getStore('openId'),
-          "id":'0',
+          "id":this.id,
           "person":this.username,
           "phone":this.phone,
           "address":this.address
@@ -118,7 +123,7 @@ export default {
                           if(res.code=='1'){// 会员
                             this.$vux.toast.show({
                                 position:'top',
-                                text: '保存成功',
+                                text: this.msg,
                                 type: 'text',
                                 width: '80%',
                                 time:'2000',

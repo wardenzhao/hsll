@@ -93,7 +93,7 @@
 </template>
 
 <script>
-
+import qs from 'qs'
 import {
     VueEditor
 }
@@ -189,7 +189,6 @@ export default {
         this.uploadify = this.HttpUrl.UrlConfig.upload
     },
     mounted() {
-
     },
     methods: {
         childMethod(type, goodId) {
@@ -225,10 +224,10 @@ export default {
                 let datas = {
                     'productName': this.ruleForm.name,
                     'title': this.ruleForm.mainTxt,
-                    'subtitle': this.ruleForm.viceTxt,
+                    'subTitle': this.ruleForm.viceTxt,
                     'describe': this.ruleForm.intro,
                     'images': this.ruleForm.imageUrl,
-                    'specs': this.ruleForm.specDatas,
+                    'specs': JSON.stringify(this.ruleForm.specDatas),
                     'specsTips': this.ruleForm.specifications,
                     'address': this.ruleForm.address,
                     'content': this.ruleForm.content
@@ -277,7 +276,7 @@ export default {
                 let datas = {
                     'id': this.goodId
                   }
-                this.$http.get(this.HttpUrl.UrlConfig.detail, datas)
+                this.$http.post(this.HttpUrl.UrlConfig.detail, qs.stringify(datas))
                     .then(res => {
                         res = res.data
                         if (res.ret === 0) {
@@ -294,7 +293,7 @@ export default {
             },
             handleAvatarSuccess(res, file, fileList) {
                 // this.ruleForm.imageUrl = res;
-                this.ruleForm.required = false;
+
                 // this.fileList2 = fileList
 
                 let imgStr = []
@@ -302,6 +301,11 @@ export default {
                   imgStr.push(val.response)
                 })
 
+                if(imgStr.length!=0){
+                  this.rules.imageUrl[0].required = false
+                }else{
+                  this.rules.imageUrl[0].required = true
+                }
                 // console.log(imgStr.join(','))
 
             },
@@ -311,6 +315,12 @@ export default {
                 fileList.forEach((val)=>{
                   imgStr.push(val.response)
                 })
+
+                if(imgStr.length!=0){
+                  this.rules.imageUrl[0].required = false
+                }else{
+                  this.rules.imageUrl[0].required = true
+                }
 
                 // console.log(imgStr.join(','))
             },

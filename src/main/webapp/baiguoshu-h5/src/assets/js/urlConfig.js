@@ -13,6 +13,8 @@ const UrlConfig = {
   getGoods: BASE_URL + '/hsll/getGoods', //
   buyGoods: BASE_URL + '/hsll/buy/goods', //  提交
   address: BASE_URL + '/hsll/get/address', //  地址列表
+  getJq: BASE_URL + '/hsll/getJq', //  24节气图片
+  changeOrderAddress: BASE_URL + '/hsll/changeOrderAddress', //  修改收货地址
 
 };
 

@@ -9,11 +9,11 @@
 <div class="">
     <h3 class="h3-t">订单管理</h3>
     <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
-      <el-tab-pane label="全部" name="first">全部</el-tab-pane>
-      <el-tab-pane label="提货卡已发货" name="second">提货卡已发货</el-tab-pane>
-      <el-tab-pane label="提货卡未发货" name="third">角色管理</el-tab-pane>
-      <el-tab-pane label="已发货" name="fourth">定时任务补偿</el-tab-pane>
-      <el-tab-pane label="未发货" name="five">定时任务补1偿</el-tab-pane>
+      <el-tab-pane label="全部" name="-1"></el-tab-pane>
+      <el-tab-pane label="提货卡已发货" name="0"></el-tab-pane>
+      <el-tab-pane label="提货卡未发货" name="1"></el-tab-pane>
+      <el-tab-pane label="已发货" name="2"></el-tab-pane>
+      <el-tab-pane label="未发货" name="3"></el-tab-pane>
     </el-tabs>
     <!-- table list -->
     <div class="app-table">
@@ -28,6 +28,10 @@
             <el-table-column prop="" label="发货地"></el-table-column>
             <el-table-column prop="" label="状态"></el-table-column>
         </el-table>
+        <div class="pager-box" v-if="total>pageSize">
+                <el-pagination @current-change="handleCurrentChange" :page-size="pageSize" layout="total, prev, pager, next" :total="total">
+                </el-pagination>
+            </div>
     </div>
     <!-- 新增、修改弹层 -->
     <el-dialog title="dialogTitle" :visible.sync="dialogVisible" size="small" @close="resetForm('ruleForm')">
@@ -75,7 +79,11 @@
 export default {
     data() {
             return {
-                activeName2: 'first',
+              pageNo: 0,
+              pageSize: 10,
+              total: null,
+              status:'',
+                activeName2: '-1',
                 tableData: [],
                 dialogVisible: false,
                 dialogTitle: '',
@@ -138,12 +146,21 @@ export default {
 
         },
         mounted() {
-
+          this.orderList()
         },
         updated() {
 
         },
         methods: {
+            orderList(){
+              this.$http.get(this.HttpUrl.UrlConfig.orderList+'?pageNo='+this.pageNo + '&pageSize='+this.pageSize + '&status='+this.activeName2)
+                  .then(res => {
+                      res = res.data
+                      this.tableData = res.applyList
+                  }).catch(error => {
+                      console.log(error)
+                  })
+            },
             // 选择table 项
             handleTableChange() {
 
@@ -186,8 +203,9 @@ export default {
                   this.$refs[formName].resetFields();
                 },
                 handleClick(tab, event) {
-        console.log(tab, event);
-      }
+                  console.log(this.activeName2)
+                  this.orderList()
+                }
         }
 }
 

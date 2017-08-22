@@ -68,7 +68,7 @@
 export default {
     data() {
             return {
-              pageNo: 1,
+              pageNo: 0,
               pageSize: 10,
               total: null,
                 tableData: [],
@@ -86,17 +86,17 @@ export default {
 
         },
         mounted() {
-
+          this.applyList()
         },
         updated() {
-          this.applyList()
+
         },
         methods: {
             handleCurrentChange(val){
               this.pageNo = val
             },
             applyList(){
-              this.$http.get(this.HttpUrl.UrlConfig.applyList)
+              this.$http.get(this.HttpUrl.UrlConfig.applyList+'?pageNo='+this.pageNo + '&pageSize='+this.pageSize +'&status=')
                   .then(res => {
                       res = res.data
                       this.tableData = res.applyList

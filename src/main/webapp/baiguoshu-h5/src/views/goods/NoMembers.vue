@@ -42,14 +42,14 @@ export default {
     }
     .img1{
       width: 200px;
-      heigt:200px;
+      height:200px;
       position: relative;
       top:0;
       left:0;
     }
     .img2{
       width: 160px;
-      heigt:160px;
+      height:160px;
       position: relative;
       top:-40px;
       left:0;

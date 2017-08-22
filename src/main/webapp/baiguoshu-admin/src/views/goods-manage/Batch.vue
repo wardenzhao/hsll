@@ -85,7 +85,7 @@ export default {
             return {
                 tableData: [],
                 dialogVisible:false,
-                dialogBatchVisible:true,
+                dialogBatchVisible:false,
                 pageNo: 1,
                 pageSize: 10,
                 total: null,
@@ -137,6 +137,9 @@ export default {
         },
         methods: {
                 batchList(){
+                  let datas = {
+                    
+                  }
                   this.$http.get(this.HttpUrl.UrlConfig.batchList)
                       .then(res => {
                           res = res.data

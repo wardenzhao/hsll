@@ -30,6 +30,10 @@ const UrlConfig = {
   applyList: BASE_URL + '/admin/apply/list',
   // 上传
   upload: BASE_URL + '/file/upload',
+  // 会员详情
+  memberDetail: BASE_URL + '/admin/member/detail',
+  // 订单列表
+  orderList: BASE_URL + '/admin/order/list',
 }
 
 export default {

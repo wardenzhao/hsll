@@ -584,9 +584,28 @@ export default {
             },
         };
     },
-
+    mounted(){
+        this.getJq()
+    },
     // All slick methods can be used too, example here
     methods: {
+      getJq(){
+        this.$http.get(this.HttpUrl.UrlConfig.getJq)
+            .then(res => {
+                var res = res.data
+                if (res.code == "1") {
+
+                } else {
+                    this.$vux.toast.show({
+                        text: res.msg,
+                        type: 'text',
+                        width: '80%'
+                    })
+                }
+            }).catch(error => {
+                console.log(error)
+            })
+      }
 
     },
 }

@@ -10,6 +10,7 @@
     .address-icon{
       width: 40px;
       text-align: center;
+      // flex:1 0 0;
       img{
         position: relative;
         top: 18px;
@@ -18,6 +19,10 @@
       }
     }
     .address-info{
+      flex:1 0 auto;
+    }
+    .update-btn{
+      margin-right: 10px;
     }
   }
   .add-address{
@@ -38,12 +43,13 @@
 <template lang="html">
 
 <div class="address-list-box">
-      <div class="address-list" v-for="(item,index) in items" :key="index" @click="imgShowClick(item,index)">
+      <div class="address-list" v-for="(item,index) in items" :key="index" >
         <div class="address-icon"><img v-show="index==i" src="../../assets/images/address-icon.png" alt=""></div>
-        <div class="address-info">
+        <div class="address-info" @click="imgShowClick(item,index)">
           <div>{{item.person}}({{item.phone}})</div>
           <div>{{item.address}}</div>
         </div>
+        <span class="update-btn" @click="updateAddress(item)">修改</span>
       </div>
       <router-link :to="'/news-address?orderNo='+orderNo">
         <div class="add-address">
@@ -119,8 +125,8 @@ export default {
         'SEL_ADDRESS'
       ]),
       imgShowClick(item,index){
+          this.changeOrderAddress(item)
           this.i = index
-
           if(this.page=='comfirmOrder'){
             setStore('comfirmOrderAddress',item)
           }
@@ -144,6 +150,35 @@ export default {
                       }).catch(error => {
                           console.log(error)
                       })
+      },
+      changeOrderAddress(item){
+        let datas = {
+          'openId':getStore('openId'),
+          'orderNo':getStore('orderNo'),
+          'person':item.person,
+          'phone':item.phone,
+          'address':item.address,
+        }
+        this.$http.post(this.HttpUrl.UrlConfig.changeOrderAddress,datas)
+                      .then(res => {
+                        var res = res.data
+                          if(res.code=='1'){//
+
+                          }else{ // 异常
+                            this.$vux.toast.show({
+                                text: res.msg,
+                                type: 'text'
+                            })
+                          }
+                      }).catch(error => {
+                          console.log(error)
+                      })
+      },
+      updateAddress(item){
+        setStore('updateAddress',item)
+        this.$router.push({
+          path:'/news-address'
+        })
       }
     }
 

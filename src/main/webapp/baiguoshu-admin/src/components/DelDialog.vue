@@ -22,6 +22,9 @@ export default {
         childMethod(){
             this.deleteDialogVisible = true
         },
+        delSucess(){
+            this.deleteDialogVisible = false
+        },
         handleDeleteData(){
             this.$emit("listenToDel")
         }

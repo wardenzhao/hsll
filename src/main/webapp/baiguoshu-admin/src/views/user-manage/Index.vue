@@ -22,7 +22,7 @@
             <el-table-column prop="" label="微信名"></el-table-column>
             <el-table-column prop="name" label="姓名"></el-table-column>
             <el-table-column prop="phone" label="手机号码"></el-table-column>
-            <el-table-column prop="sex" label="性别"></el-table-column>
+            <el-table-column prop="sex" :formatter="formatSex" label="性别"></el-table-column>
             <el-table-column prop="address" label="地址信息"></el-table-column>
             <el-table-column prop="inviteCode" label="会员邀请码"></el-table-column>
             <el-table-column prop="" label="购买记录"></el-table-column>
@@ -85,13 +85,18 @@
 
         </div>
     </el-dialog>
+    <del-dialog delTitle='删除会员' ref="refDelDialog" @listenToDel='listenToDel'></del-dialog>
 </div>
 
 </template>
 
 <script>
-
+import qs from 'qs'
+import DelDialog from '../../components/DelDialog'
 export default {
+  components : {
+      DelDialog
+  },
     data() {
             return {
                 tableData: [],
@@ -102,7 +107,7 @@ export default {
                 wechatId:'',
                 wechatName:'',
                 InviteCode:'',
-                pageNo: 1,
+                pageNo: 0,
                 pageSize: 10,
                 total: null,
                 ruleForm: {
@@ -162,8 +167,39 @@ export default {
 
         },
         methods: {
+          // 获取会员列表
+          memberList(){
+            this.$http.get(this.HttpUrl.UrlConfig.memberList+'?pageNo=' + this.pageNo + '&pageSize='+this.pageSize)
+                .then(res => {
+                    console.log(res)
+                    res = res.data
+                    this.tableData = res.memberList
+                    this.total = parseInt(res.listCount)
+                }).catch(error => {
+                    console.log(error)
+                })
+          },
+          // 格式化
+                formatSex(row, column) {
+                    var columnV = row[column.property];
+                    if (columnV === undefined) {
+                        return ''
+                    }
+                    var sex = '';
+                    switch (columnV) {
+                        case 1:
+                            sex = "男";
+                            break;
+                        case 0:
+                            sex = "女";
+                            break;
+                        default:
+                            break;
+                    }
+                    return sex;
+                },
             // 选择table 项
-            handleTableChange() {
+            handleTableChange(val) {
                 this.multipleSelection = val
                 },
                 // 新增
@@ -175,6 +211,7 @@ export default {
                 },
                 // 修改
                 updateHandler() {
+                  console.log(this.multipleSelection)
                   if (this.multipleSelection.length != 1) {
                       this.$message({
                           message: '请选择一项后在修改',
@@ -183,7 +220,26 @@ export default {
                       return;
                   }
                     this.dialogTitle = "修改商品"
-                    this.dialogVisible = true
+                    this.updateDialogVisible = true
+                    this.memberDetail()
+                },
+                memberDetail(){
+                  let datas = {
+                    'id':this.multipleSelection[0].id
+                  }
+                  this.$http.post(this.HttpUrl.UrlConfig.memberDetail,qs.stringify(datas))
+                      .then(res => {
+                          console.log(res)
+                          res = res.data
+                          this.wechatId = ''
+                          this.wechatName = ''
+                          this.ruleForm.name2 = res.name
+                          this.ruleForm.phone2 = res.phone
+                          this.InviteCode = res.inviteCode
+
+                      }).catch(error => {
+                          console.log(error)
+                      })
                 },
                 // 删除
                 deleteHandler() {
@@ -194,18 +250,23 @@ export default {
                       });
                       return;
                   }
+                  this.$refs.refDelDialog.childMethod()
+                },
+                listenToDel(){
                   let datas = {
                     'id':this.multipleSelection[0].id
                   }
-                  this.$http.post(this.HttpUrl.UrlConfig.memberDel,datas)
+                  this.$http.post(this.HttpUrl.UrlConfig.memberDel,qs.stringify(datas))
                       .then(res => {
                           res = res.data
-                          if (res.ret === "0") {
+                          if (res.ret == 0) {
                             this.$message({
                                 message: '删除成功',
                                 type: 'success'
                             });
-                            this.list()
+                            this.pageNo = 0
+                            this.memberList()
+                            this.$refs.refDelDialog.delSucess()
                           } else {
                               this.$message.error(res.msg);
                           }
@@ -289,17 +350,7 @@ export default {
                 resetForm(formName) {
                   this.$refs[formName].resetFields();
                 },
-                // 获取会员列表
-                memberList(){
-                  this.$http.get(this.HttpUrl.UrlConfig.memberList)
-                      .then(res => {
-                          console.log(res)
-                          res = res.data
-                          this.tableData = res
-                      }).catch(error => {
-                          console.log(error)
-                      })
-                }
+
         }
 }
 
