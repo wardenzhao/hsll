@@ -36,7 +36,7 @@
             <el-table-column prop="" label="发货地"></el-table-column>
             <el-table-column label="状态">
               <template scope="scope">
-                <span>{{scope.row.specs[0].specStatus}}</span>
+                <!-- <span>{{scope.row.specs[0].specStatus}}</span> -->
               </template>
             </el-table-column>
         </el-table>
@@ -139,12 +139,13 @@ export default {
                   this.$http.post(this.HttpUrl.UrlConfig.goodDel,qs.stringify(datas))
                       .then(res => {
                           res = res.data
-                          if (res.ret === "0") {
+                          if (res.ret == 0) {
                             this.$message({
                                 message: '删除成功',
                                 type: 'success'
                             });
                             this.list()
+                            this.$refs.refDelDialog.delSucess()
                           } else {
                               this.$message.error(res.msg);
                           }

@@ -301,6 +301,9 @@ export default {
                   imgStr.push(val.response)
                 })
 
+                this.ruleForm.imageUrl = imgStr.join(',')
+
+                console.log(this.ruleForm.imageUrl)
                 if(imgStr.length!=0){
                   this.rules.imageUrl[0].required = false
                 }else{
@@ -315,7 +318,7 @@ export default {
                 fileList.forEach((val)=>{
                   imgStr.push(val.response)
                 })
-
+                this.ruleForm.imageUrl = imgStr.join(',')
                 if(imgStr.length!=0){
                   this.rules.imageUrl[0].required = false
                 }else{

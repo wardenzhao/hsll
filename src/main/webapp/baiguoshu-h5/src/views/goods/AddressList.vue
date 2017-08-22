@@ -154,7 +154,7 @@ export default {
       changeOrderAddress(item){
         let datas = {
           'openId':getStore('openId'),
-          'orderNo':getStore('orderNo'),
+          'orderNo':getUrlKey('orderNo'),
           'person':item.person,
           'phone':item.phone,
           'address':item.address,
@@ -163,7 +163,7 @@ export default {
                       .then(res => {
                         var res = res.data
                           if(res.code=='1'){//
-
+                              console.log('选择成功！')
                           }else{ // 异常
                             this.$vux.toast.show({
                                 text: res.msg,
