@@ -37,13 +37,13 @@
     </select>
 
     <insert id="add">
-        insert into members(name,phone)
+        insert into member(name,phone)
         VALUES (#{member.name},#{member.phone})
 
     </insert>
 
     <update id="updateGood">
-        UPDATE members
+        UPDATE member
         <set>
             name = #{member.name},
             phone = #{member.phone}
@@ -53,7 +53,7 @@
     </update>
 
     <delete id="delete">
-        delete from members where id=#{id}
+        delete from member where id=#{id}
     </delete>
 
     <select id="getMemberByInviteName" resultType="cn.thinkjoy.hsll.bean.Member">
