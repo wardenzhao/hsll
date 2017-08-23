@@ -23,7 +23,7 @@ import java.util.List;
 
 /**
  * Created by wpliu on 17/8/13.
- * ºóÌ¨¹ÜÀí¿ØÖÆÀà
+ * ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 @Scope("prototype")
 @Controller("adminController")
@@ -37,7 +37,7 @@ public class ProductController {
     private GoodsSpecService goodsSpecService;
 
     /**
-     * ÉÌÆ·ÁÐ±ð
+     * ï¿½ï¿½Æ·ï¿½Ð±ï¿½
      * @param request
      * @param response
      * @return
@@ -80,7 +80,7 @@ public class ProductController {
 
 
     /**
-     * ÉÌÆ·ÁÐ±ð
+     * ï¿½ï¿½Æ·ï¿½Ð±ï¿½
      * @param request
      * @param response
      * @return
@@ -113,7 +113,7 @@ public class ProductController {
         return productResponse;
     }
     /**
-     * ¸üÐÂÉÌÆ·
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·
      * @param request
      * @param response
      * @param productRequest
@@ -146,7 +146,7 @@ public class ProductController {
     }
 
     /**
-     * Ìí¼ÓÉÌÆ·
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Æ·
      * @param request
      * @param response
      * @param productRequest
@@ -180,7 +180,7 @@ public class ProductController {
     }
 
     /**
-     * É¾³ýÉÌÆ·
+     * É¾ï¿½ï¿½ï¿½ï¿½Æ·
      * @param request
      * @param response
      * @param goodId
@@ -201,7 +201,7 @@ public class ProductController {
     }
 
     /**
-     * ÉÌÆ·ÉÏÏÂ¼Ü
+     * ï¿½ï¿½Æ·ï¿½ï¿½ï¿½Â¼ï¿½
      * @param request
      * @param response
      * @param productRequest
