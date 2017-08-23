@@ -3,13 +3,13 @@
 
 <mapper namespace="cn.thinkjoy.hsll.dao.GoodsDao">
     <select id="getGoodsList" resultType="cn.thinkjoy.hsll.bean.Goods">
-        SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status,thumb
+        SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status,thumb,content,spec_tips as specTips
         FROM
         goods
     </select>
 
     <select id="getGoodsById" resultType="cn.thinkjoy.hsll.bean.Goods">
-        SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status,thumb
+        SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status,thumb,content,spec_tips as specTips
         FROM
         goods WHERE id = #{id}
     </select>
@@ -28,8 +28,8 @@
     </update>
 
     <insert id="addGood" useGeneratedKeys="true" keyProperty="id" parameterType="cn.thinkjoy.hsll.bean.adminBean.ProductRequest">
-       insert into goods(name,title,sub_title,`describe`,image,price,status,content)
-       VALUES (#{productName},#{title},#{subTitle},#{describe},#{images},#{price},#{status},#{content})
+       insert into goods(name,title,sub_title,`describe`,image,price,status,content,spec_tips)
+       VALUES (#{productName},#{title},#{subTitle},#{describe},#{images},#{price},#{status},#{content},#{specsTips})
 
     </insert>
 

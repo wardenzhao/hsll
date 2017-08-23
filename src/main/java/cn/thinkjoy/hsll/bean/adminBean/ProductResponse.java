@@ -13,6 +13,24 @@ public class ProductResponse {
     private String images;
     private String describe;
     private List<ProductSpec> specs;
+    private String content;
+    private String specTips;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getSpecTips() {
+        return specTips;
+    }
+
+    public void setSpecTips(String specTips) {
+        this.specTips = specTips;
+    }
 
     public String getDescribe() {
         return describe;
