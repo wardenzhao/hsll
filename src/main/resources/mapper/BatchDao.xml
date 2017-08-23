@@ -34,7 +34,7 @@
 
     <select id="getBatchCount" resultType="java.lang.Integer">
         SELECT count(1)
-        FROM ( SELECT batch_name AS name, batch_code AS batchCode, batch_no as goodSpecId,count(1) as number,date_format(created_time,'%Y-%c-%d %h:%i:%s') as createTime
+        FROM ( SELECT batch_name AS name, batch_code AS batchCode, good_spec_id as goodSpecId,count(1) as number,date_format(created_time,'%Y-%c-%d %h:%i:%s') as createTime
         FROM batch
         group by good_spec_id,batch_code,batch_name,created_time) as a
 
@@ -47,7 +47,7 @@
 
     </insert>
 
-    <select id=" getUseNumByBatchCode" resultType="java.lang.Integer">
+    <select id="getUseNumByBatchCode" resultType="java.lang.Integer">
         SELECT count(1)
         FROM batch where batch_code=#{batchCode} and status=1
 

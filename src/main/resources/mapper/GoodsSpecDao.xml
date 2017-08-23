@@ -32,7 +32,7 @@
     </insert>
 
     <select id="getSpecById" resultType="cn.thinkjoy.hsll.bean.GoodsSpec">
-        SELECT id, spec_name as specName,address,price
+        SELECT id, spec_name as specName,address,price,goods_id as goodsId
         FROM
         goods_spec
         WHERE id = ${id}

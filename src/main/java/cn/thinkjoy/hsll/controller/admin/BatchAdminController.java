@@ -3,7 +3,10 @@ package cn.thinkjoy.hsll.controller.admin;
 import cn.thinkjoy.hsll.bean.Batch;
 import cn.thinkjoy.hsll.bean.Goods;
 import cn.thinkjoy.hsll.bean.GoodsSpec;
-import cn.thinkjoy.hsll.bean.adminBean.*;
+import cn.thinkjoy.hsll.bean.adminBean.BatchInfo;
+import cn.thinkjoy.hsll.bean.adminBean.BatchResponse;
+import cn.thinkjoy.hsll.bean.adminBean.GoodsCodeResponse;
+import cn.thinkjoy.hsll.bean.adminBean.ResultResponse;
 import cn.thinkjoy.hsll.service.BatchService;
 import cn.thinkjoy.hsll.service.GoodsService;
 import cn.thinkjoy.hsll.service.GoodsSpecService;
@@ -69,7 +72,7 @@ public class BatchAdminController {
                 batch.setGoodSpecId(Long.valueOf(specId));
                 batch.setCreatedTime(date);
                 batch.setGoodsCode(UuidUtil.generateShortUuid());
-                batch.setBatchNo(i+"");
+                batch.setBatchNo(i+1+"");
                 batchService.add(batch);
             }
         }catch (Exception e){
