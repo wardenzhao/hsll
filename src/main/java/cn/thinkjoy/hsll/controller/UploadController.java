@@ -22,7 +22,7 @@ public class UploadController {
 
 
 
-    String upAddress="http://172.16.222.194:8080/upload/";
+    String upAddress="http://192.168.0.102:8282/upload/";
 
     @RequestMapping(value = "/upload")
     @ResponseBody

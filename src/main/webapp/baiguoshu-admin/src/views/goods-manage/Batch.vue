@@ -34,13 +34,13 @@
         <div class="dialog-form">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px">
                 <el-form-item label="商品" prop="goodsInfo">
-                  <el-select v-model="ruleForm.goodsInfo" placeholder="请选择商品">
-                    <el-option v-for="(item,index) in getGoodsInfoArr" :key="index" :label="item.name" v-model="item.id"> {{item.name}}</el-option>
+                  <el-select v-model="ruleForm.goodsInfo" placeholder="请选择商品" @change="goodsInfoChange">
+                    <el-option v-for="(item,index) in getGoodsInfoArr" :key="item.id" :label="item.name" :value="item.id"> {{item.name}}</el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="规格" prop="goodSpec">
-                  <el-select v-model="ruleForm.goodSpec" placeholder="请选择规则">
-                    <el-option v-for="(item,index) in getGoodSpecArr" :key="index" :label="item.name" v-model="item.id"> {{item.name}}</el-option>
+                  <el-select v-model="ruleForm.goodSpec" placeholder="请选择规则" @click="goodSpecChange">
+                    <el-option v-for="(item,index) in getGoodSpecArr" :key="item.id" :label="item.specName" :value="item.id"> {{item.specName}}</el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="批次" prop="name">
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-
+import qs from 'qs'
 export default {
     data() {
             return {
@@ -101,27 +101,29 @@ export default {
                     number:''
                 },
                 rules: {
-                    goodsInfo: [{
-                        required: true,
-                        message: '请选择商品',
-                        trigger: 'change',
-                    }],
-                    goodSpec: [{
-                        required: true,
-                        message: '请选择规则',
-                        trigger: 'change',
-                    }],
-                    name: [{
-                        required: true,
-                        message: '请输入批次',
-                        trigger: 'blur change'
-                    }],
-                    number: [{
-                        required: true,
-                        message: '请输入数量',
-                        trigger: 'blur change'
-                    }]
-                }
+                    // goodsInfo: [{
+                    //     required: true,
+                    //     message: '请选择商品',
+                    //     trigger: 'change',
+                    // }],
+                    // goodSpec: [{
+                    //     required: true,
+                    //     message: '请选择规则',
+                    //     trigger: 'change',
+                    // }],
+                    // name: [{
+                    //     required: true,
+                    //     message: '请输入批次',
+                    //     trigger: 'blur change'
+                    // }],
+                    // number: [{
+                    //     required: true,
+                    //     message: '请输入数量',
+                    //     trigger: 'blur change'
+                    // }]
+                },
+                specId:'',
+                goodId:''
             }
         },
         create() {
@@ -130,7 +132,6 @@ export default {
         mounted() {
           this.batchList()
           this.getGoodsInfo()
-          this.getGoodSpec()
         },
         updated() {
 
@@ -138,7 +139,7 @@ export default {
         methods: {
                 batchList(){
                   let datas = {
-                    
+
                   }
                   this.$http.get(this.HttpUrl.UrlConfig.batchList)
                       .then(res => {
@@ -175,9 +176,19 @@ export default {
                           console.log(error)
                       })
                 },
+                goodsInfoChange(val){
+                  this.goodId = val
+                  this.getGoodSpecArr = []
+                  this.ruleForm.goodSpec = ''
+                  this.getGoodSpec(val)
+                },
+                goodSpecChange(val){
+                  this.specId = val
+
+                },
                 // 批次获取商品规格
-                getGoodSpec(){
-                  this.$http.get(this.HttpUrl.UrlConfig.getGoodSpec)
+                getGoodSpec(goodId){
+                  this.$http.get(this.HttpUrl.UrlConfig.getGoodSpec + "?goodId="+goodId)
                       .then(res => {
                           res = res.data
                           this.getGoodSpecArr = res
@@ -199,7 +210,32 @@ export default {
                 },
                 // 提交服务
                 handleSubmitServer() {
+                    let datas = {
+                      'goodId':this.goodId,
+                      'specId':this.specId,
+                      'name':this.ruleForm.name,
+                      'number':this.ruleForm.number
+                    }
+                    this.$http.post(this.HttpUrl.UrlConfig.batchAdd,qs.stringify(datas))
+                        .then(res => {
+                            res = res.data
+                            if(res.ret == '0'){
+                              this.$message({
+                                  message: '新建成功',
+                                  type: 'success'
+                              });
+                              this.dialogVisible = false
+                              this.batchList()
+                            }else{
+                              this.$message({
+                                  message: res.msg,
+                                  type: 'warning'
+                              });
+                            }
 
+                        }).catch(error => {
+                            console.log(error)
+                        })
                 },
                 batchDetailsList(){
 

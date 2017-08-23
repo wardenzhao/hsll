@@ -1,7 +1,23 @@
 <style lang="scss">
 
 
-
+.specName{
+  width: 100%;
+  line-height: 40px;
+  height: 40px;
+  margin:0;
+  padding: 0;
+}
+.specName2{
+  border-bottom:1px solid #ccc;
+}
+.app-table .el-table__row .rowspanClass .cell{
+  padding: 0;
+}
+.app-table2 .el-table .cell{
+  padding: 0;
+  text-align: center;
+}
 </style>
 
 <template lang="html">
@@ -15,34 +31,42 @@
         <el-button type="danger" @click='deleteHandler'>删除商品</el-button>
     </div>
     <!-- table list -->
-    <div class="app-table">
+    <div class="app-table app-table2">
         <el-table tooltip-effect="dark" @selection-change="handleSelectionChange" :data="tableData" border style="width: 100%">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="productName" label="商品名称"></el-table-column>
             <el-table-column prop="title" label="主标"></el-table-column>
             <el-table-column prop="subTitle" label="副标"></el-table-column>
-            <el-table-column prop="" label="说明文字"></el-table-column>
+            <el-table-column prop="describe" label="说明文字"></el-table-column>
             <el-table-column label="图片">
               <template scope="scope">
-                <span v-for="(item,index) in scope.row.images.split(',')"><img :src="item" alt=""></span>
+                <span v-for="(item,index) in scope.row.images.split(',')"><img width="60" height="60" :src="item" alt=""></span>
               </template>
                 <!-- <span>{{scope.row.specs[0].specStatus}}</span> -->
 
             </el-table-column>
-            <el-table-column label="规格">
+            <el-table-column label="规格" >
               <template scope="scope">
-                <div v-for="(item,index) in scope.row.specs">{{item.specName}}</div>
+                <div :class="{'specName':true,'specName2':scope.row.specs.length!=(index+1)}"  v-for="(item,index) in scope.row.specs">{{item.specName}}</div>
               </template>
             </el-table-column>
             <el-table-column label="价格">
               <template scope="scope">
-                <div v-for="(item,index) in scope.row.specs">{{item.specPrice}}</div>
+                <div :class="{'specName':true,'specName2':scope.row.specs.length!=(index+1)}"   v-for="(item,index) in scope.row.specs">{{item.specPrice}}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="" label="发货地"></el-table-column>
+            <el-table-column prop="" label="发货地">
+              <template scope="scope">
+                <div :class="{'specName':true,'specName2':scope.row.specs.length!=(index+1)}"  v-for="(item,index) in scope.row.specs">{{item.address}}</div>
+              </template>
+
+            </el-table-column>
             <el-table-column label="状态">
               <template scope="scope">
-                <!-- <span>{{scope.row.specs[0].specStatus}}</span> -->
+                <div :class="{'specName':true,'specName2':scope.row.specs.length!=(index+1)}"  v-for="(item,index) in scope.row.specs">
+                  <span v-if="item.specStatus=='0'">已上架</span>
+                  <span v-else>下架</span>
+                </div>
               </template>
             </el-table-column>
         </el-table>

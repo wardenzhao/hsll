@@ -44,7 +44,7 @@
         <div class="dialog-form">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px">
                 <el-form-item label="商品名称" prop="name">
-                    <el-input class="input" v-model="ruleForm.name" placeholder="请输入活动名称"></el-input>
+                    <el-input class="input" v-model="ruleForm.name" placeholder="请输入商品名称"></el-input>
                 </el-form-item>
                 <el-form-item label="主标文字" prop="mainTxt">
                     <el-input class="input" v-model="ruleForm.mainTxt" placeholder="请输入主标文字"></el-input>
@@ -189,6 +189,28 @@ export default {
         this.uploadify = this.HttpUrl.UrlConfig.upload
     },
     mounted() {
+
+
+
+
+      this.fileList2 = [
+  {
+    "status": "success",
+    "name": "buju.png",
+    "size": '',
+    "percentage": 100,
+    "uid": '',
+    "raw": {
+      "uid": ''
+    },
+    "url": "http://192.168.0.102:8282/upload/1503496965823.png",
+    "response": "http://192.168.0.102:8282/upload/1503496965823.png"
+  }
+]
+
+
+
+
     },
     methods: {
         childMethod(type, goodId) {
@@ -279,19 +301,18 @@ export default {
                 this.$http.post(this.HttpUrl.UrlConfig.detail, qs.stringify(datas))
                     .then(res => {
                         res = res.data
-                        if (res.ret === 0) {
-                            this.ruleForm.name = res.productName
-                            this.ruleForm.mainTxt = res.title
-                            this.ruleForm.viceTxt = res.subTitle
-
-                        } else {
-                            this.$message.error(res.msg);
-                        }
+                        this.ruleForm.name = res.productName
+                        this.ruleForm.mainTxt = res.title
+                        this.ruleForm.viceTxt = res.subTitle
+                        this.ruleForm.intro = res.describe
+                        // this.ruleForm.specDatas = res.specs
                     }).catch(error => {
                         console.log(error)
                     })
             },
             handleAvatarSuccess(res, file, fileList) {
+
+              console.log(JSON.stringify(fileList))
                 // this.ruleForm.imageUrl = res;
 
                 // this.fileList2 = fileList
@@ -325,7 +346,7 @@ export default {
                   this.rules.imageUrl[0].required = true
                 }
 
-                // console.log(imgStr.join(','))
+                console.log(this.ruleForm.imageUrl)
             },
             handlePreview(file) {
                 console.log(file);

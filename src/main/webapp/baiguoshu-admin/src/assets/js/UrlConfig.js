@@ -34,6 +34,10 @@ const UrlConfig = {
   memberDetail: BASE_URL + '/admin/member/detail',
   // 订单列表
   orderList: BASE_URL + '/admin/order/list',
+  // 规格列表
+  getGoodSpec: BASE_URL + '/admin/batch/getGoodSpec',
+  // 规格列表
+  batchAdd: BASE_URL + '/admin/batch/add',
 }
 
 export default {
