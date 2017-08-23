@@ -55,13 +55,13 @@
 
 
     <select id="getGoodCodeList" resultType="cn.thinkjoy.hsll.bean.adminBean.BatchInfo">
-        SELECT  goods_code as goodsCode,batch_name AS name, batch_code AS batchCode, good_spec_id as goodSpecId,count(1) as number,date_format(created_time,'%Y-%c-%d %h:%i:%s') as createTime
+        SELECT  goods_code as goodsCode,batch_name AS name, batch_code AS batchCode, good_spec_id as goodSpecId,date_format(created_time,'%Y-%c-%d %h:%i:%s') as createTime
         FROM batch
           where batch_code=#{batchCode} and status=0
     </select>
 
 
-    <select id=" getUnUseNumByBatchCode" resultType="java.lang.Integer">
+    <select id="getUnUseNumByBatchCode" resultType="java.lang.Integer">
         SELECT count(1)
         FROM batch where batch_code=#{batchCode} and status=0
 

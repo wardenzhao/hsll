@@ -123,14 +123,21 @@ public class BatchAdminController {
     public GoodsCodeResponse viewGoodsCode(HttpServletRequest request,HttpServletResponse response,String batchCode,int pageNo,int pageSize){
          List<BatchInfo>  goodCodeList=batchService.getGoodCodeList(batchCode, pageNo * pageSize, pageSize);
         GoodsCodeResponse goodsCodeResponse=new GoodsCodeResponse();
+        GoodsSpec goodsSpec=null;
+        Goods goods=null;
         for(int i=0;i<goodCodeList.size();i++){
             BatchInfo batchInfo=goodCodeList.get(i);
-            GoodsSpec goodsSpec= goodsSpecService.getSpecById(Long.valueOf(batchInfo.getGoodSpecId()));
-            Goods goods=goodsService.getGoodsById(goodsSpec.getGoodsId());
+            if(goodsSpec==null||goods==null){
+                goodsSpec= goodsSpecService.getSpecById(Long.valueOf(batchInfo.getGoodSpecId()));
+                goods=goodsService.getGoodsById(goodsSpec.getGoodsId());
+            }
             batchInfo.setGoodsName(goods.getName());
             batchInfo.setGoodSpecName(goodsSpec.getSpecName());
         }
         int count=batchService.getUnUseNumByBatchCode(batchCode);
+        goodsCodeResponse.setBatchInfos(goodCodeList);
+        goodsCodeResponse.setListCount(count);
+        goodsCodeResponse.setPageNo(pageNo);
         return goodsCodeResponse;
     }
 
