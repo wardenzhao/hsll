@@ -1,8 +1,21 @@
-<style lang="scss">
+<style lang="scss" scoped>
 
 
 .buyLook{
   color:#3c8dbc
+}
+.addressList{
+  margin: 10px 0 0;
+}
+.buyRecordbox .el-form-item{
+  margin-bottom: 0
+}
+.df .el-form-item__content{
+  margin-left: 20px
+}
+.list-line{
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
 }
 </style>
 
@@ -25,11 +38,22 @@
             <el-table-column prop="name" label="姓名"></el-table-column>
             <el-table-column prop="phone" label="手机号码"></el-table-column>
             <el-table-column prop="sex" :formatter="formatSex" label="性别"></el-table-column>
-            <el-table-column prop="address" label="地址信息"></el-table-column>
+            <el-table-column  width="200" label="地址信息">
+              <template scope="scope">
+                  <div class="addressList" v-for="(item,index) in JSON.parse(scope.row.address)" :key="index">
+                      <div class="">
+                        {{item.person}}({{item.phone}})
+                      </div>
+                      <div class="">
+                        {{item.address}}
+                      </div>
+                  </div>
+              </template>
+            </el-table-column>
             <el-table-column prop="inviteCode" label="会员邀请码"></el-table-column>
             <el-table-column label="购买记录">
               <template scope="scope">
-                <span class="buyLook" @click="clickBuyLook(scope.row.id)">查看记录</span>
+                <span class="buyLook" @click="clickBuyLook(scope.row.id)">购买记录</span>
               </template>
             </el-table-column>
         </el-table>
@@ -39,7 +63,7 @@
             </div>
     </div>
     <!-- 新增、修改弹层 -->
-    <el-dialog title="新增会员" :visible.sync="dialogVisible" size="small" @close="resetForm('ruleForm')">
+    <el-dialog title="新增会员" :visible.sync="dialogVisible" size="small">
         <div class="dialog-form">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px">
                 <el-form-item label="姓名" prop="name">
@@ -61,7 +85,7 @@
         </div>
     </el-dialog>
     <!-- 删除弹层 -->
-    <el-dialog title="修改会员" :visible.sync="updateDialogVisible" size="small" @close="resetForm('ruleForm')">
+    <el-dialog title="修改会员" :visible.sync="updateDialogVisible" size="small">
         <div class="dialog-form">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px">
               <el-form-item label="微信号">
@@ -83,11 +107,15 @@
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item label="地址信息">
-                    <!-- <el-input class="input" v-model="wechatName" :disabled="true"></el-input> -->
-                    <p>ddd</p>
-                    <p>ddd</p>
-                    <p>ddd</p>
-                    <p>ddd</p>
+                  <div class="addressList" v-for="(item,index) in addressList" :key="index">
+                      <div class="">
+                        {{item.person}}({{item.phone}})
+                      </div>
+                      <div class="">
+                        {{item.address}}
+                      </div>
+                  </div>
+
                 </el-form-item>
                 <el-form-item label="会员邀请码">
                     <el-input class="input" v-model="InviteCode" :disabled="true"></el-input>
@@ -98,9 +126,34 @@
             </el-form>
         </div>
     </el-dialog>
-    <el-dialog title="购买记录" :visible.sync="recordDialogVisible" size="small" @close="resetForm('ruleForm')">
-        <div class="dialog-form">
-
+    <el-dialog title="购买记录" :visible.sync="recordDialogVisible" size="small">
+        <div class="dialog-form buyRecordbox">
+          <el-form class="list-line" label-width="80px" v-for="(item,index) in buyRecord" :key="index">
+            <el-form-item label="订单编号" class="" >
+              {{item.orderNo}}
+            </el-form-item>
+            <el-form-item label="下单时间" class="">
+              {{item.orderTime}}
+            </el-form-item>
+            <el-form-item label="" class="df">
+                <h2>{{item.specName}}</h2>
+            </el-form-item>
+            <el-form-item label="收货地址" >
+                {{item.recAddress}}
+            </el-form-item>
+            <el-form-item label="收货人" >
+                {{item.recPerson}}
+            </el-form-item>
+            <el-form-item label="电话号码" >
+                {{item.recPhone}}
+            </el-form-item>
+            <el-form-item label="订单状态" >
+                <span v-if="item.status==0">提货卡未发货</span>
+                <span v-if="item.status==1">提货卡已发货</span>
+                <span v-if="item.status==2">未发货</span>
+                <span v-if="item.status==3">已发货</span>
+            </el-form-item>
+          </el-form>
         </div>
     </el-dialog>
     <del-dialog delTitle='删除会员' ref="refDelDialog" @listenToDel='listenToDel'></del-dialog>
@@ -184,7 +237,9 @@ export default {
                       trigger: 'blur change',
                     }]
                 },
-                multipleSelection:[]
+                multipleSelection:[],
+                addressList:[],
+                buyRecord:[]
             }
         },
         create() {
@@ -267,6 +322,7 @@ export default {
                           this.ruleForm.phone2 = res.phone
                           this.InviteCode = res.inviteCode
                           this.ruleForm.sex2 = res.sex +''
+                          this.addressList = JSON.parse(res.address)
 
                       }).catch(error => {
                           console.log(error)
@@ -364,7 +420,7 @@ export default {
                                 message: '修改成功',
                                 type: 'success'
                             });
-                            this.dialogVisible = false
+                            this.updateDialogVisible = false
                             this.memberList()
                           } else {
                               this.$message.error(res.msg);
@@ -383,14 +439,12 @@ export default {
                 },
                 // 会员购买记录
                 clickBuyLook(id){
+                  this.recordDialogVisible = true
                   this.$http.get(this.HttpUrl.UrlConfig.memberBuyInfo+'?id='+id)
                       .then(res => {
                           res = res.data
-                          if (res.ret === 0) {
 
-                          } else {
-                              this.$message.error(res.msg);
-                          }
+                          this.buyRecord = res
                       }).catch(error => {
                           console.log(error)
                       })
