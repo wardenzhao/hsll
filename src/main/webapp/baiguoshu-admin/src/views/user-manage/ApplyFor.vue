@@ -1,8 +1,11 @@
-<style lang="scss">
+<style lang="scss" scoped>
 
 
 .applyLook{
   color:#3c8dbc
+}
+.buyRecordbox .el-form-item{
+  margin-bottom: 0
 }
 </style>
 
@@ -20,7 +23,7 @@
             <el-table-column prop="sex" :formatter="formatSex" label="性别"></el-table-column>
             <el-table-column prop="address" label="地址信息"></el-table-column>
             <el-table-column prop="inviteMemberName" label="推荐会员"></el-table-column>
-            <el-table-column prop="status" label="状态"></el-table-column>
+            <el-table-column prop="status" label="状态" :formatter="formatStatus"></el-table-column>
             <el-table-column label="操作">
               <template scope="scope">
                 <span class="applyLook" @click="clickApplyLook(scope.row.id)">查看</span>
@@ -34,29 +37,25 @@
     </div>
     <!-- 新增、修改弹层 -->
     <el-dialog title="查看申请" :visible.sync="dialogVisible" size="small">
-        <div class="dialog-form">
+        <div class="dialog-form buyRecordbox">
             <el-form label-width="150px">
               <el-form-item label="微信号">
-                  <el-input class="input" v-model="wechatId" :disabled="true"></el-input>
+                  {{wechatId}}
               </el-form-item>
               <el-form-item label="姓名">
-                  <el-input class="input" v-model="name" :disabled="true"></el-input>
+                  {{name}}
               </el-form-item>
               <el-form-item label="手机号码">
-                  <el-input class="input" v-model="phone" :disabled="true"></el-input>
+                  {{phone}}
               </el-form-item>
               <el-form-item label="性别">
-                  <el-input class="input" v-model="sex" :disabled="true"></el-input>
+                  {{sex}}
               </el-form-item>
               <el-form-item label="地址信息">
-                  <!-- <el-input class="input" v-model="wechatName" :disabled="true"></el-input> -->
                   <p>{{address}}</p>
-                  <!-- <p>ddd</p>
-                  <p>ddd</p>
-                  <p>ddd</p> -->
               </el-form-item>
               <el-form-item label="推荐会员">
-                  <el-input class="input" v-model="members" :disabled="true"></el-input>
+                  {{members}}
               </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="throughClick">通过</el-button>
@@ -71,7 +70,7 @@
 </template>
 
 <script>
-
+import qs from 'qs'
 export default {
     data() {
             return {
@@ -120,8 +119,29 @@ export default {
                     }
                     return sex;
                 },
+                formatStatus(row, column) {
+                    var columnV = row[column.property];
+                    if (columnV === undefined) {
+                        return ''
+                    }
+                    var status = '';
+                    switch (columnV) {
+                        case 0:
+                            status = "待审核";
+                            break;
+                        case 1:
+                            status = "已通过";
+                            break;
+                        case 2:
+                            status = "不通过";
+                            break;
+                        default:
+                            break;
+                    }
+                    return status;
+                },
             handleCurrentChange(val){
-              this.pageNo = val
+              this.pageNo = parseInt(val)-1
             },
             applyList(){
               this.$http.get(this.HttpUrl.UrlConfig.applyList+'?pageNo='+this.pageNo + '&pageSize='+this.pageSize)
@@ -135,7 +155,7 @@ export default {
             },
             clickApplyLook(id){
               this.id = id+''
-              this.$http.get(this.HttpUrl.UrlConfig.applyDetail+'?id='+id)
+              this.$http.post(this.HttpUrl.UrlConfig.applyDetail+'?id='+id)
                   .then(res => {
                       res = res.data
                       this.dialogVisible = true
@@ -153,14 +173,17 @@ export default {
                 'id':this.id,
                 'status':'1'
               }
-              this.$http.post(this.HttpUrl.UrlConfig.applyCheck,datas)
+              this.$http.post(this.HttpUrl.UrlConfig.applyCheck,qs.stringify(datas))
                   .then(res => {
                       res = res.data
-                      if(res.ret == '0'){
+                      if(res.ret == 0){
                         this.$message({
                             message: '通过审核',
                             type: 'success'
                         });
+                        this.dialogVisible = false
+                        this.pageNo = 0
+                        this.applyList()
                       }else{
                         this.$message({
                             message: res.msg,
@@ -175,16 +198,19 @@ export default {
             noThroughClick(){
               let datas = {
                 'id':this.id,
-                'status':'0'
+                'status':'2'
               }
-              this.$http.post(this.HttpUrl.UrlConfig.applyCheck,datas)
+              this.$http.post(this.HttpUrl.UrlConfig.applyCheck,qs.stringify(datas))
                   .then(res => {
                       res = res.data
-                      if(res.ret == '0'){
+                      if(res.ret == 0){
                         this.$message({
                             message: '不通过审核',
                             type: 'warning'
                         });
+                        this.dialogVisible = false
+                        this.pageNo = 0
+                        this.applyList()
                       }else{
                         this.$message({
                             message: res.msg,

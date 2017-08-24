@@ -46,6 +46,10 @@ const UrlConfig = {
   applyDetail: BASE_URL + '/admin/apply/detail',
   // 申请审核
   applyCheck: BASE_URL + '/admin/apply/check',
+  // 订单详情
+  orderDetail: BASE_URL + '/admin/order/detail',
+  // 确认发货
+  orderSend: BASE_URL + '/admin/order/send',
 }
 
 export default {
