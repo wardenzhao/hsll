@@ -73,16 +73,9 @@ public class OrderController {
                 }
                 orderInfo.setBatchInfo(batchInfo);
             }
-
-            Member member=memberService.getMemberById(order.getBuyMemberId());
-            if(member!=null){
-                orderInfo.setBuyUser(member.getName());
-            }
+            orderInfo.setBuyUser(order.getBuyMemberName());
             orderInfo.setGoodCode(order.getGoodsCode());
-            Goods goods=goodsService.getGoodsById(order.getGoodsId());
-            if(goods!=null){
-                orderInfo.setGoodName(goods.getName());
-            }
+            orderInfo.setGoodName(order.getGoodsName()+order.getGoodsSpecName()+"*"+order.getGoodsNum());
             orderInfo.setOrderDate(format.format(order.getCreatedTime()));
             orderInfo.setTaxInfo("[" + order.getTaxInfo() + "]");
             orderInfo.setUserReply(order.getBuyerMessage());
@@ -135,7 +128,6 @@ public class OrderController {
         if(goods!=null){
             orderInfo.setGoodName(goods.getName());
         }
-
             orderInfo.setOrderDate(format.format(order.getCreatedTime()));
             orderInfo.setTaxInfo("["+order.getTaxInfo()+"]");
             orderInfo.setUserReply(order.getBuyerMessage());
@@ -158,7 +150,7 @@ public class OrderController {
     @ResponseBody
     public ResultResponse send(HttpServletRequest request,HttpServletResponse response,String orderNo,String status){
         ResultResponse result=new ResultResponse();
-        orderService.sendByOrderNo(orderNo,1);
+        orderService.sendByOrderNo(orderNo,Integer.valueOf(status));
         result.setRet(0);
         result.setMsg("success");
         return result;
@@ -197,17 +189,11 @@ public class OrderController {
                 }
                 orderInfo.setBatchInfo(batchInfo);
             }
-            Member member=memberService.getMemberById(order.getBuyMemberId());
-            if(member!=null){
-                orderInfo.setBuyUser(member.getName());
-            }
+            orderInfo.setBuyUser(order.getBuyMemberName());
             orderInfo.setGoodCode(order.getGoodsCode());
-            Goods goods=goodsService.getGoodsById(order.getGoodsId());
-            if(goods!=null){
-                orderInfo.setGoodName(goods.getName());
-            }
+            orderInfo.setGoodName(order.getGoodsName()+order.getGoodsSpecName()+"*"+order.getGoodsNum());
             orderInfo.setOrderDate(format.format(order.getCreatedTime()));
-            orderInfo.setTaxInfo("["+order.getTaxInfo()+"]");
+            orderInfo.setTaxInfo("[" + order.getTaxInfo() + "]");
             orderInfo.setUserReply(order.getBuyerMessage());
             orderInfo.setOrderNo(order.getOrderNo());
             orderInfo.setOrderStatus(order.getStatus()+"");
