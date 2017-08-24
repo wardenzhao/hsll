@@ -293,6 +293,8 @@ export default {
                         this.ruleForm.viceTxt = res.subTitle
                         this.ruleForm.intro = res.describe
                         this.ruleForm.address = res.specs[0].address
+                        this.ruleForm.content = res.content
+                        this.ruleForm.specifications = res.specTips
 
                       res.images.split(',').forEach((val)=>{
                           this.fileList2.push({

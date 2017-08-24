@@ -1,7 +1,9 @@
 <style lang="scss">
 
 
-
+.buyLook{
+  color:#3c8dbc
+}
 </style>
 
 <template lang="html">
@@ -25,7 +27,11 @@
             <el-table-column prop="sex" :formatter="formatSex" label="性别"></el-table-column>
             <el-table-column prop="address" label="地址信息"></el-table-column>
             <el-table-column prop="inviteCode" label="会员邀请码"></el-table-column>
-            <el-table-column prop="" label="购买记录"></el-table-column>
+            <el-table-column label="购买记录">
+              <template scope="scope">
+                <span class="buyLook" @click="clickBuyLook(scope.row.id)">查看记录</span>
+              </template>
+            </el-table-column>
         </el-table>
         <div class="pager-box" v-if="total>pageSize">
                 <el-pagination @current-change="handleCurrentChange" :page-size="pageSize" layout="total, prev, pager, next" :total="total">
@@ -41,6 +47,12 @@
                 </el-form-item>
                 <el-form-item label="手机号码" prop="phone">
                     <el-input class="input" v-model="ruleForm.phone" placeholder="请输入手机号码"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号码" prop="sex">
+                  <el-radio-group v-model="ruleForm.sex">
+                    <el-radio label="1">男</el-radio>
+                    <el-radio label="0">女</el-radio>
+                  </el-radio-group>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
@@ -63,6 +75,12 @@
                 </el-form-item>
                 <el-form-item label="手机号码" prop="phone2">
                     <el-input class="input" v-model="ruleForm.phone2" placeholder="请输入手机号码"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号码" prop="sex2">
+                  <el-radio-group v-model="ruleForm.sex2">
+                    <el-radio label="1">男</el-radio>
+                    <el-radio label="0">女</el-radio>
+                  </el-radio-group>
                 </el-form-item>
                 <el-form-item label="地址信息">
                     <!-- <el-input class="input" v-model="wechatName" :disabled="true"></el-input> -->
@@ -114,7 +132,9 @@ export default {
                     name: '',
                     phone:'',
                     name2: '',
-                    phone2:''
+                    phone2:'',
+                    sex:'',
+                    sex2:''
                 },
                 rules: {
                     name: [{
@@ -153,6 +173,16 @@ export default {
                         },
                         trigger: 'blur change',
                     }],
+                    sex:[{
+                      required: true,
+                      message: '请选择男女',
+                      trigger: 'blur change',
+                    }],
+                    sex2:[{
+                      required: true,
+                      message: '请选择男女',
+                      trigger: 'blur change',
+                    }]
                 },
                 multipleSelection:[]
             }
@@ -236,6 +266,7 @@ export default {
                           this.ruleForm.name2 = res.name
                           this.ruleForm.phone2 = res.phone
                           this.InviteCode = res.inviteCode
+                          this.ruleForm.sex2 = res.sex +''
 
                       }).catch(error => {
                           console.log(error)
@@ -298,7 +329,8 @@ export default {
                 handleSubmitServer(){
                   let datas = {
                     'name':this.ruleForm.name,
-                    'phone':this.ruleForm.phone
+                    'phone':this.ruleForm.phone,
+                    'sex':this.ruleForm.sex
                   }
                   this.$http.post(this.HttpUrl.UrlConfig.memberAdd,datas)
                       .then(res => {
@@ -318,19 +350,18 @@ export default {
                       })
                 },
                 handleSubmitServer2(){
-
-
                   let datas = {
                     'id':this.multipleSelection[0].id,
                     'name':this.ruleForm.name2,
-                    'phone':this.ruleForm.phone2
+                    'phone':this.ruleForm.phone2,
+                    'sex':this.ruleForm.sex2
                   }
                   this.$http.post(this.HttpUrl.UrlConfig.memberUpdate,datas)
                       .then(res => {
                           res = res.data
                           if (res.ret === 0) {
                             this.$message({
-                                message: '修改成功成功',
+                                message: '修改成功',
                                 type: 'success'
                             });
                             this.dialogVisible = false
@@ -350,6 +381,20 @@ export default {
                 resetForm(formName) {
                   this.$refs[formName].resetFields();
                 },
+                // 会员购买记录
+                clickBuyLook(id){
+                  this.$http.get(this.HttpUrl.UrlConfig.memberBuyInfo+'?id='+id)
+                      .then(res => {
+                          res = res.data
+                          if (res.ret === 0) {
+
+                          } else {
+                              this.$message.error(res.msg);
+                          }
+                      }).catch(error => {
+                          console.log(error)
+                      })
+                }
 
         }
 }

@@ -40,6 +40,12 @@ const UrlConfig = {
   batchAdd: BASE_URL + '/admin/batch/add',
   // 提货码
   viewGoodsCode: BASE_URL + '/admin/batch/viewGoodsCode',
+  // 会员购买记录
+  memberBuyInfo: BASE_URL + '/admin/member/buyInfo',
+  // 申请详情
+  applyDetail: BASE_URL + '/admin/apply/detail',
+  // 申请审核
+  applyCheck: BASE_URL + '/admin/apply/check',
 }
 
 export default {

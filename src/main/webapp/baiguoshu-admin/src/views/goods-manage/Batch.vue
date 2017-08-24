@@ -1,7 +1,9 @@
 <style lang="scss">
 
 
-
+.batchLook{
+  color:#3c8dbc
+}
 </style>
 
 <template lang="html">
@@ -24,7 +26,7 @@
             <el-table-column prop="usedNum" label="已用数量"></el-table-column>
             <el-table-column prop="goodsCode" label="提货码">
               <template scope="scope">
-                <span @click="clickBatchLook(scope.row.batchCode)">查看</span>
+                <span class="batchLook" @click="clickBatchLook(scope.row.batchCode)">查看</span>
               </template>
             </el-table-column>
         </el-table>
@@ -43,7 +45,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="规格" prop="goodSpec">
-                  <el-select v-model="ruleForm.goodSpec" placeholder="请选择规则" @click="goodSpecChange">
+                  <el-select v-model="ruleForm.goodSpec" placeholder="请选择规则" @change="goodSpecChange">
                     <el-option v-for="(item,index) in getGoodSpecArr" :key="item.id" :label="item.specName" :value="item.id"> {{item.specName}}</el-option>
                   </el-select>
                 </el-form-item>
@@ -64,13 +66,13 @@
 
     <el-dialog title="批次详情" :visible.sync="dialogBatchVisible" size="large">
         <div class="dialog-form">
-          <el-table ref="multipleTable" tooltip-effect="dark" :data="tableData" border style="width: 100%">
+          <el-table ref="multipleTable" tooltip-effect="dark" :data="tableData2" border style="width: 100%">
               <el-table-column width="80" type="index" label="序号"></el-table-column>
-              <el-table-column prop="" label="提货码"></el-table-column>
-              <el-table-column prop="" label="生成时间"></el-table-column>
-              <el-table-column prop="" label="批次"></el-table-column>
-              <el-table-column prop="" label="商品"></el-table-column>
-              <el-table-column prop="" label="规格"></el-table-column>
+              <el-table-column prop="goodsCode" label="提货码"></el-table-column>
+              <el-table-column prop="createTime" label="生成时间"></el-table-column>
+              <el-table-column prop="name" label="批次"></el-table-column>
+              <el-table-column prop="goodsName" label="商品"></el-table-column>
+              <el-table-column prop="goodSpecName" label="规格"></el-table-column>
           </el-table>
           <div class="pager-box" v-if="total2>pageSize2">
               <el-pagination @current-change="handleCurrentChange2" :page-size="pageSize2" layout="total, prev, pager, next" :total="total2">
@@ -88,13 +90,14 @@ export default {
     data() {
             return {
                 tableData: [],
+                tableData2: [],
                 dialogVisible:false,
                 dialogBatchVisible:false,
                 pageNo: 0,
                 pageSize: 10,
                 total: null,
                 pageNo2: 0,
-                pageSize2: 10,
+                pageSize2: 4,
                 total2: null,
                 getGoodsInfoArr:[],
                 getGoodSpecArr:[],
@@ -154,12 +157,12 @@ export default {
                       })
                 },
                 handleCurrentChange(val) {
-                    this.pageNo = val;
+                    this.pageNo = parseInt(val)-1;
                     this.batchList()
                 },
                 handleCurrentChange2(val) {
-                    this.pageNo2 = val;
-                    this.batchDetailsList()
+                    this.pageNo2 = parseInt(val)-1;
+                    this.viewGoodsCode(this.batchCode)
                 },
                 // 新增
                 addHandler() {
@@ -179,13 +182,21 @@ export default {
                       })
                 },
                 goodsInfoChange(val){
-                  this.goodId = val
-                  this.getGoodSpecArr = []
-                  this.ruleForm.goodSpec = ''
-                  this.getGoodSpec(val)
+                  console.log(val)
+                  if(val){
+                    this.goodId = val
+                    this.getGoodSpecArr = []
+                    this.ruleForm.goodSpec = ''
+                    this.getGoodSpec(val)
+                  }
+
                 },
                 goodSpecChange(val){
-                  this.specId = val
+                  console.log(val)
+                  if(val){
+                    this.specId = val
+                  }
+
 
                 },
                 // 批次获取商品规格
@@ -218,6 +229,7 @@ export default {
                       'name':this.ruleForm.name,
                       'number':this.ruleForm.number
                     }
+                    // console.log(datas)
                     this.$http.post(this.HttpUrl.UrlConfig.batchAdd,qs.stringify(datas))
                         .then(res => {
                             res = res.data
@@ -239,31 +251,18 @@ export default {
                             console.log(error)
                         })
                 },
-                batchDetailsList(){
-
-                },
                 clickBatchLook(batchCode){
+                  this.batchCode = batchCode
                   this.dialogBatchVisible = true
+                  this.tableData2 = []
                   this.viewGoodsCode(batchCode)
                 },
                 viewGoodsCode(batchCode){
                   this.$http.get(this.HttpUrl.UrlConfig.viewGoodsCode+'?batchCode='+batchCode + '&pageNo=' + this.pageNo2 + '&pageSize='+this.pageSize2)
                       .then(res => {
                           res = res.data
-                          if(res.ret == '0'){
-                            this.$message({
-                                message: '新建成功',
-                                type: 'success'
-                            });
-                            this.dialogVisible = false
-                            this.batchList()
-                          }else{
-                            this.$message({
-                                message: res.msg,
-                                type: 'warning'
-                            });
-                          }
-
+                          this.tableData2 = res.batchInfos
+                          this.total2 = parseInt(res.listCount)
                       }).catch(error => {
                           console.log(error)
                       })
