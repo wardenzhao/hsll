@@ -148,7 +148,7 @@ public class MemberController {
     public List<BuyInfoResponse> buyInfo(HttpServletRequest request,HttpServletResponse response,long id){
         List<BuyInfoResponse> buyInfoResponses=new ArrayList<>();
         try{
-           List<Order> orders=orderService.getListByMemberId(id,1,1000);
+           List<Order> orders=orderService.getListByMemberId(id,0,1000);
             SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Order order=null;
             for(int i=0;i<orders.size();i++){
