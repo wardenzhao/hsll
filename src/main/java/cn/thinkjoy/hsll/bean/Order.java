@@ -10,9 +10,12 @@ public class Order implements Serializable{
 
     private long id;
     private long buyMemberId;
+    private String buyMemberName;
     private long goodsId;
+    private String goodsName;
     private String orderNo;
     private long goodsSpecId;
+    private String goodsSpecName;
     private int goodsNum;
     private long addressId;
     private String batchId;
@@ -27,6 +30,29 @@ public class Order implements Serializable{
     private String phone;
     private Date sendTime;
 
+    public String getBuyMemberName() {
+        return buyMemberName;
+    }
+
+    public void setBuyMemberName(String buyMemberName) {
+        this.buyMemberName = buyMemberName;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getGoodsSpecName() {
+        return goodsSpecName;
+    }
+
+    public void setGoodsSpecName(String goodsSpecName) {
+        this.goodsSpecName = goodsSpecName;
+    }
 
     public long getId() {
         return id;
