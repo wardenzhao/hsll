@@ -44,7 +44,7 @@ public class ApplyMemberController {
             List<MemberApply> memberApplies=memberApplyService.getMemberApplys(pageNo*pageSize,pageSize);
             int count=memberApplyService.getMemberApplysCount();
             for(int i=0;i<memberApplies.size();i++){
-                MemberApply apply=new MemberApply();
+                MemberApply apply=memberApplies.get(i);
                 if(apply.getInviteMemberId()==0){
                     apply.setInviteMemberName("");
                 }else{
