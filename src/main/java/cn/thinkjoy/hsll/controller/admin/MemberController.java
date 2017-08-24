@@ -143,7 +143,7 @@ public class MemberController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/buyInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "/buyInfo",method = RequestMethod.GET)
     @ResponseBody
     public List<BuyInfoResponse> buyInfo(HttpServletRequest request,HttpServletResponse response,long id){
         List<BuyInfoResponse> buyInfoResponses=new ArrayList<>();
