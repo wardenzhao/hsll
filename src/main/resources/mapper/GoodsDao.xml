@@ -5,7 +5,7 @@
     <select id="getGoodsList" resultType="cn.thinkjoy.hsll.bean.Goods">
         SELECT id,name,title,sub_title AS subTitle,`describe`,image,price,status,thumb,content,spec_tips as specTips
         FROM
-        goods
+        goods where state!=1
     </select>
 
     <select id="getGoodsById" resultType="cn.thinkjoy.hsll.bean.Goods">
@@ -33,9 +33,13 @@
 
     </insert>
 
-    <delete id="delGood">
+    <update id="delGood">
+        UPDATE goods
+        <set>
+           state=1
+        </set>
+        where id = #{goodId}
+    </update>
 
-        DELETE from goods where id=#{goodId}
-    </delete>
 </mapper>
 
