@@ -58,6 +58,7 @@
         SELECT  goods_code as goodsCode,batch_name AS name, batch_code AS batchCode, good_spec_id as goodSpecId,date_format(created_time,'%Y-%c-%d %h:%i:%s') as createTime
         FROM batch
           where batch_code=#{batchCode} and status=0
+          limit #{pageNo},#{pageSize}
     </select>
 
 
