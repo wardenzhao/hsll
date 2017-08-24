@@ -61,13 +61,20 @@ public class OrderController {
             OrderInfo orderInfo=new OrderInfo();
             orderInfo.setAddress(order.getAddress());
             Batch batch= batchService.getBatchById(Long.valueOf(order.getBatchId()));
-            String batchInfo= batch.getBatchName()+"第"+batch.getBatchNo()+"盒";
-            orderInfo.setBatchInfo(batchInfo);
+            if(batch!=null){
+                String batchInfo= batch.getBatchName()+"第"+batch.getBatchNo()+"盒";
+                orderInfo.setBatchInfo(batchInfo);
+            }
+
             Member member=memberService.getMemberById(order.getBuyMemberId());
-            orderInfo.setBuyUser(member.getName());
+            if(member!=null){
+                orderInfo.setBuyUser(member.getName());
+            }
             orderInfo.setGoodCode(order.getGoodsCode());
             Goods goods=goodsService.getGoodsById(order.getGoodsId());
-            orderInfo.setGoodName(goods.getName());
+            if(goods!=null){
+                orderInfo.setGoodName(goods.getName());
+            }
             orderInfo.setOrderDate(format.format(order.getCreatedTime()));
             orderInfo.setTaxInfo(order.getTaxInfo());
             orderInfo.setUserReply(order.getBuyerMessage());
@@ -94,17 +101,26 @@ public class OrderController {
     public OrderInfo list(HttpServletRequest request,HttpServletResponse response,String orderNo){
         OrderResponse orderResponse=new OrderResponse();
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Order order=orderService.getByOrderNo(orderNo);
+          Order order=orderService.getByOrderNo(orderNo);
             OrderInfo orderInfo=new OrderInfo();
             orderInfo.setAddress(order.getAddress());
             Batch batch= batchService.getBatchById(Long.valueOf(order.getBatchId()));
+        if(batch!=null){
             String batchInfo= batch.getBatchName()+"第"+batch.getBatchNo()+"盒";
             orderInfo.setBatchInfo(batchInfo);
+        }
+
             Member member=memberService.getMemberById(order.getBuyMemberId());
+        if(member!=null){
             orderInfo.setBuyUser(member.getName());
+        }
+
             orderInfo.setGoodCode(order.getGoodsCode());
             Goods goods=goodsService.getGoodsById(order.getGoodsId());
+        if(goods!=null){
             orderInfo.setGoodName(goods.getName());
+        }
+
             orderInfo.setOrderDate(format.format(order.getCreatedTime()));
             orderInfo.setTaxInfo(order.getTaxInfo());
             orderInfo.setUserReply(order.getBuyerMessage());

@@ -28,12 +28,12 @@
 
     <select id="getMemberList" resultType="cn.thinkjoy.hsll.bean.Member">
         select id as id, name as name, open_id as openId, phone as phone, sex as sex,address as address,invite_code as inviteCode
-        FROM member limit #{pageNo},#{pageSize}
+        FROM member  where state!=1 limit #{pageNo},#{pageSize}
     </select>
 
     <select id="getMemberCount" resultType="java.lang.Integer">
         select count(1)
-        FROM member
+        FROM member where state!=1
     </select>
 
     <insert id="add">
@@ -46,16 +46,22 @@
         UPDATE member
         <set>
             name = #{member.name},
-            phone = #{member.phone}
+            phone = #{member.phone},
             sex=#{member.sex}
         </set>
         where id = #{member.id}
 
     </update>
 
-    <delete id="delete">
-        delete from member where id=#{id}
-    </delete>
+
+    <update id="delete">
+        UPDATE member
+        <set>
+            state=1
+        </set>
+        where id = #{member.id}
+
+    </update>
 
     <select id="getMemberByInviteName" resultType="cn.thinkjoy.hsll.bean.Member">
         select id as id, name as name, open_id as openId, phone as phone, sex as sex,address as address,invite_code as inviteCode
