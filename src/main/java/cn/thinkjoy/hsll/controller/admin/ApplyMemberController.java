@@ -92,7 +92,15 @@ public class ApplyMemberController {
     @ResponseBody
     public ResultResponse check(HttpServletRequest request,HttpServletResponse response,long id,int status){
         ResultResponse result=new ResultResponse();
-        memberApplyService.updateApplyStatus(id,status);
+        MemberApply memberApply= memberApplyService.getMemberApplyDetail(id);
+        Member member=new Member();
+        member.setName(memberApply.getName());
+        member.setPhone(memberApply.getPhone());
+        member.setSex(memberApply.getSex());
+        member.setAddress(memberApply.getAddress());
+        member.setOpenId(memberApply.getOpenId());
+        memberService.add(member);
+        memberApplyService.updateApplyStatus(id, status);
         result.setRet(0);
         result.setMsg("success");
         return result;

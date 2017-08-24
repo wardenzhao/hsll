@@ -37,8 +37,10 @@
 
     <select id="getListByStatus" resultType="cn.thinkjoy.hsll.bean.Order">
         SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime
-        FROM hsll_order
-        WHERE status=#{status}
+        FROM hsll_order where 1=1
+        <if test="status!=-1">
+            and  status=#{status}
+        </if>
         limit #{startPage},#{pageSize}
     </select>
 
@@ -46,7 +48,10 @@
     <select id="getListCountByStatus" resultType="java.lang.Integer">
         SELECT count(1)
         FROM hsll_order
-        WHERE status=#{status}
+        <if test="status!=-1">
+            WHERE status=#{status}
+        </if>
+
     </select>
 
     <update id="sendByOrderNo">
@@ -54,6 +59,28 @@
         SET status=${status}
         WHERE order_no = #{orderNo}
     </update>
+
+    <select id="getListBySearch" resultType="cn.thinkjoy.hsll.bean.Order">
+        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime
+        FROM hsll_order  as a left join member b  on a.buy_member_id=b.id
+         where 1=1
+        <if test="searchName!=null and searchName!=''">
+             and  b.name like #{searchName} or a.order_no like #{searchName}
+            or a.goods_code like #{searchName}
+        </if>
+        limit #{pageNo},#{pageSize}
+    </select>
+
+
+    <select id="getListBySearch" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM hsll_order  as a left join member b  on a.buy_member_id=b.id
+        where 1=1
+        <if test="searchName!=null and searchName!=''">
+             and  b.name like #{searchName}
+        </if>
+
+    </select>
 
 
 </mapper>
