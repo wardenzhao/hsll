@@ -56,6 +56,8 @@ public class ProductController {
                 productResponse.setImages(good.getImage());
                 productResponse.setSubTitle(good.getSubTitle());
                 productResponse.setDescribe(good.getDescribe());
+                productResponse.setContent(good.getContent());
+                productResponse.setSpecTips(good.getSpecTips());
                 List<GoodsSpec> goodsSpecList= goodsSpecService.getSpecLsBygoodId(good.getId());
                 List<ProductSpec> productSpecs=new ArrayList<>();
                 if(goodsSpecList!=null&&goodsSpecList.size()>0){
@@ -110,6 +112,8 @@ public class ProductController {
         productResponse.setImages(goods.getImage());
         productResponse.setSubTitle(goods.getSubTitle());
         productResponse.setDescribe(goods.getDescribe());
+        productResponse.setContent(goods.getContent());
+        productResponse.setSpecTips(goods.getSpecTips());
         return productResponse;
     }
     /**

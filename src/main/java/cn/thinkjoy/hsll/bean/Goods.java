@@ -16,7 +16,24 @@ public class Goods implements Serializable{
     private Double price;
     private int status;
     private String thumb;
+    private String content;
+    private String specTips;
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getSpecTips() {
+        return specTips;
+    }
+
+    public void setSpecTips(String specTips) {
+        this.specTips = specTips;
+    }
 
     public long getId() {
         return id;
