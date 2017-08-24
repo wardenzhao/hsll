@@ -38,6 +38,8 @@ const UrlConfig = {
   getGoodSpec: BASE_URL + '/admin/batch/getGoodSpec',
   // 规格列表
   batchAdd: BASE_URL + '/admin/batch/add',
+  // 提货码
+  viewGoodsCode: BASE_URL + '/admin/batch/viewGoodsCode',
 }
 
 export default {

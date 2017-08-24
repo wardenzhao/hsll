@@ -193,20 +193,7 @@ export default {
 
 
 
-      this.fileList2 = [
-  {
-    "status": "success",
-    "name": "buju.png",
-    "size": '',
-    "percentage": 100,
-    "uid": '',
-    "raw": {
-      "uid": ''
-    },
-    "url": "http://192.168.0.102:8282/upload/1503496965823.png",
-    "response": "http://192.168.0.102:8282/upload/1503496965823.png"
-  }
-]
+
 
 
 
@@ -305,14 +292,40 @@ export default {
                         this.ruleForm.mainTxt = res.title
                         this.ruleForm.viceTxt = res.subTitle
                         this.ruleForm.intro = res.describe
-                        // this.ruleForm.specDatas = res.specs
+                        this.ruleForm.address = res.specs[0].address
+
+                      res.images.split(',').forEach((val)=>{
+                          this.fileList2.push({
+                            "status": "success",
+                            "name": val,
+                            "size": '',
+                            "percentage": 100,
+                            "uid": '',
+                            "raw": {
+                              "uid": ''
+                            },
+                            "url": val,
+                            "response": val
+                          }
+                          )
+                      })
+
+                      res.specs.forEach((val)=>{
+                        this.ruleForm.specDatas.push({
+                            'specName': val.specName,
+                            'specPrice': val.specPrice
+                        })
+                      })
+
+
+
                     }).catch(error => {
                         console.log(error)
                     })
             },
             handleAvatarSuccess(res, file, fileList) {
 
-              console.log(JSON.stringify(fileList))
+              this.fileList2 = fileList
                 // this.ruleForm.imageUrl = res;
 
                 // this.fileList2 = fileList
@@ -334,6 +347,7 @@ export default {
 
             },
             handleRemove(file, fileList) {
+                this.fileList2 = fileList
                 // this.fileList2 = fileList
                 let imgStr = []
                 fileList.forEach((val)=>{

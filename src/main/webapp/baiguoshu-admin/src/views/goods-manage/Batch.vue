@@ -16,13 +16,17 @@
     <div class="app-table">
         <el-table ref="multipleTable" tooltip-effect="dark" :data="tableData" border style="width: 100%">
             <el-table-column width="80" type="index" label="序号"></el-table-column>
-            <el-table-column prop="" label="生成时间"></el-table-column>
-            <el-table-column prop="name" label="商品"></el-table-column>
+            <el-table-column prop="createTime" label="生成时间"></el-table-column>
+            <el-table-column prop="goodsName" label="商品"></el-table-column>
             <el-table-column prop="goodSpecName" label="规格"></el-table-column>
-            <el-table-column prop="" label="批次"></el-table-column>
+            <el-table-column prop="name" label="批次"></el-table-column>
             <el-table-column prop="number" label="数量"></el-table-column>
             <el-table-column prop="usedNum" label="已用数量"></el-table-column>
-            <el-table-column prop="goodsCode" label="提货码"></el-table-column>
+            <el-table-column prop="goodsCode" label="提货码">
+              <template scope="scope">
+                <span @click="clickBatchLook(scope.row.batchCode)">查看</span>
+              </template>
+            </el-table-column>
         </el-table>
         <div class="pager-box" v-if="total>pageSize">
                 <el-pagination @current-change="handleCurrentChange" :page-size="pageSize" layout="total, prev, pager, next" :total="total">
@@ -44,7 +48,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="批次" prop="name">
-                  <el-input class="input"  v-model="ruleForm.name" placeholder="请输入批次"></el-input>
+                  第<el-input class="input"  v-model="ruleForm.name" placeholder="请输入批次"></el-input>批
                 </el-form-item>
                 <el-form-item label="数量" prop="number">
                   <el-input class="input"  v-model="ruleForm.number" placeholder="请输入数量"></el-input>
@@ -86,10 +90,10 @@ export default {
                 tableData: [],
                 dialogVisible:false,
                 dialogBatchVisible:false,
-                pageNo: 1,
+                pageNo: 0,
                 pageSize: 10,
                 total: null,
-                pageNo2: 1,
+                pageNo2: 0,
                 pageSize2: 10,
                 total2: null,
                 getGoodsInfoArr:[],
@@ -123,7 +127,8 @@ export default {
                     // }]
                 },
                 specId:'',
-                goodId:''
+                goodId:'',
+                batchCode:''
             }
         },
         create() {
@@ -138,10 +143,7 @@ export default {
         },
         methods: {
                 batchList(){
-                  let datas = {
-
-                  }
-                  this.$http.get(this.HttpUrl.UrlConfig.batchList)
+                  this.$http.get(this.HttpUrl.UrlConfig.batchList+'?pageNo='+this.pageNo + '&pageSize='+this.pageSize)
                       .then(res => {
                           res = res.data
                           this.tableData = res.batchList
@@ -239,6 +241,32 @@ export default {
                 },
                 batchDetailsList(){
 
+                },
+                clickBatchLook(batchCode){
+                  this.dialogBatchVisible = true
+                  this.viewGoodsCode(batchCode)
+                },
+                viewGoodsCode(batchCode){
+                  this.$http.get(this.HttpUrl.UrlConfig.viewGoodsCode+'?batchCode='+batchCode + '&pageNo=' + this.pageNo2 + '&pageSize='+this.pageSize2)
+                      .then(res => {
+                          res = res.data
+                          if(res.ret == '0'){
+                            this.$message({
+                                message: '新建成功',
+                                type: 'success'
+                            });
+                            this.dialogVisible = false
+                            this.batchList()
+                          }else{
+                            this.$message({
+                                message: res.msg,
+                                type: 'warning'
+                            });
+                          }
+
+                      }).catch(error => {
+                          console.log(error)
+                      })
                 }
         }
 }
