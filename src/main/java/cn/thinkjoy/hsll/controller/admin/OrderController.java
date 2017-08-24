@@ -84,7 +84,7 @@ public class OrderController {
                 orderInfo.setGoodName(goods.getName());
             }
             orderInfo.setOrderDate(format.format(order.getCreatedTime()));
-            orderInfo.setTaxInfo(order.getTaxInfo());
+            orderInfo.setTaxInfo("[" + order.getTaxInfo() + "]");
             orderInfo.setUserReply(order.getBuyerMessage());
             orderInfo.setOrderNo(order.getOrderNo());
             orderInfo.setOrderStatus(order.getStatus()+"");
@@ -137,7 +137,7 @@ public class OrderController {
         }
 
             orderInfo.setOrderDate(format.format(order.getCreatedTime()));
-            orderInfo.setTaxInfo(order.getTaxInfo());
+            orderInfo.setTaxInfo("["+order.getTaxInfo()+"]");
             orderInfo.setUserReply(order.getBuyerMessage());
             orderInfo.setOrderNo(order.getOrderNo());
             orderInfo.setOrderStatus(order.getStatus()+"");
@@ -207,7 +207,7 @@ public class OrderController {
                 orderInfo.setGoodName(goods.getName());
             }
             orderInfo.setOrderDate(format.format(order.getCreatedTime()));
-            orderInfo.setTaxInfo(order.getTaxInfo());
+            orderInfo.setTaxInfo("["+order.getTaxInfo()+"]");
             orderInfo.setUserReply(order.getBuyerMessage());
             orderInfo.setOrderNo(order.getOrderNo());
             orderInfo.setOrderStatus(order.getStatus()+"");
