@@ -37,8 +37,8 @@
     </select>
 
     <insert id="add">
-        insert into member(name,phone)
-        VALUES (#{member.name},#{member.phone})
+        insert into member(name,phone,sex)
+        VALUES (#{member.name},#{member.phone},#{member.sex})
 
     </insert>
 
