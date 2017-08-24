@@ -42,11 +42,12 @@
 
     </insert>
 
-    <update id="updateGood">
+    <update id="update">
         UPDATE member
         <set>
             name = #{member.name},
             phone = #{member.phone}
+            sex=#{member.sex}
         </set>
         where id = #{member.id}
 
