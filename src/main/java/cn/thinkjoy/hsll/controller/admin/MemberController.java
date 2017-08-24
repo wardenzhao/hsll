@@ -11,6 +11,7 @@ import cn.thinkjoy.hsll.service.GoodsSpecService;
 import cn.thinkjoy.hsll.service.MemberAddressService;
 import cn.thinkjoy.hsll.service.MemberService;
 import cn.thinkjoy.hsll.service.OrderService;
+import cn.thinkjoy.hsll.util.CodeUtil;
 import com.alibaba.fastjson.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -80,6 +81,8 @@ public class MemberController {
     @ResponseBody
     public ResultResponse add(HttpServletRequest request,HttpServletResponse response,@RequestBody Member member){
         ResultResponse result=new ResultResponse();
+        String inviteCode= CodeUtil.getRandomString(6);
+        member.setInviteCode(inviteCode);
         try{
             memberService.add(member);
         }catch (Exception e){
@@ -148,7 +151,7 @@ public class MemberController {
     public List<BuyInfoResponse> buyInfo(HttpServletRequest request,HttpServletResponse response,long id){
         List<BuyInfoResponse> buyInfoResponses=new ArrayList<>();
         try{
-           List<Order> orders=orderService.getListByMemberId(id,1,1000);
+           List<Order> orders=orderService.getListByMemberId(id,0,1000);
             SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Order order=null;
             for(int i=0;i<orders.size();i++){

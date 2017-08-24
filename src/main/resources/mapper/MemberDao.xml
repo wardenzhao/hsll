@@ -37,16 +37,17 @@
     </select>
 
     <insert id="add">
-        insert into member(name,phone,sex)
-        VALUES (#{member.name},#{member.phone},#{member.sex})
+        insert into member(name,phone,sex,invite_code)
+        VALUES (#{member.name},#{member.phone},#{member.sex},#{member.inviteCode})
 
     </insert>
 
-    <update id="updateGood">
+    <update id="update">
         UPDATE member
         <set>
             name = #{member.name},
             phone = #{member.phone}
+            sex=#{member.sex}
         </set>
         where id = #{member.id}
 
