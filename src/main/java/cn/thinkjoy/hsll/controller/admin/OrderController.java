@@ -60,9 +60,17 @@ public class OrderController {
             Order order=orders.get(i);
             OrderInfo orderInfo=new OrderInfo();
             orderInfo.setAddress(order.getAddress());
-            Batch batch= batchService.getBatchById(Long.valueOf(order.getBatchId()));
-            if(batch!=null){
-                String batchInfo= batch.getBatchName()+"第"+batch.getBatchNo()+"盒";
+            String batchIds=order.getBatchId();
+            if(batchIds!=null&&!"".equals(batchIds.trim())){
+                String[] batchIdStrings=batchIds.split(",");
+                String batchInfo="";
+                for(int m=0;m<batchIdStrings.length;m++){
+                    Batch batch= batchService.getBatchById(Long.valueOf(batchIdStrings[m]));
+                    if(batch!=null){
+                        String  batchName= batch.getBatchName()+"第"+batch.getBatchNo()+"盒;";
+                        batchInfo=batchInfo+batchName;
+                    }
+                }
                 orderInfo.setBatchInfo(batchInfo);
             }
 
@@ -104,12 +112,19 @@ public class OrderController {
           Order order=orderService.getByOrderNo(orderNo);
             OrderInfo orderInfo=new OrderInfo();
             orderInfo.setAddress(order.getAddress());
-            Batch batch= batchService.getBatchById(Long.valueOf(order.getBatchId()));
-        if(batch!=null){
-            String batchInfo= batch.getBatchName()+"第"+batch.getBatchNo()+"盒";
+        String batchIds=order.getBatchId();
+        if(batchIds!=null&&!"".equals(batchIds.trim())){
+            String[] batchIdStrings=batchIds.split(",");
+            String batchInfo="";
+            for(int m=0;m<batchIdStrings.length;m++){
+                Batch batch= batchService.getBatchById(Long.valueOf(batchIdStrings[m]));
+                if(batch!=null){
+                    String  batchName= batch.getBatchName()+"第"+batch.getBatchNo()+"盒;";
+                    batchInfo=batchInfo+batchName;
+                }
+            }
             orderInfo.setBatchInfo(batchInfo);
         }
-
             Member member=memberService.getMemberById(order.getBuyMemberId());
         if(member!=null){
             orderInfo.setBuyUser(member.getName());
@@ -156,7 +171,6 @@ public class OrderController {
      * @param response
      * @param pageNo  分页起始页
      * @param pageSize  页面长度
-     * @param status -1:全部 0：提货卡未发货 1:提货卡已发货  2：未发货 3：已发货
      * @return
      */
     @RequestMapping(value = "/search",method = RequestMethod.GET)
@@ -170,12 +184,19 @@ public class OrderController {
             Order order=orders.get(i);
             OrderInfo orderInfo=new OrderInfo();
             orderInfo.setAddress(order.getAddress());
-            Batch batch= batchService.getBatchById(Long.valueOf(order.getBatchId()));
-            if(batch!=null){
-                String batchInfo= batch.getBatchName()+"第"+batch.getBatchNo()+"盒";
+            String batchIds=order.getBatchId();
+            if(batchIds!=null&&!"".equals(batchIds.trim())){
+                String[] batchIdStrings=batchIds.split(",");
+                String batchInfo="";
+                for(int m=0;m<batchIdStrings.length;m++){
+                    Batch batch= batchService.getBatchById(Long.valueOf(batchIdStrings[m]));
+                    if(batch!=null){
+                        String  batchName= batch.getBatchName()+"第"+batch.getBatchNo()+"盒;";
+                        batchInfo=batchInfo+batchName;
+                    }
+                }
                 orderInfo.setBatchInfo(batchInfo);
             }
-
             Member member=memberService.getMemberById(order.getBuyMemberId());
             if(member!=null){
                 orderInfo.setBuyUser(member.getName());

@@ -97,8 +97,10 @@ public class ApplyMemberController {
         member.setName(memberApply.getName());
         member.setPhone(memberApply.getPhone());
         member.setSex(memberApply.getSex());
+        member.setAddress(memberApply.getAddress());
+        member.setOpenId(memberApply.getOpenId());
         memberService.add(member);
-        memberApplyService.updateApplyStatus(id,status);
+        memberApplyService.updateApplyStatus(id, status);
         result.setRet(0);
         result.setMsg("success");
         return result;

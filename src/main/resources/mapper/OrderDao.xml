@@ -65,7 +65,8 @@
         FROM hsll_order  as a left join member b  on a.buy_member_id=b.id
          where 1=1
         <if test="searchName!=null and searchName!=''">
-             and  b.name like #{searchName}
+             and  b.name like #{searchName} or a.order_no like #{searchName}
+            or a.goods_code like #{searchName}
         </if>
         limit #{pageNo},#{pageSize}
     </select>
