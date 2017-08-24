@@ -98,7 +98,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/detail",method = RequestMethod.GET)
     @ResponseBody
-    public OrderInfo list(HttpServletRequest request,HttpServletResponse response,String orderNo){
+    public OrderInfo detail(HttpServletRequest request,HttpServletResponse response,String orderNo){
         OrderResponse orderResponse=new OrderResponse();
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
           Order order=orderService.getByOrderNo(orderNo);
@@ -149,4 +149,54 @@ public class OrderController {
         return result;
     }
 
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @param pageNo  分页起始页
+     * @param pageSize  页面长度
+     * @param status -1:全部 0：提货卡未发货 1:提货卡已发货  2：未发货 3：已发货
+     * @return
+     */
+    @RequestMapping(value = "/search",method = RequestMethod.GET)
+    @ResponseBody
+    public OrderResponse search(HttpServletRequest request,HttpServletResponse response,int pageNo,int pageSize,String searchName){
+        OrderResponse orderResponse=new OrderResponse();
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<Order>  orders=orderService.getListBySearch(pageNo * pageSize, pageSize, searchName);
+        List<OrderInfo> orderInfos=new ArrayList<>();
+        for(int i=0;i<orders.size();i++){
+            Order order=orders.get(i);
+            OrderInfo orderInfo=new OrderInfo();
+            orderInfo.setAddress(order.getAddress());
+            Batch batch= batchService.getBatchById(Long.valueOf(order.getBatchId()));
+            if(batch!=null){
+                String batchInfo= batch.getBatchName()+"第"+batch.getBatchNo()+"盒";
+                orderInfo.setBatchInfo(batchInfo);
+            }
+
+            Member member=memberService.getMemberById(order.getBuyMemberId());
+            if(member!=null){
+                orderInfo.setBuyUser(member.getName());
+            }
+            orderInfo.setGoodCode(order.getGoodsCode());
+            Goods goods=goodsService.getGoodsById(order.getGoodsId());
+            if(goods!=null){
+                orderInfo.setGoodName(goods.getName());
+            }
+            orderInfo.setOrderDate(format.format(order.getCreatedTime()));
+            orderInfo.setTaxInfo(order.getTaxInfo());
+            orderInfo.setUserReply(order.getBuyerMessage());
+            orderInfo.setOrderNo(order.getOrderNo());
+            orderInfo.setOrderStatus(order.getStatus()+"");
+            orderInfo.setOrderType(order.getType()+"");
+            orderInfos.add(orderInfo);
+        }
+        int count=orderService.getListCountBySearchName(searchName);
+        orderResponse.setOrderInfos(orderInfos);
+        orderResponse.setPageNo(pageNo);
+        orderResponse.setListCount(count);
+        return  orderResponse;
+    }
 }

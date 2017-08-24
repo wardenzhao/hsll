@@ -24,4 +24,8 @@ public interface OrderService {
     int getListCountByStatus(int status);
 
     void sendByOrderNo(String orderNo,int status);
+
+    List<Order> getListBySearch(int i, int pageSize, String searchName);
+
+    int getListCountBySearchName(String searchName);
 }

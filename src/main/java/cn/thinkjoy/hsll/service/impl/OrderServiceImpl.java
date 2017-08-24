@@ -56,4 +56,14 @@ public class OrderServiceImpl implements OrderService {
     public void sendByOrderNo(String orderNo,int status) {
         orderDao.sendByOrderNo(orderNo,status);
     }
+
+    @Override
+    public List<Order> getListBySearch(int i, int pageSize, String searchName) {
+        return orderDao.getListBySearch(i,pageSize,searchName);
+    }
+
+    @Override
+    public int getListCountBySearchName(String searchName) {
+        return orderDao.getListCountBySearchName(searchName);
+    }
 }

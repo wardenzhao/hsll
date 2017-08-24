@@ -26,4 +26,8 @@ public interface OrderDao {
     int getListCountByStatus(@Param("status")int status);
 
     void sendByOrderNo(@Param("orderNo")String orderNo,@Param("status")int status);
+
+    List<Order> getListBySearch(@Param("pageNo")int i,@Param("pageSize") int pageSize, @Param("searchName")String searchName);
+
+    int getListCountBySearchName(@Param("searchName")String searchName);
 }
