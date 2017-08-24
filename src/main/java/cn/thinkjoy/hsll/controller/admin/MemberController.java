@@ -2,13 +2,16 @@ package cn.thinkjoy.hsll.controller.admin;
 
 import cn.thinkjoy.hsll.bean.GoodsSpec;
 import cn.thinkjoy.hsll.bean.Member;
+import cn.thinkjoy.hsll.bean.MemberAddress;
 import cn.thinkjoy.hsll.bean.Order;
 import cn.thinkjoy.hsll.bean.adminBean.BuyInfoResponse;
 import cn.thinkjoy.hsll.bean.adminBean.MemberResPonse;
 import cn.thinkjoy.hsll.bean.adminBean.ResultResponse;
 import cn.thinkjoy.hsll.service.GoodsSpecService;
+import cn.thinkjoy.hsll.service.MemberAddressService;
 import cn.thinkjoy.hsll.service.MemberService;
 import cn.thinkjoy.hsll.service.OrderService;
+import com.alibaba.fastjson.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -38,6 +41,8 @@ public class MemberController {
     private OrderService orderService;
     @Autowired
     private GoodsSpecService goodsSpecService;
+    @Autowired
+    private MemberAddressService memberAddressService;
 
     /**
      * 会员列表
@@ -52,6 +57,11 @@ public class MemberController {
     public MemberResPonse list(HttpServletRequest request,HttpServletResponse response,int pageNo,int pageSize){
 
         List<Member> members= memberService.getMemberList(pageNo,pageSize);
+        for (int i=0;i<members.size();i++){
+            Member member=members.get(i);
+           List<MemberAddress>  memberAddresses= memberAddressService.getMemberByMemberId(member.getId());
+            member.setAddress(JSONArray.toJSONString(memberAddresses,false));
+        }
         int count=memberService.getMemberCount();
         MemberResPonse memberResPonse=new MemberResPonse();
         memberResPonse.setPageNo(pageNo);
@@ -92,6 +102,8 @@ public class MemberController {
     public Member getMemberDetail(HttpServletRequest request,HttpServletResponse response,long id){
         Member member=new Member();
          member=memberService.getMemberById(id);
+      List<MemberAddress> memberAddresses=  memberAddressService.getMemberByMemberId(id);
+        member.setAddress(JSONArray.toJSONString(memberAddresses,false));
         return  member;
     }
 
