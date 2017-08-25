@@ -1,8 +1,20 @@
 <style lang="scss" scoped>
-
+.applyLook{
+  color:#3c8dbc
+}
 
 .buyRecordbox .el-form-item{
   margin-bottom: 0
+}
+.header-box{
+  display: flex;
+  .h-left{
+    flex-grow: 4
+  }
+  .h-right{
+    text-align: right;
+    flex-grow: 1
+  }
 }
 </style>
 
@@ -10,13 +22,29 @@
 
 <div class="">
     <h3 class="h3-t">订单管理</h3>
-    <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
-      <el-tab-pane label="全部" name="-1"></el-tab-pane>
-      <el-tab-pane label="提货卡已发货" name="0"></el-tab-pane>
-      <el-tab-pane label="提货卡未发货" name="1"></el-tab-pane>
-      <el-tab-pane label="已发货" name="2"></el-tab-pane>
-      <el-tab-pane label="未发货" name="3"></el-tab-pane>
-    </el-tabs>
+    <div class="header-box">
+      <div class="h-left">
+        <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
+          <el-tab-pane label="全部" name="-1"></el-tab-pane>
+          <el-tab-pane label="提货卡已发货" name="0"></el-tab-pane>
+          <el-tab-pane label="提货卡未发货" name="1"></el-tab-pane>
+          <el-tab-pane label="已发货" name="2"></el-tab-pane>
+          <el-tab-pane label="未发货" name="3"></el-tab-pane>
+        </el-tabs>
+      </div>
+      <div class="h-right">
+        <el-form :inline="true" class="demo-form-inline">
+      <el-form-item>
+        <el-input v-model="searchName" placeholder="订单号/购买人姓名/提货码"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="queryOrder">查询</el-button>
+      </el-form-item>
+    </el-form>
+      </div>
+    </div>
+
+
     <!-- table list -->
     <div class="app-table">
         <el-table ref="multipleTable" tooltip-effect="dark" @selection-change="handleTableChange" :data="tableData" border style="width: 100%">
@@ -222,6 +250,7 @@ export default {
                 orderStatus:'',
                 taxInfo:'',
                 userReply:'',
+                searchName:''
             }
         },
         create() {
@@ -288,6 +317,7 @@ export default {
             },
             handleCurrentChange(val){
               this.pageNo = parseInt(val)-1
+              this.orderList()
             },
             // 选择table 项
             handleTableChange() {
@@ -362,7 +392,7 @@ export default {
                     }else if(status=='2'){
                       status1 = '3'
                     }
-                    this.$http.get(this.HttpUrl.UrlConfig.orderSend+'?orderNo='+orderNo + '&status='+status)
+                    this.$http.get(this.HttpUrl.UrlConfig.orderSend+'?orderNo='+orderNo + '&status='+status1)
                         .then(res => {
                             res = res.data
                             if(res.ret == 0){
@@ -370,7 +400,38 @@ export default {
                                   message: '发货成功',
                                   type: 'success'
                               });
-
+                              this.dialogVisible2 = false
+                              this.pageNo = 0
+                              this.orderList()
+                            }else{
+                              this.$message({
+                                  message: res.msg,
+                                  type: 'warning'
+                              });
+                            }
+                        }).catch(error => {
+                            console.log(error)
+                        })
+                },
+                queryOrder(){
+                    if(this.searchName==''){
+                      this.$message({
+                          message: '请输入订单号/购买人姓名/提货码',
+                          type: 'warning'
+                      });
+                      return
+                    }
+                    this.$http.get(this.HttpUrl.UrlConfig.orderSearch+'?pageNo='+this.pageNo + '&pageSize='+this.pageSize +'&searchName='+this.searchName)
+                        .then(res => {
+                            res = res.data
+                            if(res.ret == 0){
+                              this.$message({
+                                  message: '发货成功',
+                                  type: 'success'
+                              });
+                              this.dialogVisible2 = false
+                              this.pageNo = 0
+                              this.orderList()
                             }else{
                               this.$message({
                                   message: res.msg,

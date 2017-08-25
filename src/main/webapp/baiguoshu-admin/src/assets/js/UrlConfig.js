@@ -50,6 +50,8 @@ const UrlConfig = {
   orderDetail: BASE_URL + '/admin/order/detail',
   // 确认发货
   orderSend: BASE_URL + '/admin/order/send',
+  // 搜索订单
+  orderSearch: BASE_URL + '/admin/order/search',
 }
 
 export default {
