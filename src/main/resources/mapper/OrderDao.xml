@@ -66,7 +66,7 @@
     </update>
 
     <select id="getListBySearch" resultType="cn.thinkjoy.hsll.bean.Order">
-        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime,
+        SELECT a.id,a.order_no AS orderNo,a.goods_id AS goodsId,a.buy_member_id AS buyMemberId,a.goods_spec_id AS goodsSpecId,a.goods_num as goodsNum,a.address_id AS addressId,a.batch_id AS batchId,a.goods_code AS goodsCode,a.tax_info AS taxInfo,a.buyer_message AS buyerMessage, a.status,a.created_time AS createdTime,a.type,a.address,a.person,a.phone,a.send_time AS  sendTime,
         b.name as goodsName,c.spec_name as goodsSpecName,d.name as buyMemberName
         FROM hsll_order as  a
         left join goods  as b on  a.goods_id=b.id
