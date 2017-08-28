@@ -258,6 +258,7 @@ export default {
         },
         mounted() {
           this.orderList()
+          // this.queryOrder()
         },
         updated() {
 
@@ -425,13 +426,7 @@ export default {
                         .then(res => {
                             res = res.data
                             if(res.ret == 0){
-                              this.$message({
-                                  message: '发货成功',
-                                  type: 'success'
-                              });
-                              this.dialogVisible2 = false
-                              this.pageNo = 0
-                              this.orderList()
+
                             }else{
                               this.$message({
                                   message: res.msg,
