@@ -1,5 +1,6 @@
 let hostname = window.location.hostname,
-  BASE_URL = '/api'
+  // BASE_URL = '/api'
+  BASE_URL = ''
 
 const UrlConfig = {
   isuser: BASE_URL + '/hsll/check/isuser', // 是否是会员
