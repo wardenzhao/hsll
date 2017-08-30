@@ -32,7 +32,7 @@ public class IndexController extends BaseController{
     @Autowired
     private MemberService memberService;
 
-    private String baseUrl = "http://172.16.222.194:8080";
+    private String baseUrl = "http://www.100fruit.cn/";
 
     @RequestMapping(value = "/auth",method = RequestMethod.GET)
     public String auth(HttpServletRequest request){

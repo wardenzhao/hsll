@@ -5,8 +5,8 @@ package cn.thinkjoy.hsll.util;
  */
 public class WeiXinUtil {
 
-    private static final String appid = "wxe1daa1b3f5a65eb0";
-    private static final String appsecret = "4053b1c6a2e6a7f6d830cca2f79292e1";
+    private static final String appid = "wx1bed28867ce8a1ad";
+    private static final String appsecret = "ff13bdd9c73308bc7495067ca9b58106";
     private static final String domain="http://172.16.222.194:8080/hsll";
 
     public static String getAppid() {
