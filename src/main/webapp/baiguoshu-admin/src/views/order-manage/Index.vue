@@ -425,14 +425,8 @@ export default {
                     this.$http.get(this.HttpUrl.UrlConfig.orderSearch+'?pageNo='+this.pageNo + '&pageSize='+this.pageSize +'&searchName='+this.searchName)
                         .then(res => {
                             res = res.data
-                            if(res.ret == 0){
-
-                            }else{
-                              this.$message({
-                                  message: res.msg,
-                                  type: 'warning'
-                              });
-                            }
+                            this.tableData = res.orderInfos
+                            this.total = res.listCount
                         }).catch(error => {
                             console.log(error)
                         })
