@@ -2,7 +2,6 @@ package cn.thinkjoy.hsll.controller;
 
 import cn.thinkjoy.hsll.util.HttpKit;
 import cn.thinkjoy.hsll.util.JsonUtil;
-import cn.thinkjoy.hsll.util.SessionUtil;
 import cn.thinkjoy.hsll.util.StringUtil;
 import cn.thinkjoy.hsll.weixin.WXPayConstants;
 import cn.thinkjoy.hsll.weixin.WXPayUtil;
@@ -27,7 +26,7 @@ import java.util.*;
 public class WeixinPayController {
 
     private String appid = "wx1bed28867ce8a1ad";
-    private String partnerid = "1483234762";
+    private String partnerid = "1487368312";
     private String paternerKey = "ff13bdd9c73308bc7495067ca9b58106";
     private String notifyUrl = "http://www.100fruit.cn/hsll/paysuccess";
 
@@ -38,18 +37,28 @@ public class WeixinPayController {
         String openId = request.getParameter("openId");
 
         String out_trade_no = request.getParameter("orderNo");
+
+        String nonce_str = create_nonce_str();
         Map<String, String> paraMap = new HashMap<String, String>();
         paraMap.put("appid", appid);
         paraMap.put("attach", "测试支付");
         paraMap.put("body", "测试购买Beacon支付");
         paraMap.put("mch_id", partnerid);
-        paraMap.put("nonce_str", create_nonce_str());
+        paraMap.put("nonce_str", nonce_str);
         paraMap.put("openid", openId);
         paraMap.put("out_trade_no", out_trade_no);
         paraMap.put("spbill_create_ip", getAddrIp(request));
         paraMap.put("total_fee", "1");
         paraMap.put("trade_type", "JSAPI");
         paraMap.put("notify_url", notifyUrl);
+        paraMap.put("device_info", "WEB");
+
+//        Map<String, String> signMap = new HashMap<String, String>();
+//        signMap.put("appid", appid);
+//        signMap.put("body", "测试购买Beacon支付");
+//        signMap.put("mch_id", partnerid);
+//        signMap.put("device_info", "WEB");
+//        paraMap.put("nonce_str", nonce_str);
         String sign = WXPayUtil.generateSignature(paraMap, paternerKey, WXPayConstants.SignType.MD5);
         paraMap.put("sign", sign);
 
