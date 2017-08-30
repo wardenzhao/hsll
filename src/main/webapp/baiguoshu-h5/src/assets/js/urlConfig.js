@@ -15,6 +15,7 @@ const UrlConfig = {
   address: BASE_URL + '/hsll/get/address', //  地址列表
   getJq: BASE_URL + '/hsll/getJq', //  24节气图片
   changeOrderAddress: BASE_URL + '/hsll/changeOrderAddress', //  修改收货地址
+  hsllPay: BASE_URL + '/hsll/pay', //  支付接口
 
 };
 

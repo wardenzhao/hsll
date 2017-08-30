@@ -128,6 +128,7 @@
 </template>
 
 <script>
+import qs from 'qs'
 import {
     setStore, getStore ,getUrlKey
 }
@@ -170,7 +171,8 @@ export default {
             totalPrice:0,
             addressInfo:'请选择收货地址',
             comfirmOrderAddress:'',
-            invoiceTitle:''
+            invoiceTitle:'',
+            orderNo:''
         }
     },
     created() {
@@ -212,7 +214,7 @@ export default {
             'goodNum': this.goodNum,
             'goodSpecId': this.goodSpecId,
             'goodSpeName': this.goodSpeName,
-            'goodPrice': this.goodPrice,
+            'goodPrice': this.buyInfo.goodPrice.toFixed(2),
             'address': this.addressInfo,
             'person': this.person,
             'phone': this.phone,
@@ -226,7 +228,8 @@ export default {
             .then(res => {
                 var res = res.data
                 if (res.code == "1") {
-
+                  this.orderNo = res.data
+                  this.hsllPay()
                 } else {
                     this.$vux.toast.show({
                         text: res.msg,
@@ -234,6 +237,20 @@ export default {
                         width: '80%'
                     })
                 }
+            }).catch(error => {
+                console.log(error)
+            })
+      },
+      hsllPay(){
+        let datas = {
+            'openId':getStore('openId') ,
+            'orderNo': this.orderNo,
+            'totalPrice': this.buyInfo.goodPrice.toFixed(2)
+        }
+        this.$http.post(this.HttpUrl.UrlConfig.hsllPay, qs.stringify(datas))
+            .then(res => {
+                var res = res.data
+                
             }).catch(error => {
                 console.log(error)
             })

@@ -35,7 +35,7 @@ public class WeixinPayController {
     @RequestMapping(value = "/pay")
     public void jspay(HttpServletRequest request, HttpServletResponse response, String callback) throws Exception {
         // 获取openid
-        String openId = SessionUtil.getAtt(request, "openId");
+        String openId = request.getParameter("openId");
 
         String out_trade_no = request.getParameter("orderNo");
         Map<String, String> paraMap = new HashMap<String, String>();
