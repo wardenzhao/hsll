@@ -63,6 +63,9 @@ export default {
           msg:'保存成功'
         }
     },
+    created(){
+
+    },
     mounted(){
       if(getStore('updateAddress')){
         let updateAddress = JSON.parse(getStore('updateAddress'))
@@ -71,6 +74,9 @@ export default {
         this.address = updateAddress.address
         this.id = updateAddress.id
         this.msg = '修改成功'
+        document.title="修改地址"
+      }else{
+        document.title="新增地址"
       }
     },
     methods:{

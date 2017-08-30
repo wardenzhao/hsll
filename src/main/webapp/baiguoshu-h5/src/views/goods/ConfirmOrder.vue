@@ -250,7 +250,7 @@ export default {
         this.$http.post(this.HttpUrl.UrlConfig.hsllPay, qs.stringify(datas))
             .then(res => {
                 var res = res.data
-                
+
             }).catch(error => {
                 console.log(error)
             })

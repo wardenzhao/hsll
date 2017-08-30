@@ -584,6 +584,9 @@ export default {
             },
         };
     },
+    created(){
+        document.title="24节气"
+    },
     mounted(){
         this.getJq()
     },

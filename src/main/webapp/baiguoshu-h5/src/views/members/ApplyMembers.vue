@@ -80,6 +80,9 @@ export default {
             ]
         }
     },
+    created(){
+        document.title="申请会员"
+    },
     mounted(){
 
     },

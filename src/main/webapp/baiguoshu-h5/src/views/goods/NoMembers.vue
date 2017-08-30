@@ -24,6 +24,7 @@ export default {
     XButton
   },
   created(){
+    document.title="不是会员"
     if(getUrlKey('openId')){
       setStore('openId',getUrlKey('openId'))
     }
