@@ -17,6 +17,10 @@ const router = new VueRouter({
 })
 import $ from 'jquery'
   // 发送 ajax 请求
+
+  import { WechatPlugin } from 'vux'
+  Vue.use(WechatPlugin)
+
 import {
   AjaxPlugin
 }
@@ -28,6 +32,11 @@ import {
 }
 from 'vux'
 Vue.use(ToastPlugin)
+
+
+
+
+
 
 
 // 添加Fastclick移除移动端点击延迟
