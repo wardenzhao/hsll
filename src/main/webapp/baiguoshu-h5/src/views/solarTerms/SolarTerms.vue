@@ -345,6 +345,7 @@ pre[class*="language-"].line-numbers .line-numbers-rows {
 <template lang="html">
 
 <div class="blue">
+  ssss
   <slick id="sliderA" class="slider slider-for" ref="slick" :options="slickOptions1">
       <div v-for="(list,index) in datas" :key="index"><h3><img :src="list.img" /></h3><p>{{list.solarName}}</p></div>
   </slick>
@@ -586,9 +587,10 @@ export default {
     },
     created(){
         document.title="24节气"
+
     },
     mounted(){
-        this.getJq()
+        // this.getJq()
     },
     // All slick methods can be used too, example here
     methods: {
