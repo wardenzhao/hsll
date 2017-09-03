@@ -91,7 +91,7 @@ export default {
             'openId':getStore('openId') ,
             'orderNo':this.orderNo
         }
-          this.$http.post(this.HttpUrl.UrlConfig.payGoodsSuccess, qs.stringify(datas)）
+          this.$http.post(this.HttpUrl.UrlConfig.payGoodsSuccess, qs.stringify(datas))
               .then(res => {
                   var res = res.data
                   if (res.code == "1") {
