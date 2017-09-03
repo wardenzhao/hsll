@@ -468,15 +468,6 @@ export default {
               this.$router.push({
                 path:'/confirm-order'
               })
-
-
-
-
-
-
-
-
-
               console.log(this.price)
             }
     }
