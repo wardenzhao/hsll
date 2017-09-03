@@ -74,21 +74,22 @@ export default {
           person:'',
           phone:'',
           address:'',
-          receiver:''
+          receiver:'',
+          batch:''
         }
     },
     created(){
         document.title="支付成功"
     },
     mounted() {
-      this.orderNo = getUrlKey('orderNo')
+      this.orderNo = getStore('orderNo')
       this.payGoodsSuccess()
     },
     methods: {
       payGoodsSuccess(){
         let datas = {
             'openId':getStore('openId') ,
-            'orderNo':getUrlKey('orderNo')
+            'orderNo':this.orderNo
         }
           this.$http.post(this.HttpUrl.UrlConfig.payGoodsSuccess, datas)
               .then(res => {
@@ -100,6 +101,7 @@ export default {
                     this.phone = res.phone
                     this.address = res.address
                     this.receiver = res.receiver
+                    this.batch = res.batch
                   } else {
                       this.$vux.toast.show({
                           text: res.msg,
