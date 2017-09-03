@@ -251,6 +251,7 @@ export default {
             .then(res => {
                 var res = res.data
                 // console.log(this.$wechat)
+                // console.log(WeixinJSBridge.invoke)
               //   WeixinJSBridge.invoke(
               //      'getBrandWCPayRequest', {
               //          "appId" :res.appId,       //公众号名称，由商户传入
@@ -273,20 +274,56 @@ export default {
 
 
 
-               this.$wechat.chooseWXPay({
-                  "appId" :res.appId,
-                  "timestamp": res.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-                  "nonceStr": res.nonceStr, // 支付签名随机串，不长于 32 位
-                  "package": res.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-                  "signType": res.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-                  "paySign": res.paySign, // 支付签名
-                  success:(result)=> {
-                      // 支付成功后的回调函数
-                      console.log(result)
-                      alert(result)
-
-                  }
-              });
+              //  this.$wechat.chooseWXPay({
+                  // "appId" :res.appId,
+                  // "timestamp": res.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                  // "nonceStr": res.nonceStr, // 支付签名随机串，不长于 32 位
+                  // "package": res.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                  // "signType": res.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                  // "paySign": res.paySign, // 支付签名
+              //     success:(result)=> {
+              //         // 支付成功后的回调函数
+              //         console.log(result)
+              //         alert(result)
+              //
+              //     }
+              // });
+              var jsStr = {
+                "appId" :res.appId,
+                "timestamp": res.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                "nonceStr": res.nonceStr, // 支付签名随机串，不长于 32 位
+                "package": res.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                "signType": res.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                "paySign": res.paySign, // 支付签名
+              }
+              callpay(jsStr)
+              function jsApiCall(jsStr) {
+                    WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',
+                     jsStr,//存在问题的
+                     //jsStr,//josn串
+                     function (result) {
+                         alert(result)
+                         WeixinJSBridge.log(result.err_msg);
+                         //由于官方申明：使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                         //所以在返回ok的时候，只进行成功提示（即使是支付失败，但是返回是ok）
+                     }
+                     );
+                }
+                function callpay(jsStr) {
+                    if (typeof WeixinJSBridge == "undefined") {
+                        if (document.addEventListener) {
+                            document.addEventListener('WeixinJSBridgeReady', jsApiCall(jsStr), false);
+                        }
+                        else if (document.attachEvent) {
+                            document.attachEvent('WeixinJSBridgeReady', jsApiCall(jsStr));
+                            document.attachEvent('onWeixinJSBridgeReady', jsApiCall(jsStr));
+                        }
+                    }
+                    else {
+                        jsApiCall(jsStr);
+                    }
+                }
 
 
 
