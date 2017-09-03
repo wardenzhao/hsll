@@ -304,7 +304,7 @@ export default {
                      //jsStr,//josn串
                      (result)=> {
                          if(result.err_msg == "get_brand_wcpay_request:ok" ) {
-                            window.location.replace("http://www.100fruit.cn/baiguoshu-h5/dist/index.html#/pay-sucess");
+                            window.location.replace("http://www.100fruit.cn/baiguoshu-h5/dist/index.html#/pay-sucess?orderNo"+this.orderNo);
                           }
                          //由于官方申明：使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
                          //所以在返回ok的时候，只进行成功提示（即使是支付失败，但是返回是ok）

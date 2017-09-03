@@ -59,7 +59,10 @@
 
 
 
-
+import {
+    setStore, getStore ,getUrlKey
+}
+from '../../config/mUtils'
 
 export default {
 
@@ -70,6 +73,7 @@ export default {
     },
     created(){
         document.title="支付成功"
+        console.log(getUrlKey('orderNo'))
     },
     mounted() {
 
