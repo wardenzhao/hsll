@@ -251,6 +251,24 @@ export default {
             .then(res => {
                 var res = res.data
 
+                WeixinJSBridge.invoke(
+                   'getBrandWCPayRequest', {
+                       "appId" :res.appId,       //公众号名称，由商户传入
+                       "timeStamp":res.timeStamp, //时间戳，自1970年以来的秒数
+                       "nonceStr" : res.nonceStr, //随机串
+                       "package" : res.package,
+                       "signType" :res.signType,  //微信签名方式：
+                       "paySign" : res.paySign     //微信签名
+                   },
+                   (res)=>{
+                       if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+                         this.$router.push(
+                           {
+                             path: '/pay-sucess'
+                           })
+                       }
+                   }
+               );
             }).catch(error => {
                 console.log(error)
             })
