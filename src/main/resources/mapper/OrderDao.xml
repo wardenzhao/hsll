@@ -5,38 +5,38 @@
 
     <insert id="insertData">
         INSERT INTO
-        hsll_order(order_no,goods_id,buy_member_id,goods_spec_id,goods_num,address_id,batch_id,goods_code,tax_info,buyer_message,status,created_time,type,address,person,phone)
-        VALUES (#{order.orderNo},#{order.goodsId},#{order.buyMemberId},#{order.goodsSpecId},#{order.goodsNum},#{order.addressId},#{order.batchId},#{order.goodsCode},#{order.taxInfo},#{order.buyerMessage},#{order.status},#{order.createdTime},#{order.type},#{order.address},#{order.person},#{order.phone})
+        hsll_order(order_no,goods_id,buy_member_id,goods_spec_id,goods_num,address_id,batch_id,goods_code,tax_info,buyer_message,status,created_time,type,address,person,phone,total_price)
+        VALUES (#{order.orderNo},#{order.goodsId},#{order.buyMemberId},#{order.goodsSpecId},#{order.goodsNum},#{order.addressId},#{order.batchId},#{order.goodsCode},#{order.taxInfo},#{order.buyerMessage},#{order.status},#{order.createdTime},#{order.type},#{order.address},#{order.person},#{order.phone},#{order.totalPrice})
     </insert>
 
     <select id="getByOrderNo" resultType="cn.thinkjoy.hsll.bean.Order">
-        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime
+        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime,total_price AS totalPrice
         FROM hsll_order
         WHERE order_no = #{orderNo}
     </select>
 
     <update id="updateData">
         UPDATE hsll_order
-        SET batch_id = #{order.batchId},goods_code = #{order.goodsCode}, person = #{order.person}, address = #{order.address}, phone = #{order.phone}
+        SET batch_id = #{order.batchId},goods_code = #{order.goodsCode}, person = #{order.person}, address = #{order.address}, phone = #{order.phone}, status = #{order.status}
         WHERE id = #{order.id}
     </update>
 
     <select id="getByGoodsCode" resultType="cn.thinkjoy.hsll.bean.Order">
-        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime
+        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime,total_price AS totalPrice
         FROM hsll_order
         WHERE goods_code LIKE #{goodsCode}
         limit 1
     </select>
 
     <select id="getListByMemberId" resultType="cn.thinkjoy.hsll.bean.Order">
-        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime
+        SELECT id,order_no AS orderNo,goods_id AS goodsId,buy_member_id AS buyMemberId,goods_spec_id AS goodsSpecId,goods_num as goodsNum,address_id AS addressId,batch_id AS batchId,goods_code AS goodsCode,tax_info AS taxInfo,buyer_message AS buyerMessage, status,created_time AS createdTime,type,address,person,phone,send_time AS  sendTime,total_price AS totalPrice
         FROM hsll_order
         WHERE buy_member_id LIKE #{memberId}
         limit #{offset},#{pageSize}
     </select>
 
     <select id="getListByStatus" resultType="cn.thinkjoy.hsll.bean.Order">
-        SELECT a.id,a.order_no AS orderNo,a.goods_id AS goodsId,a.buy_member_id AS buyMemberId,a.goods_spec_id AS goodsSpecId,a.goods_num as goodsNum,a.address_id AS addressId,a.batch_id AS batchId,a.goods_code AS goodsCode,a.tax_info AS taxInfo,a.buyer_message AS buyerMessage, a.status,a.created_time AS createdTime,a.type,a.address,a.person,a.phone,a.send_time AS  sendTime,
+        SELECT a.id,a.order_no AS orderNo,a.goods_id AS goodsId,a.buy_member_id AS buyMemberId,a.goods_spec_id AS goodsSpecId,a.goods_num as goodsNum,a.address_id AS addressId,a.batch_id AS batchId,a.goods_code AS goodsCode,a.tax_info AS taxInfo,a.buyer_message AS buyerMessage, a.status,a.created_time AS createdTime,a.type,a.address,a.person,a.phone,a.send_time AS  sendTime,total_price AS totalPrice,
         b.name as goodsName,c.spec_name as goodsSpecName,d.name as buyMemberName
         FROM hsll_order as  a
         left join goods  as b on  a.goods_id=b.id
@@ -66,7 +66,7 @@
     </update>
 
     <select id="getListBySearch" resultType="cn.thinkjoy.hsll.bean.Order">
-        SELECT a.id,a.order_no AS orderNo,a.goods_id AS goodsId,a.buy_member_id AS buyMemberId,a.goods_spec_id AS goodsSpecId,a.goods_num as goodsNum,a.address_id AS addressId,a.batch_id AS batchId,a.goods_code AS goodsCode,a.tax_info AS taxInfo,a.buyer_message AS buyerMessage, a.status,a.created_time AS createdTime,a.type,a.address,a.person,a.phone,a.send_time AS  sendTime,
+        SELECT a.id,a.order_no AS orderNo,a.goods_id AS goodsId,a.buy_member_id AS buyMemberId,a.goods_spec_id AS goodsSpecId,a.goods_num as goodsNum,a.address_id AS addressId,a.batch_id AS batchId,a.goods_code AS goodsCode,a.tax_info AS taxInfo,a.buyer_message AS buyerMessage, a.status,a.created_time AS createdTime,a.type,a.address,a.person,a.phone,a.send_time AS  sendTime,total_price AS totalPrice,
         b.name as goodsName,c.spec_name as goodsSpecName,d.name as buyMemberName
         FROM hsll_order as  a
         left join goods  as b on  a.goods_id=b.id

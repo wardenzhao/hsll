@@ -32,13 +32,13 @@ public class IndexController extends BaseController{
     @Autowired
     private MemberService memberService;
 
-    private String baseUrl = "http://www.100fruit.cn/";
+    private String baseUrl = "http://www.100fruit.cn";
 
     @RequestMapping(value = "/auth",method = RequestMethod.GET)
     public String auth(HttpServletRequest request){
         String redirect_uri = request.getParameter("redirect_uri");
         if (StringUtil.isBlank(redirect_uri)) {
-            return "redirect:/hsll/index"; //跳转到手机站首页
+            redirect_uri = baseUrl+"/hsll/auth"; //跳转到手机站首页
         }
 
         logger.info("redirect to :" + redirect_uri);

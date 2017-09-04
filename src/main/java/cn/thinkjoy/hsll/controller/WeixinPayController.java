@@ -1,10 +1,13 @@
 package cn.thinkjoy.hsll.controller;
 
+import cn.thinkjoy.hsll.bean.Order;
+import cn.thinkjoy.hsll.service.OrderService;
 import cn.thinkjoy.hsll.util.HttpKit;
 import cn.thinkjoy.hsll.util.JsonUtil;
 import cn.thinkjoy.hsll.util.StringUtil;
 import cn.thinkjoy.hsll.weixin.WXPayConstants;
 import cn.thinkjoy.hsll.weixin.WXPayUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +34,9 @@ public class WeixinPayController {
     private String notifyUrl = "http://www.100fruit.cn/hsll/paysuccess";
 
 
+    @Autowired
+    private OrderService orderService;
+
     @RequestMapping(value = "/pay")
     public void jspay(HttpServletRequest request, HttpServletResponse response, String callback) throws Exception {
         // 获取openid
@@ -41,8 +47,8 @@ public class WeixinPayController {
         String nonce_str = create_nonce_str();
         Map<String, String> paraMap = new HashMap<String, String>();
         paraMap.put("appid", appid);
-        paraMap.put("attach", "测试支付");
-        paraMap.put("body", "测试购买Beacon支付");
+        paraMap.put("attach", "购买支付");
+        paraMap.put("body", "购买好柿连连柿饼支付");
         paraMap.put("mch_id", partnerid);
         paraMap.put("nonce_str", nonce_str);
         paraMap.put("openid", openId);
@@ -60,6 +66,7 @@ public class WeixinPayController {
 //        signMap.put("device_info", "WEB");
 //        paraMap.put("nonce_str", nonce_str);
         String sign = WXPayUtil.generateSignature(paraMap, paternerKey, WXPayConstants.SignType.MD5);
+        System.out.println("sign--->"+sign);
         paraMap.put("sign", sign);
 
         // 统一下单 https://api.mch.weixin.qq.com/pay/unifiedorder
@@ -160,6 +167,10 @@ public class WeixinPayController {
                 System.out.println("total_fee:" + total_fee);
 
                 //////////执行自己的业务逻辑////////////////
+                Order order = orderService.getByOrderNo(out_trade_no);
+                order.setStatus(1);
+                orderService.updateData(order);
+
 
                 System.out.println("支付成功");
                 //通知微信.异步确认成功.必写.不然会一直通知后台.八次之后就认为交易失败了.

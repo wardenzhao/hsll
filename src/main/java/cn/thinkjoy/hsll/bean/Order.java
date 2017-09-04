@@ -20,6 +20,7 @@ public class Order implements Serializable{
     private long addressId;
     private String batchId;
     private String goodsCode;
+    private Double totalPrice;
     private String taxInfo;
     private String buyerMessage;
     private int status;
@@ -196,5 +197,13 @@ public class Order implements Serializable{
 
     public void setSendTime(Date sendTime) {
         this.sendTime = sendTime;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }
