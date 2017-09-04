@@ -248,7 +248,7 @@ export default {
             'orderNo': this.orderNo,
             'totalPrice': this.buyInfo.goodPrice.toFixed(2)
         }
-        this.$http.post(this.HttpUrl.UrlConfig.hsllPay, qs.stringify(datas))
+        this.$http.post(this.HttpUrl.UrlConfig.hsllPay, datas)
             .then(res => {
                 var res = res.data
                 // console.log(this.$wechat)

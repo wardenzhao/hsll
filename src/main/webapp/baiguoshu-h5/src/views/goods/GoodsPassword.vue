@@ -52,7 +52,7 @@
         <div class="txt">请输入提货密码</div>
         <p class="txt2">好柿连连</p>
         <div class="input-list">
-            <input v-for="(n,index) in nums" maxlength="1" type="text" name="" v-model="n.num">
+            <input v-for="(n,index) in nums" maxlength="1" :id="'input_'+index" :key="index" @keyup="clickKeyup(n,index)" type="number" name="" v-model="n.num">
         </div>
     </div>
     <div class="wechat-btn">
@@ -149,6 +149,11 @@ export default {
             },
             handelClick() {
 
+            },
+            clickKeyup(n,index){
+                // if(n!=''){
+                //   document.getElementById('input_'+(index+1)).focus()
+                // }
             }
     }
 }
