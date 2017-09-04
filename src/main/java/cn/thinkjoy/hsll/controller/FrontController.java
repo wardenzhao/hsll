@@ -473,13 +473,14 @@ public class FrontController extends BaseController{
                 order.setAddress(req.getAddress());
                 order.setPerson(req.getPerson());
                 order.setPhone(req.getPhone());
+                order.setTotalPrice(req.getGoodPrice());
 
                 TaxInfo taxInfo = new TaxInfo();
                 taxInfo.setReceiptNo(req.getReceiptNo());
                 taxInfo.setReceiptTitle(req.getReceiptTitle());
                 taxInfo.setReceiptType(req.getReceiptType());
                 order.setTaxInfo(JsonUtil.tranObjectToJsonStr(taxInfo));
-                order.setStatus(1);
+                order.setStatus(-1);
                 //购买订单
                 order.setType(0);
 
@@ -513,15 +514,25 @@ public class FrontController extends BaseController{
     }
 
 
-    @RequestMapping(value = "pay/success")
+    @ResponseBody
+    @RequestMapping(value = "pay/goods/success")
     public String paySuccess(HttpServletRequest request){
         String json = this.getJsonString(request);
         ObjectDataResp resp = new ObjectDataResp();
+        PaySussessReq req = null;
         String batchMessage = "";
-        String payTime = "";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            String orderNo = request.getParameter("orderNo");
-            orderNo = "1502276362910";
+            if(json != null){
+                req = JsonUtil.tranjsonStrToObject(json,PaySussessReq.class);
+            }else{
+                resp.setCode("-1");
+                resp.setMsg("请求参数错误");
+                resp.setOpedId(req.getOpenId());
+                return JsonUtil.tranObjectToJsonStr(resp);
+            }
+            String orderNo = req.getOrderNo();
+//            orderNo = "1502276362910";
             Order order = orderService.getByOrderNo(orderNo);
             String batchId = "";
             String goodsCode = "";
@@ -529,9 +540,9 @@ public class FrontController extends BaseController{
             List<Batch> batchList = batchService.getNewBatch(order.getGoodsNum());
             for(int i=0;i<batchList.size();i++){
                 if(i==0){
-                    batchMessage += batchList.get(i).getBatchName() +"第"+batchList.get(i).getBatchCode();
+                    batchMessage += batchList.get(i).getBatchName() +"第"+batchList.get(i).getBatchNo();
                 }else{
-                    batchMessage += ","+batchList.get(i).getBatchCode();
+                    batchMessage += ","+batchList.get(i).getBatchNo();
                 }
                 if(i==(batchList.size()-1)){
                     batchId += batchList.get(i).getId();
@@ -547,12 +558,24 @@ public class FrontController extends BaseController{
             order.setGoodsCode(goodsCode);
             orderService.updateData(order);
 
+            PaySuccessResp paySuccess = new PaySuccessResp();
+            paySuccess.setBatch(batchMessage);
+            paySuccess.setReceiver("陕西百果园");
+            paySuccess.setPayTime(dateFormat.format(order.getCreatedTime()));
+            paySuccess.setOrderPrice(order.getTotalPrice() + "");
+            paySuccess.setPerson(order.getPerson());
+            paySuccess.setPhone(order.getPhone());
+            paySuccess.setAddress(order.getAddress());
+
+            resp.setData(paySuccess);
+            resp.setCode("1");
+            resp.setMsg("请求成功");
         }catch (Exception e){
             e.printStackTrace();
             resp.setCode("-1");
             resp.setMsg("系统错误");
         }
-        return "pay_success.html?batchMessage="+batchMessage;
+        return JsonUtil.tranObjectToJsonStr(resp);
     }
 
     /**
@@ -763,7 +786,9 @@ public class FrontController extends BaseController{
                     myOrderResp.setPhone(order.getPhone());
                     myOrderResp.setGoodNum(order.getGoodsNum());
 
-                    if(order.getStatus() == 1){
+                    if(order.getStatus() == -1){
+                        myOrderResp.setOrderState("未支付");
+                    }else if(order.getStatus() == 1){
                         myOrderResp.setOrderState("等待发货");
                     }else if(order.getStatus() == 2){
                         myOrderResp.setOrderState("已发货");
@@ -774,7 +799,7 @@ public class FrontController extends BaseController{
                     Goods goods = goodsService.getGoodsById(order.getGoodsId());
                     myOrderResp.setGoodName(goods.getName());
                     myOrderResp.setGoodIcon(goods.getThumb());
-                    myOrderResp.setOrderPrice(order.getGoodsNum() * goods.getPrice() + "");
+                    myOrderResp.setOrderPrice(order.getTotalPrice() + "");
                     if (order.getSendTime() != null){
                         myOrderResp.setSendTime(dateFormat.format(order.getSendTime()));
                     }else{
