@@ -91,9 +91,11 @@ export default {
             'openId':getStore('openId') ,
             'orderNo':this.orderNo
         }
+        alert(datas)
           this.$http.post(this.HttpUrl.UrlConfig.payGoodsSuccess,datas)
               .then(res => {
                   var res = res.data
+                  alert(res)
                   if (res.code == "1") {
                     this.orderPrice = res.orderPrice
                     this.payTime = res.payTime
