@@ -92,16 +92,16 @@ export default {
                   alert(JSON.stringify(res))
                   var res = res.data
                   if (res.code == "1") {
-                    this.orderPrice = res.orderPrice
-                    this.payTime = res.payTime
-                    this.person = res.person
-                    this.phone = res.phone
-                    this.address = res.address
-                    this.receiver = res.receiver
-                    this.batch = res.batch
+                    this.orderPrice = res.data.orderPrice
+                    this.payTime = res.data.payTime
+                    this.person = res.data.person
+                    this.phone = res.data.phone
+                    this.address = res.data.address
+                    this.receiver = res.data.receiver
+                    this.batch = res.data.batch
                   } else {
                       this.$vux.toast.show({
-                          text: res.msg,
+                          text: res.data.msg,
                           type: 'text',
                           width: '80%'
                       })
