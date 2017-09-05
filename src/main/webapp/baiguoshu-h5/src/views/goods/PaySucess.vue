@@ -87,12 +87,7 @@ export default {
     },
     methods: {
       payGoodsSuccess(){
-        let datas = {
-            'openId':getStore('openId') ,
-            'orderNo':this.orderNo
-        }
-        alert(JSON.stringify(datas))
-          this.$http.post(this.HttpUrl.UrlConfig.payGoodsSuccess,qs.stringify(datas))
+          this.$http.post(this.HttpUrl.UrlConfig.payGoodsSuccess+'?openId='+getStore('openId')+'&orderNo='+this.orderNo)
               .then(res => {
                   alert(JSON.stringify(res))
                   var res = res.data
