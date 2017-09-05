@@ -1,4 +1,5 @@
-let BASE_URL = '/api';
+// let BASE_URL = '/api';
+let BASE_URL = '';
 
 
 const UrlConfig = {
