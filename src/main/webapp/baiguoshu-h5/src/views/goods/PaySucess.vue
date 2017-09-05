@@ -89,7 +89,7 @@ export default {
       payGoodsSuccess(){
           this.$http.post(this.HttpUrl.UrlConfig.payGoodsSuccess+'?openId='+getStore('openId')+'&orderNo='+this.orderNo)
               .then(res => {
-                  alert(JSON.stringify(res))
+                  // alert(JSON.stringify(res))
                   var res = res.data
                   if (res.code == "1") {
                     this.orderPrice = res.data.orderPrice
