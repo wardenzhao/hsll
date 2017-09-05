@@ -94,8 +94,8 @@ export default {
         alert(JSON.stringify(datas))
           this.$http.post(this.HttpUrl.UrlConfig.payGoodsSuccess,qs.stringify(datas))
               .then(res => {
-                  var res = res.data
                   alert(JSON.stringify(res))
+                  var res = res.data
                   if (res.code == "1") {
                     this.orderPrice = res.orderPrice
                     this.payTime = res.payTime
