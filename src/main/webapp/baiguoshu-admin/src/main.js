@@ -21,8 +21,7 @@ Vue.use(ElementUI)
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-  routes,
-  mode: 'history'
+  routes
 })
 
 

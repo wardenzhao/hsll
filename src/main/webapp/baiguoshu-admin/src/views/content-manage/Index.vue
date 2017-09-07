@@ -7,7 +7,7 @@
 <template lang="html">
 
 <div class="">
-    <h3 class="h3-t">科室信息管理</h3>
+    <h3 class="h3-t">内容管理</h3>
     <!-- btn -->
     <div class="btn-box">
         <el-button type="success" @click='addHandler'>发布内容</el-button>
@@ -148,7 +148,7 @@ export default {
                 submitForm(formName) {
                     this.$refs[formName].validate((valid) => {
                         if (valid) {
-                            this.handleSubmitServer;
+                            // this.handleSubmitServer;
                         } else {
                             return false;
                         }
